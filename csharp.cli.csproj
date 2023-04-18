@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
+    <PackageReference Include="Polly" Version="7.2.3" />
   </ItemGroup>
 
 </Project>

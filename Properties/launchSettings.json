@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "echo \"Hello!\" --repeat-count=10 --upper"
+      "commandLineArgs": "polly"
     }
   }
 }
