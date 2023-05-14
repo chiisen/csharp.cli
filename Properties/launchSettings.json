@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "polly"
+      "commandLineArgs": "echo -?"
     }
   }
 }
