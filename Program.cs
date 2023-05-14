@@ -8,6 +8,11 @@ public class Program
 {
     static int Main(string[] args)
     {
+        foreach (var arg in args)
+        {
+            Console.WriteLine($"輸入參數:{arg}");
+        }
+
         var app = new CommandLineApplication { Name = "csharp.cli.app" };
         app.HelpOption("-?|-h|--help");
         app.OnExecute(() =>

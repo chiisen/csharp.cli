@@ -1,29 +1,47 @@
 # cs.cli
-csharp cli
+# 介紹
+C# 製作成的 CLI
+- CLI 是命令列介面 (Command-Line Interface)
+以指令與電腦互動
+- GUI 是圖形化介面 (Graphical User Interface)
 
-- �إ߱M��
+# CLI 常用指令有哪些？
+windows 作業系統為例，常用的指令如下：
+cd	=> 切換目錄
+pwd	=> 取得目前所在位置
+cp	=> 複製檔案
+
+# 建立專案
 ```bash=
 dotnet new console -lang c#
 ```
-- �b *.csproj �U�s�W�U���T��
+- 在 *.csproj 下新增下面三行
 ```xml=
 <PackAsTool>true</PackAsTool>
 <ToolCommandName>csharp.cli</ToolCommandName>
 <PackageOutputPath>./nupkg</PackageOutputPath>
 ```
-- ���� nupkg
+
+# 安裝
+- 產生 nupkg
 ```bash=
 dotnet pack
 ```
-- �w�˥���M��
+- 安裝全域套件
 ```bash=
 dotnet tool install --global --add-source .\nupkg csharp.cli
 ```
-- �d�ݥ���M��
+- 查看全域套件
 ```bash=
 dotnet tool list -g
 ```
-- �Ѱ��w�˥���M��
+- 測試是否安裝成功 
+```bash=
+csharp.cli --help
+```
+![help](./images/help.png)
+# 解除安裝
+- 解除安裝全域套件
 ```bash=
 dotnet tool uninstall -g csharp.cli
 ```
