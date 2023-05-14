@@ -5,11 +5,15 @@ C# 製作成的 CLI
 以指令與電腦互動
 - GUI 是圖形化介面 (Graphical User Interface)
 
+---
+
 # CLI 常用指令有哪些？
-windows 作業系統為例，常用的指令如下：
-cd	=> 切換目錄
-pwd	=> 取得目前所在位置
-cp	=> 複製檔案
+windows 作業系統為例，常用的指令如下：  
+cd	=> 切換目錄  
+pwd	=> 取得目前所在位置  
+cp	=> 複製檔案  
+
+---
 
 # 建立專案
 ```bash=
@@ -21,6 +25,8 @@ dotnet new console -lang c#
 <ToolCommandName>csharp.cli</ToolCommandName>
 <PackageOutputPath>./nupkg</PackageOutputPath>
 ```
+
+---
 
 # 安裝
 - 產生 nupkg
@@ -40,8 +46,22 @@ dotnet tool list -g
 csharp.cli --help
 ```
 ![help](./images/help.png)
+
+---
+
 # 解除安裝
 - 解除安裝全域套件
 ```bash=
 dotnet tool uninstall -g csharp.cli
 ```
+
+---
+
+# 本地安裝套件批次檔案
+```bash=
+.\install.bat
+```
+會循序進行清理目錄、打包、移除套件、安裝套件並顯示套件安裝版本  
+
+---
+
