@@ -2,6 +2,7 @@
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using System;
+using System.Globalization;
 
 public partial class Program
 {
@@ -13,20 +14,53 @@ public partial class Program
             command.Description = "查詢 betArea";
             command.HelpOption("-?|-h|-help");
 
+            // 輸入參數說明
+            var gameNameArgument = command.Argument("[gameName]", "指定需要輸出的遊戲。");
+
             // 輸入指令說明
-            var betAreaOption = command.Option("-i|--id", "指定輸出 betArea", CommandOptionType.SingleValue);
+            var idOption = command.Option("-i|--id", "指定輸出 betArea", CommandOptionType.SingleValue);
+            var contextOption = command.Option("-c|--context", "指定輸出 betArea", CommandOptionType.SingleValue);
 
             command.OnExecute((Func<int>)(() =>
             {
-                var betAreaId = betAreaOption.HasValue() ? betAreaOption.Value() : "00001";
-                betAreaId = string.Format("{0:00000}", Convert.ToInt16(betAreaId));
-
-                BetArea convert = JsonConvert.DeserializeObject<BetArea>(betAreaJson);
-                var context  = convert.data.Where<BetAreaData>(x => x.gameName == "Bacc" && x.betArea == betAreaId.ToString());
-                foreach (var item in context)
+                BetArea json = JsonConvert.DeserializeObject<BetArea>(betAreaJson);
+                if(json == null)
                 {
-                    Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
+                    Console.WriteLine($"null json");
+                    return 1;
                 }
+
+                var gameName = gameNameArgument.HasValue ? gameNameArgument.Value : null;
+                if (gameName == null)
+                {
+                    Console.WriteLine($"null gameName");
+                    return 1;
+                }
+
+                gameName = gameName.ToLower(CultureInfo.InvariantCulture);
+
+                string id = idOption.HasValue() ? idOption.Value() : null;
+                if(id != null)
+                {
+                    id = string.Format("{0:00000}", Convert.ToInt16(id));
+                    var ids = json.data.Where<BetAreaData>(x => x.gameName.ToLower() == gameName && x.betArea == id.ToString());
+                    foreach (var item in ids)
+                    {
+                        Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
+                    }
+                    return 0;
+                }
+
+                string context = contextOption.HasValue() ? contextOption.Value() : null;
+                if (context != null)
+                {
+                    var contexts = json.data.Where<BetAreaData>(x => x.gameName.ToLower() == gameName && x.context == context);
+                    foreach (var item in contexts)
+                    {
+                        Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
+                    }
+                }
+                    
                 return 0;
             }));
         }));
