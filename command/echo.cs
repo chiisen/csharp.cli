@@ -4,6 +4,10 @@ using System.Globalization;
 
 public partial class Program
 {
+    /// <summary>
+    /// 輸出用戶輸入的文字。
+    /// 命令列引數: echo words -r 3
+    /// </summary>
     public static void echo()
     {
         _ = _app.Command("echo", command =>
@@ -21,16 +25,16 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                var subject = wordsArgument.HasValue ? wordsArgument.Value : "world";
+                var words = wordsArgument.HasValue ? wordsArgument.Value : "world";
                 if (upperOption.HasValue())
                 {
-                    subject = subject.ToUpper(CultureInfo.InvariantCulture);
+                    words = words.ToUpper(CultureInfo.InvariantCulture);
                 }
                 var count = repeatOption.HasValue() ? repeatOption.Value() : "1";
                 int repeat_count = int.Parse(count);
                 for (int i = 0; i < repeat_count; ++i)
                 {
-                    Console.WriteLine(subject);
+                    Console.WriteLine(words);
                 }
 
                 return 0;

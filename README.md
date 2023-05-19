@@ -65,3 +65,19 @@ dotnet tool uninstall -g csharp.cli
 
 ---
 
+# echo
+輸出用戶輸入的文字。
+```bash=
+csharp.cli echo "Hello World" -r 3
+```
+# polly
+重試測試。
+```bash=
+csharp.cli polly
+```
+
+# bet-area
+查詢 betArea
+```bash=
+csharp.cli bet-area -i 2
+```
