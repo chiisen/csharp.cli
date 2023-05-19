@@ -1,14 +1,17 @@
 ﻿using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
-using System;
 using System.Globalization;
 
 public partial class Program
 {
+    /// <summary>
+    /// 查詢 betArea
+    /// 命令列引數: bet-area Bacc -c "閒"
+    /// </summary>
     public static void betArea()
     {
-        _ = _app.Command("bet-area", (Action<CommandLineApplication>)(command =>
+        _ = _app.Command("bet-area", command =>
         {
             // 第二層 Help 的標題
             command.Description = "查詢 betArea";
@@ -21,10 +24,10 @@ public partial class Program
             var idOption = command.Option("-i|--id", "指定輸出 betArea", CommandOptionType.SingleValue);
             var contextOption = command.Option("-c|--context", "指定輸出 betArea", CommandOptionType.SingleValue);
 
-            command.OnExecute((Func<int>)(() =>
+            command.OnExecute(() =>
             {
                 BetArea json = JsonConvert.DeserializeObject<BetArea>(betAreaJson);
-                if(json == null)
+                if (json == null)
                 {
                     Console.WriteLine($"null json");
                     return 1;
@@ -40,7 +43,7 @@ public partial class Program
                 gameName = gameName.ToLower(CultureInfo.InvariantCulture);
 
                 string id = idOption.HasValue() ? idOption.Value() : null;
-                if(id != null)
+                if (id != null)
                 {
                     id = string.Format("{0:00000}", Convert.ToInt16(id));
                     var ids = json.data.Where<BetAreaData>(x => x.gameName.ToLower() == gameName && x.betArea == id.ToString());
@@ -60,10 +63,10 @@ public partial class Program
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
                     }
                 }
-                    
+
                 return 0;
-            }));
-        }));
+            });
+        });
     }
 
     private static string betAreaJson = @"

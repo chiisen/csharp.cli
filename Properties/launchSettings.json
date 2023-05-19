@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "bet-area Bacc -c \"閒\""
+      "commandLineArgs": "example \"words\" -r 10"
     }
   }
 }

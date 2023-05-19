@@ -1,5 +1,4 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using Polly;
+﻿using Polly;
 using System.Net;
 
 public partial class Program

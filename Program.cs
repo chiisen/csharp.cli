@@ -17,7 +17,7 @@ public partial class Program
             argString += arg + " ";
 
         }
-        Console.WriteLine($"輸入參數:{argString}");
+        Console.WriteLine($"輸入參數:csharp.cli {argString}");
         Console.WriteLine($"====================");
 
         #endregion 【Logger 輸入參數】
@@ -39,15 +39,20 @@ public partial class Program
         #region 【註冊 Command】
 
         // ! 註冊 Command
+        example();
+
         echo();
 
         polly();
 
         betArea();
+
+        csv();
         #endregion 【註冊 Command】
 
         int ret = -1;
-        try {
+        try
+        {
             ret = _app.Execute(args);
         }
         catch (Exception ex)
