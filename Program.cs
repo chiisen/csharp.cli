@@ -43,6 +43,7 @@ public partial class Program
 
         polly();
 
+        betArea();
         #endregion 【註冊 Command】
 
         int ret = -1;
