@@ -18,23 +18,27 @@
             command.OnExecute(() =>
             {
                 var path = pathArgument.HasValue ? pathArgument.Value : null;
-                string p = currentPath + path;
-                Console.WriteLine($"讀取csv: {p}");
-                using (var reader = new StreamReader(p))
+                if(path == null)
                 {
-                    List<string> listA = new();
-                    List<string> listB = new();
+                    Console.WriteLine($"null path");
+                    return 1;
+                }
+                Console.WriteLine($"讀取csv: {path}");
+                using (var reader = new StreamReader(path))
+                {
+                    List<string> lineList = new();
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
                         var values = line.Split(';');
 
-                        listA.Add(values[0]);
-                        listB.Add(values[1]);
+                        lineList.Add(line);
+                    }
+                    foreach(var line in lineList)
+                    {
+                        Console.WriteLine(line);
                     }
                 }
-
-                Console.WriteLine($"csv");
                 return 0;
             });
         });
