@@ -1,15 +1,26 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using McMaster.Extensions.CommandLineUtils;
 using System.Reflection;
+using System.Runtime.Caching;
 
 public partial class Program
 {
     private static string currentPath;
     private static CommandLineApplication _app = new() { Name = "csharp.cli" };
+
+    private static ObjectCache Cache = MemoryCache.Default;
+    private static string CacheName = "Cache1";
+
     static int Main(string[] args)
     {
+        #region 顯示執行路徑
         currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         Console.WriteLine($"執行路徑: {currentPath}");
+        #endregion 顯示執行路徑
+
+        #region 建立快取
+
+        #endregion 建立快取
 
         #region 【Logger 輸入參數】
 
