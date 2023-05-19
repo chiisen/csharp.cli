@@ -1,4 +1,7 @@
-﻿public partial class Program
+﻿using System.Data;
+using System.Runtime.Caching;
+
+public partial class Program
 {
     /// <summary>
     /// 讀取 csv。
@@ -34,10 +37,32 @@
 
                         lineList.Add(line);
                     }
-                    foreach(var line in lineList)
+
+                    
+
+                    foreach (var line in lineList)
                     {
                         Console.WriteLine(line);
+
+                        // 檢查快取是否存在
+                        bool isSet = Cache[CacheName] != null;
+
+                        // 取得資料庫取得物件(省略動作)
+                        DataTable dt = new();
+
+                        // 寫入快取 (指定時間後回收快取)
+                        CacheItemPolicy policy = new()
+                        {
+                            AbsoluteExpiration = DateTime.Now + TimeSpan.FromMinutes(60) // 60 分鐘後回收
+                        };
+                        Cache.Add(new CacheItem(CacheName, dt), policy);
+
+                        // 讀取快取
+                        dt = (DataTable)Cache[CacheName];
                     }
+
+                    // 移除快取
+                    Cache.Remove(CacheName);
                 }
                 return 0;
             });
