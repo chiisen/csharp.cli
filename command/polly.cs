@@ -3,6 +3,10 @@ using System.Net;
 
 public partial class Program
 {
+    /// <summary>
+    /// 重試測試。
+    /// 命令列引數: polly
+    /// </summary>
     public static void polly()
     {
         _ = _app.Command("polly", command =>

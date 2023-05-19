@@ -1,12 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using McMaster.Extensions.CommandLineUtils;
+using System.Reflection;
 
 public partial class Program
 {
+    private static string currentPath;
     private static CommandLineApplication _app = new() { Name = "csharp.cli" };
     static int Main(string[] args)
     {
-
+        currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        Console.WriteLine($"執行路徑: {currentPath}");
 
         #region 【Logger 輸入參數】
 
@@ -48,6 +51,8 @@ public partial class Program
         betArea();
 
         csv();
+
+        version();
         #endregion 【註冊 Command】
 
         int ret = -1;

@@ -4,6 +4,10 @@ using System.Globalization;
 
 public partial class Program
 {
+    /// <summary>
+    /// 輸出用戶輸入的文字。
+    /// 命令列引數: echo words -r 3
+    /// </summary>
     public static void echo()
     {
         _ = _app.Command("echo", command =>
