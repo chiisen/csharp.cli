@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "example \"words\" -r 10"
+      "commandLineArgs": "csv \"C:\\royal\\github\\RoyalTemporaryFile\\WM\\csv\\輪盤.csv\""
     }
   }
 }
