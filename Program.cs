@@ -9,7 +9,7 @@ public partial class Program
     private static CommandLineApplication _app = new() { Name = "csharp.cli" };
 
     private static ObjectCache Cache = MemoryCache.Default;
-    private static string CacheName = "Cache1";
+    private static readonly int SECONDS_EXPIRATION = 600;// 指定秒數後回收
 
     static int Main(string[] args)
     {
@@ -17,10 +17,6 @@ public partial class Program
         currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         Console.WriteLine($"執行路徑: {currentPath}");
         #endregion 顯示執行路徑
-
-        #region 建立快取
-
-        #endregion 建立快取
 
         #region 【Logger 輸入參數】
 
@@ -64,6 +60,8 @@ public partial class Program
         csv();
 
         version();
+
+        cache();
         #endregion 【註冊 Command】
 
         int ret = -1;

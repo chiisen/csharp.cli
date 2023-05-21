@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "csv \"C:\\royal\\github\\RoyalTemporaryFile\\WM\\csv\\輪盤.csv\""
+      "commandLineArgs": "cache -s getKey -v setValue1"
     }
   }
 }
