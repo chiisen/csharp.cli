@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "cache -s getKey -v setValue1"
+      "commandLineArgs": "csv \"C:\\royal\\RoyalTemporaryFile\\WM\\csv\\百家樂.csv\" -b Bacc"
     }
   }
 }
