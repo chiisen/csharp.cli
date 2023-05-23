@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "csv \"C:\\royal\\RoyalTemporaryFile\\WM\\csv\\百家樂.csv\" -b Bacc"
+      "commandLineArgs": "json \"C:\\royal\\BetRecordHistory.json\""
     }
   }
 }

@@ -62,6 +62,8 @@ public partial class Program
         version();
 
         cache();
+
+        json();
         #endregion 【註冊 Command】
 
         int ret = -1;
