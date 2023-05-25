@@ -79,5 +79,17 @@ csharp.cli polly
 # bet-area
 查詢 betArea
 ```bash=
-csharp.cli bet-area -i 2
+csharp.cli bet-area LongHu -a "C:\csvFilePath.csv"
+```
+
+# cache
+測試 cache
+```bash=
+csharp.cli cache -r keyName
+```
+
+# version
+查詢版本號
+```bash=
+csharp.cli version
 ```

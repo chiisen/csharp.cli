@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "json \"C:\\royal\\BetRecordHistory.json\""
+      "commandLineArgs": "bet-area LongHu -a \"C:\\royal\\github\\RoyalTemporaryFile\\WM\\csv\\龍虎.csv\""
     }
   }
 }

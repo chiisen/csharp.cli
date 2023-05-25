@@ -36,7 +36,7 @@ public partial class Program
             BetArea json = null;
             if (betArea != null)
             {
-                json = JsonConvert.DeserializeObject<BetArea>(betAreaJson);
+                json = JsonConvert.DeserializeObject<BetArea>(BetAreaJson.Value);
                 if (json == null)
                 {
                     Console.WriteLine($"null json");
