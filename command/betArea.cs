@@ -90,7 +90,10 @@ public partial class Program
                             var ids = json.data.Where(x => x.gameName.ToLower() == gameName && x.betArea == aId);
                             foreach (var item in ids)
                             {
-                                Console.WriteLine($"{areaName} {item.betArea} {item.context} {item.lang}");
+                                if (item.lang == "zh-TW")
+                                {
+                                    Console.WriteLine($"{areaName} {item.betArea} {item.context} {item.lang}");
+                                }
                             }
                         }
                     }
