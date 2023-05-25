@@ -1,8 +1,10 @@
-﻿using csharp.cli.model;
+﻿using Colorful;
+using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
+using System.Drawing;
 using System.Globalization;
-using System.IO;
+using Console = Colorful.Console;
 
 public partial class Program
 {
@@ -92,7 +94,15 @@ public partial class Program
                             {
                                 if (item.lang == "zh-TW")
                                 {
-                                    Console.WriteLine($"{areaName} {item.betArea} {item.context} {item.lang}");
+                                    string message = "{0} {1} {2} {3}";
+                                    Formatter[] colors = new Formatter[]
+                                    {
+                                        new Formatter(areaName, Color.Red),
+                                        new Formatter(item.betArea, Color.Blue),
+                                        new Formatter(item.context, Color.Yellow),
+                                        new Formatter(item.lang, Color.Pink),
+                                    };
+                                    Console.WriteLineFormatted(message, Color.White, colors);
                                 }
                             }
                         }
