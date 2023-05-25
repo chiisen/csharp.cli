@@ -75,7 +75,20 @@ public partial class Program
         {
             Console.WriteLine($"發生錯誤:{ex.Message}");
         }
-        Console.WriteLine($"回傳值為: {ret}");
+
+        #region 取的 File Version
+        // ! 取的 File Version
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+        string fileVersion = fvi.FileVersion;
+        #endregion 取的 File Version
+
+        #region 取得 Assembly Version
+        // ! 取得 Assembly Version
+        string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        #endregion 取得 Assembly Version
+
+        Console.WriteLine($" AssemblyVersion: {AssemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
         Console.WriteLine($"按任何鍵繼續....");
         Console.ReadKey();
 
