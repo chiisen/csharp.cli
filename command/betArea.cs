@@ -46,7 +46,7 @@ public partial class Program
                 if (id != null)
                 {
                     id = string.Format("{0:00000}", Convert.ToInt16(id));
-                    var ids = json.data.Where<BetAreaData>(x => x.gameName.ToLower() == gameName && x.betArea == id.ToString());
+                    var ids = json.data.Where(x => x.gameName.ToLower() == gameName && x.betArea == id.ToString());
                     foreach (var item in ids)
                     {
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
@@ -57,7 +57,7 @@ public partial class Program
                 string context = contextOption.HasValue() ? contextOption.Value() : null;
                 if (context != null)
                 {
-                    var contexts = json.data.Where<BetAreaData>(x => x.gameName.ToLower() == gameName && x.context == context);
+                    var contexts = json.data.Where(x => x.gameName.ToLower() == gameName && x.context == context);
                     foreach (var item in contexts)
                     {
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
