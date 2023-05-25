@@ -5,7 +5,7 @@ public partial class Program
 {
     /// <summary>
     /// 範例程式
-    /// 命令列引數: cache "words" -r 10
+    /// 命令列引數: cache -r keyName
     /// </summary>
     public static void cache()
     {
