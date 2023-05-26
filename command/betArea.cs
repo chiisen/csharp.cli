@@ -50,6 +50,10 @@ public partial class Program
                     {
                         Console.WriteLine("> " + ba.gameName + ba.gameDesc);
 
+                        string writePath = @$"{Environment.CurrentDirectory}\{ba.gameName}.txt";
+
+                        List<string> codes = new List<string>();
+
                         List<Dictionary<int, string>> listWM = GetCsv(ba.pathWM);
                         List<Dictionary<int, string>> list = GetCsv(ba.path);
                         foreach (var d in list)
@@ -80,6 +84,8 @@ public partial class Program
                                     if(first != null)
                                     {
                                         Console.WriteLineFormatted(message + $" {first[1]}", Color.White, colors);
+
+                                        codes.Add($"{{(101, \"{first[1]}\"),\"{areaName}\"}},// {item.context}");
                                     }
                                     else
                                     {
@@ -87,6 +93,14 @@ public partial class Program
                                     }
                                 }
                             }
+                        }
+
+                        using (StreamWriter writer = new StreamWriter(writePath))
+                        {
+                            codes.ForEach( x =>
+                            {
+                                writer.WriteLine(x);
+                            });
                         }
                     }
                     return 0;
