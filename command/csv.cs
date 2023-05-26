@@ -1,14 +1,14 @@
-﻿using csharp.cli.model;
+﻿using Colorful;
+using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
-using Newtonsoft.Json;
-using System.Linq;
-using System.Text;
+using System.Drawing;
+using Console = Colorful.Console;
 
 public partial class Program
 {
     /// <summary>
     /// 讀取 csv。
-    /// 命令列引數: csv csvFile.csv
+    /// 命令列引數: csv csvFile.csv -b Bacc
     /// </summary>
     public static void csv()
     {
@@ -26,51 +26,70 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-            var path = pathArgument.HasValue ? pathArgument.Value : null;
-            if (path == null)
-            {
-                Console.WriteLine($"null path");
-                return 1;
-            }
-            Console.WriteLine($"讀取csv: {path}");
-            var betArea = betAreaOption.HasValue() ? betAreaOption.Value() : null;
-            BetArea json = null;
-            if (betArea != null)
-            {
-                    string text = File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}resource\betArea.json", Encoding.UTF8);
-                    json = JsonConvert.DeserializeObject<BetArea>(text);
-                if (json == null)
+                var path = pathArgument.HasValue ? pathArgument.Value : null;
+                if (path == null)
                 {
-                    Console.WriteLine($"null json");
+                    Console.WriteLine($"null path");
                     return 1;
                 }
-            }
-            using (var reader = new StreamReader(path))
-            {
-                while (!reader.EndOfStream)
+                Console.WriteLine($"讀取csv: {path}");
+                var betArea = betAreaOption.HasValue() ? betAreaOption.Value() : null;
+                BetArea? data = null;
+                if (betArea != null)
                 {
-                        var line = reader.ReadLine();
-                        if (betArea != null)
-                        {
-                            var values = line.Split(',');
-                            Dictionary<int, string> result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
-
-                            var id = result[2].ToString();
-                            var name = result[3].ToString();
-                            var ids = json.data.Where(x => x.gameName.ToLower() == betArea.ToLower() && x.betArea == id);
-                            foreach (var item in ids)
-                            {
-                                Console.WriteLine($"{name} {item.betArea} {item.context} {item.lang}");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine($"{line}");
-                        }
+                    data = GetBetAreaJson();
+                    if (data == null)
+                    {
+                        Console.WriteLine($"null json");
+                        return 1;
+                    }
                 }
-            }
-            return 0;            
+
+                List<Dictionary<int, string>> list = GetCsv(path);
+                foreach (var d in list)
+                {
+                    var id = d[2].ToString();
+                    var name = d[3].ToString();
+                    var ids = data.data.Where(x => x.gameName.ToLower() == betArea.ToLower() && x.betArea == id);
+                    foreach (var item in ids)
+                    {
+                        if (item.lang == "zh-TW")
+                        {
+                            string message = "{0} {1} {2}";
+                            Formatter[] colors = new Formatter[]
+                            {
+                                new Formatter(name, Color.Red),
+                                new Formatter(item.betArea, Color.Blue),
+                                new Formatter(item.context, Color.Yellow)
+                            };
+                            Console.WriteLineFormatted(message, Color.White, colors);
+                        }
+                    }
+                }
+                return 0;
             });
         });
+    }
+
+    public static List<Dictionary<int, string>> GetCsv(string path)
+    {
+        List<Dictionary<int, string>> list = new();
+        if(path == null)
+        {
+            Console.WriteLine($"null path");
+            return list;
+        }
+
+        using (var reader = new StreamReader(path))
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                Dictionary<int, string> result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
+                list.Add(result);
+            }
+        }
+        return list;
     }
 }

@@ -4,6 +4,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using Console = Colorful.Console;
 
@@ -31,11 +32,70 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                string text = File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}resource\betArea.json", Encoding.UTF8);
-                BetArea json = JsonConvert.DeserializeObject<BetArea>(text);
-                if (json == null)
+                string settingPath = @$"{Environment.CurrentDirectory}\.bet-area";
+                if (File.Exists(settingPath))
                 {
-                    Console.WriteLine($"null json");
+                    Console.WriteLine($"> 讀取到 .bet-area 設定檔案");
+
+                    BetArea jsonData = GetBetAreaJson();
+                    if (jsonData == null)
+                    {
+                        Console.WriteLine($"null jsonData");
+                        return 1;
+                    }
+
+                    string settingsText = File.ReadAllText(settingPath, Encoding.UTF8);
+                    List<BetAreaSetting> settings = JsonConvert.DeserializeObject<List<BetAreaSetting>>(settingsText);
+                    foreach (var ba in settings)
+                    {
+                        Console.WriteLine("> " + ba.gameName + ba.gameDesc);
+
+                        List<Dictionary<int, string>> listWM = GetCsv(ba.pathWM);
+                        List<Dictionary<int, string>> list = GetCsv(ba.path);
+                        foreach (var d in list)
+                        {
+                            var areaId = d[2].ToString();
+                            var isNumeric = int.TryParse(areaId, out int n);
+                            if (isNumeric == false)
+                            {
+                                continue;
+                            }
+                            var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
+                            var areaName = d[3].ToString();
+
+                            var ids = jsonData.data.Where(x => x.gameName.ToLower() == ba.gameName.ToLower() && x.betArea == aId);
+                            foreach (var item in ids)
+                            {
+                                if (item.lang == "zh-TW")
+                                {
+                                    string message = "{0} {1} {2}";
+                                    Formatter[] colors = new Formatter[]
+                                    {
+                                        new Formatter(areaName, Color.Red),
+                                        new Formatter(item.betArea, Color.Blue),
+                                        new Formatter(item.context, Color.Yellow)
+                                    };
+
+                                    var first = listWM.Where(x => x[3].Equals(item.context)).Select(x => x).FirstOrDefault();
+                                    if(first != null)
+                                    {
+                                        Console.WriteLineFormatted(message + $" {first[1]}", Color.White, colors);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLineFormatted(message, Color.White, colors);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return 0;
+                }
+
+                BetArea data = GetBetAreaJson();
+                if (data == null)
+                {
+                    Console.WriteLine($"null data");
                     return 1;
                 }
 
@@ -52,7 +112,7 @@ public partial class Program
                 if (id != null)
                 {
                     id = string.Format("{0:00000}", Convert.ToInt16(id));
-                    var ids = json.data.Where(x => x.gameName.ToLower() == gameName && x.betArea == id.ToString());
+                    var ids = data.data.Where(x => x.gameName.ToLower() == gameName && x.betArea == id.ToString());
                     foreach (var item in ids)
                     {
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
@@ -63,7 +123,7 @@ public partial class Program
                 string context = contextOption.HasValue() ? contextOption.Value() : null;
                 if (context != null)
                 {
-                    var contexts = json.data.Where(x => x.gameName.ToLower() == gameName && x.context == context);
+                    var contexts = data.data.Where(x => x.gameName.ToLower() == gameName && x.context == context);
                     foreach (var item in contexts)
                     {
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
@@ -84,25 +144,24 @@ public partial class Program
 
                             var areaId = result[2].ToString();
                             var isNumeric = int.TryParse(areaId, out int n);
-                            if(isNumeric == false)
+                            if (isNumeric == false)
                             {
                                 continue;
                             }
                             var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
                             var areaName = result[3].ToString();
 
-                            var ids = json.data.Where(x => x.gameName.ToLower() == gameName && x.betArea == aId);
+                            var ids = data.data.Where(x => x.gameName.ToLower() == gameName && x.betArea == aId);
                             foreach (var item in ids)
                             {
                                 if (item.lang == "zh-TW")
                                 {
-                                    string message = "{0} {1} {2} {3}";
+                                    string message = "{0} {1} {2}";
                                     Formatter[] colors = new Formatter[]
                                     {
                                         new Formatter(areaName, Color.Red),
                                         new Formatter(item.betArea, Color.Blue),
-                                        new Formatter(item.context, Color.Yellow),
-                                        new Formatter(item.lang, Color.Pink),
+                                        new Formatter(item.context, Color.Yellow)
                                     };
                                     Console.WriteLineFormatted(message, Color.White, colors);
                                 }

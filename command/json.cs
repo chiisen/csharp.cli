@@ -1,9 +1,20 @@
 ﻿using csharp.cli.model;
-using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
+using System.Text;
 
 public partial class Program
 {
+    static BetArea? GetBetAreaJson()
+    {
+        string json = File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}resource\betArea.json", Encoding.UTF8);
+        BetArea data = JsonConvert.DeserializeObject<BetArea>(json);
+        if (data == null)
+        {
+            Console.WriteLine($"null data");
+            return null;
+        }
+        return data;
+    }
     /// <summary>
     /// 範例程式
     /// 命令列引數: json "words" -r 10
@@ -27,7 +38,7 @@ public partial class Program
                     Console.WriteLine($"null path");
                     return 1;
                 }
-                
+
                 var jsonText = File.ReadAllText(path);
                 List<BetRecord> record = JsonConvert.DeserializeObject<List<BetRecord>>(jsonText);
 
