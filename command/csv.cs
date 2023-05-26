@@ -2,6 +2,7 @@
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Text;
 
 public partial class Program
 {
@@ -36,7 +37,8 @@ public partial class Program
             BetArea json = null;
             if (betArea != null)
             {
-                json = JsonConvert.DeserializeObject<BetArea>(BetAreaJson.Value);
+                    string text = File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}resource\betArea.json", Encoding.UTF8);
+                    json = JsonConvert.DeserializeObject<BetArea>(text);
                 if (json == null)
                 {
                     Console.WriteLine($"null json");

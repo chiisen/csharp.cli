@@ -8,8 +8,8 @@
 	<PackAsTool>true</PackAsTool>
 	<ToolCommandName>csharp.cli</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
-	<AssemblyVersion>1.0.1.71</AssemblyVersion>
-	<FileVersion>2023.0525.0908.93</FileVersion>
+	<AssemblyVersion>1.0.1.72</AssemblyVersion>
+	<FileVersion>2023.0526.0243.103</FileVersion>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
@@ -45,6 +45,12 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="resource\betArea.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
