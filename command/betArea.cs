@@ -29,6 +29,7 @@ public partial class Program
             var idOption = command.Option("-i|--id", "指定輸出 betArea", CommandOptionType.SingleValue);
             var contextOption = command.Option("-c|--context", "指定輸出 betArea", CommandOptionType.SingleValue);
             var AreaNameOption = command.Option("-a|--area-name", "指定輸出 Area Name 的 csv 路徑", CommandOptionType.SingleValue);
+            var writeOption = command.Option("-w|--write", "指定輸出 Area Name 的 txt 路徑", CommandOptionType.SingleValue);
 
             command.OnExecute(() =>
             {
@@ -49,6 +50,16 @@ public partial class Program
                     foreach (var ba in settings)
                     {
                         Console.WriteLine("> " + ba.gameName + ba.gameDesc);
+
+                        string head = "{0} {1} {2} {3}";
+                        Formatter[] headColors = new Formatter[]
+                        {
+                            new Formatter("\"areaName\"", Color.Red),
+                            new Formatter("\"betArea\"", Color.Blue),
+                            new Formatter("\"context\"", Color.Yellow),
+                            new Formatter("\"WM code\"", Color.White)
+                        };
+                        Console.WriteLineFormatted(head, Color.White, headColors);
 
                         string writePath = @$"{Environment.CurrentDirectory}\{ba.gameName}.txt";
 
@@ -73,7 +84,7 @@ public partial class Program
                                 if (item.lang == "zh-TW")
                                 {
                                     string message = "{0} {1} {2}";
-                                    Formatter[] colors = new Formatter[]
+                                    Formatter[] messageColors = new Formatter[]
                                     {
                                         new Formatter(areaName, Color.Red),
                                         new Formatter(item.betArea, Color.Blue),
@@ -83,25 +94,29 @@ public partial class Program
                                     var first = listWM.Where(x => x[3].Equals(item.context)).Select(x => x).FirstOrDefault();
                                     if(first != null)
                                     {
-                                        Console.WriteLineFormatted(message + $" {first[1]}", Color.White, colors);
+                                        Console.WriteLineFormatted(message + $" {first[1]}", Color.White, messageColors);
 
                                         codes.Add($"{{(101, \"{first[1]}\"),\"{areaName}\"}},// {item.context}");
                                     }
                                     else
                                     {
-                                        Console.WriteLineFormatted(message, Color.White, colors);
+                                        Console.WriteLineFormatted(message, Color.White, messageColors);
                                     }
                                 }
                             }
                         }
 
-                        using (StreamWriter writer = new StreamWriter(writePath))
+                        string writeOptionString = writeOption.HasValue() ? writeOption.Value() : null;
+                        if (writeOptionString != null)
                         {
-                            codes.ForEach( x =>
+                            using (StreamWriter writer = new(writePath))
                             {
-                                writer.WriteLine(x);
-                            });
-                        }
+                                codes.ForEach( x =>
+                                {
+                                    writer.WriteLine(x);
+                                });
+                            }                            
+                        }                        
                     }
                     return 0;
                 }
