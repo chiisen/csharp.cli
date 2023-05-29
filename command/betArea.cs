@@ -49,7 +49,7 @@ public partial class Program
                     List<BetAreaSetting> settings = JsonConvert.DeserializeObject<List<BetAreaSetting>>(settingsText);
                     foreach (var ba in settings)
                     {
-                        Console.WriteLine("> " + ba.gameName + ba.gameDesc);
+                        Console.WriteLine($"> {ba.gameName} {ba.gameDesc}");
 
                         string head = "{0} {1} {2} {3}";
                         Formatter[] headColors = new Formatter[]
@@ -63,7 +63,7 @@ public partial class Program
 
                         string writePath = @$"{Environment.CurrentDirectory}\{ba.gameName}.txt";
 
-                        List<string> codes = new List<string>();
+                        List<string> codes = new();
 
                         List<Dictionary<int, string>> listWM = GetCsv(ba.pathWM);
                         List<Dictionary<int, string>> list = GetCsv(ba.path);
