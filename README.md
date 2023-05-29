@@ -29,6 +29,11 @@ dotnet new console -lang c#
 ---
 
 # 安裝
+- 編譯
+```bash=
+dotnet build
+```
+看看有沒有錯誤訊息
 - 產生 nupkg
 ```bash=
 dotnet pack

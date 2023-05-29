@@ -12,7 +12,7 @@ public partial class Program
         _ = _app.Command("ps", command =>
         {
             // 第二層 Help 的標題
-            command.Description = "pwd 說明";
+            command.Description = "power shell 說明";
             command.HelpOption("-?|-h|-help");
 
             command.OnExecute(() =>
