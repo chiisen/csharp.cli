@@ -96,8 +96,8 @@ public partial class Program
         #endregion 取得 Assembly Version
 
         Console.WriteLine($" AssemblyVersion: {AssemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
-        Console.WriteLine($"按任何鍵繼續....");
-        Console.ReadKey();
+        //Console.WriteLine($"按任何鍵繼續....");
+        //Console.ReadKey();
 
         return 0;
     }

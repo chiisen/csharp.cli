@@ -50,6 +50,7 @@ public partial class Program
                 {
                     var id = d[2].ToString();
                     var name = d[3].ToString();
+                    name = name.Replace("\"", "");
                     var ids = data.data.Where(x => x.gameName.ToLower() == betArea.ToLower() && x.betArea == id);
                     foreach (var item in ids)
                     {

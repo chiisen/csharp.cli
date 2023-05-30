@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Xml.Linq;
 using Console = Colorful.Console;
 
 public partial class Program
@@ -50,6 +51,7 @@ public partial class Program
                     foreach (var ba in settings)
                     {
                         Console.WriteLine($"> {ba.gameName} {ba.gameDesc}");
+                        Console.WriteLine("==============================");
 
                         string head = "{0} {1} {2} {3}";
                         Formatter[] headColors = new Formatter[]
@@ -60,6 +62,7 @@ public partial class Program
                             new Formatter("\"WM code\"", Color.White)
                         };
                         Console.WriteLineFormatted(head, Color.White, headColors);
+                        Console.WriteLine("==============================");
 
                         string writePath = @$"{Environment.CurrentDirectory}\{ba.gameName}.txt";
 
@@ -77,26 +80,40 @@ public partial class Program
                             }
                             var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
                             var areaName = d[3].ToString();
+                            areaName = areaName.Replace("\"", "");
 
                             var ids = jsonData.data.Where(x => x.gameName.ToLower() == ba.gameName.ToLower() && x.betArea == aId);
                             foreach (var item in ids)
                             {
                                 if (item.lang == "zh-TW")
                                 {
+                                    var cont = item.context;
+                                    cont = cont.Replace(" ", "");// 去掉空白
+
+                                    cont = cont.Replace("一", "1");
+                                    cont = cont.Replace("二", "2");
+                                    cont = cont.Replace("三", "3");
+                                    cont = cont.Replace("四", "4");
+                                    cont = cont.Replace("五", "5");
+                                    cont = cont.Replace("六", "6");
+                                    cont = cont.Replace("七", "7");
+                                    cont = cont.Replace("八", "8");
+                                    cont = cont.Replace("九", "9");
+
                                     string message = "{0} {1} {2}";
                                     Formatter[] messageColors = new Formatter[]
                                     {
                                         new Formatter(areaName, Color.Red),
                                         new Formatter(item.betArea, Color.Blue),
-                                        new Formatter(item.context, Color.Yellow)
+                                        new Formatter(cont, Color.Yellow)
                                     };
 
-                                    var first = listWM.Where(x => x[3].Equals(item.context)).Select(x => x).FirstOrDefault();
+                                    var first = listWM.Where(x => x[3].Equals(cont)).Select(x => x).FirstOrDefault();
                                     if(first != null)
                                     {
                                         Console.WriteLineFormatted(message + $" {first[1]}", Color.White, messageColors);
 
-                                        codes.Add($"{{(101, \"{first[1]}\"),\"{areaName}\"}},// {item.context}");
+                                        codes.Add($"{{(101, \"{first[1]}\"),\"{areaName}\"}},// {cont}");
                                     }
                                     else
                                     {
