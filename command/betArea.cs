@@ -1,4 +1,5 @@
 ﻿using Colorful;
+using csharp.cli.common;
 using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
@@ -73,14 +74,17 @@ public partial class Program
                         foreach (var d in list)
                         {
                             var areaId = d[2].ToString();
-                            var isNumeric = int.TryParse(areaId, out int n);
-                            if (isNumeric == false)
+                            if (Common.IsNumeric(areaId) == false)
                             {
                                 continue;
                             }
                             var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
                             var areaName = d[3].ToString();
                             areaName = areaName.Replace("\"", "");
+                            if (Common.IsLetter(areaName) == false)
+                            {
+                                areaName = $"'{areaName}'";
+                            }
 
                             var ids = jsonData.data.Where(x => x.gameName.ToLower() == ba.gameName.ToLower() && x.betArea == aId);
                             foreach (var item in ids)
@@ -90,15 +94,7 @@ public partial class Program
                                     var cont = item.context;
                                     cont = cont.Replace(" ", "");// 去掉空白
 
-                                    cont = cont.Replace("一", "1");
-                                    cont = cont.Replace("二", "2");
-                                    cont = cont.Replace("三", "3");
-                                    cont = cont.Replace("四", "4");
-                                    cont = cont.Replace("五", "5");
-                                    cont = cont.Replace("六", "6");
-                                    cont = cont.Replace("七", "7");
-                                    cont = cont.Replace("八", "8");
-                                    cont = cont.Replace("九", "9");
+                                    cont = Common.ReplaceChineseNumerals(cont);
 
                                     string message = "{0} {1} {2}";
                                     Formatter[] messageColors = new Formatter[]
@@ -189,8 +185,7 @@ public partial class Program
                             Dictionary<int, string> result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
 
                             var areaId = result[2].ToString();
-                            var isNumeric = int.TryParse(areaId, out int n);
-                            if (isNumeric == false)
+                            if (Common.IsNumeric(areaId) == false)
                             {
                                 continue;
                             }

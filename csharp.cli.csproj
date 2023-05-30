@@ -9,7 +9,7 @@
 	<ToolCommandName>csharp.cli</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
 	<AssemblyVersion>1.0.1.79</AssemblyVersion>
-	<FileVersion>2023.0530.0725.190</FileVersion>
+	<FileVersion>2023.0530.0859.201</FileVersion>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
