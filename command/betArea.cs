@@ -82,7 +82,7 @@ public partial class Program
 
                         List<Dictionary<int, string>> listWM = GetCsv(ba.pathWM);
                         List<Dictionary<int, string>> list = GetCsv(ba.path);
-                        Dictionary<string, string> dict = new Dictionary<string, string>();
+                        Dictionary<string, string> dict = new();
                         foreach (var d in list)
                         {
                             var areaId = d[2].ToString();
@@ -101,12 +101,14 @@ public partial class Program
                                 continue;
                             }
                             dict.Add(areaName, aId);
-
+                            
+                            // TODO: 去掉有引號的字串
                             areaName = areaName.Replace("\"", "");
-                            if (Common.IsLetter(areaName) == false)
-                            {
-                                areaName = $"'{areaName}'";
-                            }
+
+                            //if (Common.IsLetter(areaName) == false)
+                            //{
+                            //    areaName = $"'{areaName}'";
+                            //}
 
                             string targetAreaName = "ZhuangB";
                             if (areaName.ToLower() == targetAreaName.ToLower())
@@ -141,7 +143,7 @@ public partial class Program
                                 }
                                 else
                                 {
-                                    Console.WriteLineFormatted(message, Color.White, messageColors);
+                                    Console.WriteLineFormatted(message + " 沒有對應的代碼", Color.White, messageColors);
                                 }
                             }
                         }
