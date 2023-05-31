@@ -98,3 +98,9 @@ csharp.cli cache -r keyName
 ```bash=
 csharp.cli version
 ```
+
+# csv
+測試 csv
+```bash=
+csharp.cli csv ".\WM\csv\csvFile.csv" -b Bacc
+```

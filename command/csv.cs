@@ -1,16 +1,16 @@
 ﻿using Colorful;
 using csharp.cli.model;
+using CsvHelper;
 using McMaster.Extensions.CommandLineUtils;
 using System.Drawing;
-using System.Linq;
-using System.Text.RegularExpressions;
+using System.Globalization;
 using Console = Colorful.Console;
 
 public partial class Program
 {
     /// <summary>
     /// 讀取 csv。
-    /// 命令列引數: csv csvFile.csv -b Bacc
+    /// 命令列引數: csv ".\WM\csv\csvFile.csv" -b Bacc
     /// </summary>
     public static void csv()
     {
@@ -35,18 +35,24 @@ public partial class Program
                     return 1;
                 }
                 Console.WriteLine($"讀取csv: {path}");
-                var betArea = betAreaOption.HasValue() ? betAreaOption.Value() : null;
-                BetArea? data = null;
-                if (betArea != null)
+                
+                BetArea? data = GetBetAreaJson();
+                if (data == null)
                 {
-                    data = GetBetAreaJson();
-                    if (data == null)
-                    {
-                        Console.WriteLine($"null json");
-                        return 1;
-                    }
+                    Console.WriteLine($"null json");
+                    return 1;
+                }
+                else
+                {
                     // 只留下 lang 為 zh-TW
                     data.data = data.data.Where(x => x.lang == "zh-TW").ToList();
+                }
+
+                var betArea = betAreaOption.HasValue() ? betAreaOption.Value() : null;
+                if (betArea == null)
+                {
+                    Console.WriteLine($"null betArea");
+                    return 1;
                 }
 
                 List<Dictionary<int, string>> list = GetCsv(path);
@@ -77,7 +83,7 @@ public partial class Program
     public static List<Dictionary<int, string>> GetCsv(string path)
     {
         List<Dictionary<int, string>> list = new();
-        if(path == null)
+        if (path == null)
         {
             Console.WriteLine($"null path");
             return list;
@@ -85,42 +91,30 @@ public partial class Program
 
         using (var reader = new StreamReader(path))
         {
-            while (!reader.EndOfStream)
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                var line = reader.ReadLine();
-
-                bool isReplace = false;
-
-                Regex regex = new("\"(.*)\"");
-                var v = regex.Match(line);
-                string sourceStr = "";
-                string replaceStr = "";
-                if (v.Groups.Count > 1)
-                {
-                    // 把兩個 " 之間的逗號，換成中文逗號，避免被當成 csv 分隔符號
-                    sourceStr = v.Groups[0].ToString();
-                    replaceStr = sourceStr.Replace(",", "，");
-                    line = line.Replace(sourceStr, replaceStr);
-
-                    isReplace = true;
-                }
-
-                var values = line.Split(',');
-
-                if (isReplace)
-                {
-                    values.Where(x => x.Equals(replaceStr)).ToList().ForEach(x =>
-                    {
-                        // 把兩個 " 之間的中文逗號，還原為逗點
-                        var index = Array.IndexOf(values, x);
-                        values[index] = x.Replace(replaceStr, sourceStr);
-                    });
-                }
+                var records = csv.GetRecords<dynamic>();
                 
-                Dictionary<int, string> result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
-                list.Add(result);
+                foreach (var rec in records)
+                {
+                    var dic = new Dictionary<int, string>();
+
+                    var dics = (IDictionary<string, object>)rec;
+                    int index = 1;
+                    foreach (var prop in dics)
+                    {
+                        dic.Add(index, prop.Value as string);
+                        //Console.WriteLine($"{prop.Key} {prop.Value}");
+                        index++;
+                    }
+                    if (dic.Count > 0)
+                    {
+                        list.Add(dic);
+                    }
+                }
             }
         }
+
         return list;
     }
 }

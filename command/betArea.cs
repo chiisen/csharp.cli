@@ -5,10 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using Console = Colorful.Console;
 
 public partial class Program
@@ -62,7 +59,7 @@ public partial class Program
                         if (ba.gameName.ToLower() == targetGameName.ToLower())
                         {
                             // TODO: 這裡是指定遊戲的特殊處理
-                            Console.WriteLine("==============================");
+                            int debug = 0;
                         }
 
                         string head = "{0} {1} {2} {3}";
@@ -114,7 +111,7 @@ public partial class Program
                             if (areaName.ToLower() == targetAreaName.ToLower())
                             {
                                 // TODO: 這裡是指定 areaName 的特殊處理
-                                Console.WriteLine("==============================");
+                                int debug = 0;
                             }
 
                             var ids = jsonData.data.Where(x => x.gameName.ToLower() == ba.gameName.ToLower() 
