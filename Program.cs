@@ -14,6 +14,8 @@ public partial class Program
 
     static int Main(string[] args)
     {
+        Console.WriteLine($"================");
+
         #region 顯示執行路徑
         currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         Console.WriteLine($"執行路徑: {currentPath}");
@@ -71,6 +73,8 @@ public partial class Program
         environment();
 
         ps();
+
+        excel();
         #endregion 【註冊 Command】
 
         int ret = -1;
@@ -95,6 +99,7 @@ public partial class Program
         string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         #endregion 取得 Assembly Version
 
+        Console.WriteLine($"================");
         Console.WriteLine($" AssemblyVersion: {AssemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
         Console.WriteLine($"====程式結束====");
         //Console.WriteLine($"按任何鍵繼續....");

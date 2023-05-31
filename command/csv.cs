@@ -2,6 +2,8 @@
 using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
 using System.Drawing;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Console = Colorful.Console;
 
 public partial class Program
@@ -43,6 +45,8 @@ public partial class Program
                         Console.WriteLine($"null json");
                         return 1;
                     }
+                    // 只留下 lang 為 zh-TW
+                    data.data = data.data.Where(x => x.lang == "zh-TW").ToList();
                 }
 
                 List<Dictionary<int, string>> list = GetCsv(path);
@@ -51,20 +55,18 @@ public partial class Program
                     var id = d[2].ToString();
                     var name = d[3].ToString();
                     name = name.Replace("\"", "");
-                    var ids = data.data.Where(x => x.gameName.ToLower() == betArea.ToLower() && x.betArea == id);
+                    var ids = data.data.Where(x => x.gameName.ToLower() == betArea.ToLower() 
+                                           && x.betArea == id).ToList();
                     foreach (var item in ids)
                     {
-                        if (item.lang == "zh-TW")
+                        string message = "{0} {1} {2}";
+                        Formatter[] colors = new Formatter[]
                         {
-                            string message = "{0} {1} {2}";
-                            Formatter[] colors = new Formatter[]
-                            {
-                                new Formatter(name, Color.Red),
-                                new Formatter(item.betArea, Color.Blue),
-                                new Formatter(item.context, Color.Yellow)
-                            };
-                            Console.WriteLineFormatted(message, Color.White, colors);
-                        }
+                            new Formatter(name, Color.Red),
+                            new Formatter(item.betArea, Color.Blue),
+                            new Formatter(item.context, Color.Yellow)
+                        };
+                        Console.WriteLineFormatted(message, Color.White, colors);
                     }
                 }
                 return 0;
@@ -86,7 +88,35 @@ public partial class Program
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
+
+                bool isReplace = false;
+
+                Regex regex = new("\"(.*)\"");
+                var v = regex.Match(line);
+                string sourceStr = "";
+                string replaceStr = "";
+                if (v.Groups.Count > 1)
+                {
+                    // 把兩個 " 之間的逗號，換成中文逗號，避免被當成 csv 分隔符號
+                    sourceStr = v.Groups[0].ToString();
+                    replaceStr = sourceStr.Replace(",", "，");
+                    line = line.Replace(sourceStr, replaceStr);
+
+                    isReplace = true;
+                }
+
                 var values = line.Split(',');
+
+                if (isReplace)
+                {
+                    values.Where(x => x.Equals(replaceStr)).ToList().ForEach(x =>
+                    {
+                        // 把兩個 " 之間的中文逗號，還原為逗點
+                        var index = Array.IndexOf(values, x);
+                        values[index] = x.Replace(replaceStr, sourceStr);
+                    });
+                }
+                
                 Dictionary<int, string> result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
                 list.Add(result);
             }

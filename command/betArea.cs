@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using Console = Colorful.Console;
@@ -47,12 +48,22 @@ public partial class Program
                         return 1;
                     }
 
+                    // 只留下 lang 為 zh-TW
+                    jsonData.data = jsonData.data.Where(x => x.lang == "zh-TW").ToList();
+
                     string settingsText = File.ReadAllText(settingPath, Encoding.UTF8);
                     List<BetAreaSetting> settings = JsonConvert.DeserializeObject<List<BetAreaSetting>>(settingsText);
                     foreach (var ba in settings)
                     {
                         Console.WriteLine($"> {ba.gameName} {ba.gameDesc}");
                         Console.WriteLine("==============================");
+
+                        string targetGameName = "SeDie";
+                        if (ba.gameName.ToLower() == targetGameName.ToLower())
+                        {
+                            // TODO: 這裡是指定遊戲的特殊處理
+                            //Console.WriteLine("==============================");
+                        }
 
                         string head = "{0} {1} {2} {3}";
                         Formatter[] headColors = new Formatter[]
@@ -71,50 +82,66 @@ public partial class Program
 
                         List<Dictionary<int, string>> listWM = GetCsv(ba.pathWM);
                         List<Dictionary<int, string>> list = GetCsv(ba.path);
+                        Dictionary<string, string> dict = new Dictionary<string, string>();
                         foreach (var d in list)
                         {
                             var areaId = d[2].ToString();
                             if (Common.IsNumeric(areaId) == false)
                             {
+                                //Console.WriteLine($"areaId: {areaId} 不是數值，所以略過處理");
                                 continue;
                             }
                             var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
                             var areaName = d[3].ToString();
+
+                            //跳過重複
+                            if (dict.ContainsKey(areaName) == true)
+                            {
+                                Console.WriteLine($"areaName: {areaName} 重複處理，所以略過處理");
+                                continue;
+                            }
+                            dict.Add(areaName, aId);
+
                             areaName = areaName.Replace("\"", "");
                             if (Common.IsLetter(areaName) == false)
                             {
                                 areaName = $"'{areaName}'";
                             }
 
-                            var ids = jsonData.data.Where(x => x.gameName.ToLower() == ba.gameName.ToLower() && x.betArea == aId);
+                            string targetAreaName = "ZhuangB";
+                            if (areaName.ToLower() == targetAreaName.ToLower())
+                            {
+                                // TODO: 這裡是指定 areaName 的特殊處理
+                                //Console.WriteLine("==============================");
+                            }
+
+                            var ids = jsonData.data.Where(x => x.gameName.ToLower() == ba.gameName.ToLower() 
+                                                       && x.betArea == aId).ToList();
                             foreach (var item in ids)
                             {
-                                if (item.lang == "zh-TW")
+                                var cont = item.context;
+                                cont = cont.Replace(" ", "");// 去掉空白
+
+                                cont = Common.ReplaceChineseNumerals(cont);
+
+                                string message = "{0} {1} {2}";
+                                Formatter[] messageColors = new Formatter[]
                                 {
-                                    var cont = item.context;
-                                    cont = cont.Replace(" ", "");// 去掉空白
+                                    new Formatter(areaName, Color.Red),
+                                    new Formatter(item.betArea, Color.Blue),
+                                    new Formatter(cont, Color.Yellow)
+                                };
 
-                                    cont = Common.ReplaceChineseNumerals(cont);
+                                var first = listWM.Where(x => Common.ReplaceChineseNumerals(x[3]).Equals(cont)).Select(x => x).FirstOrDefault();
+                                if(first != null)
+                                {
+                                    Console.WriteLineFormatted(message + $" {first[1]}", Color.White, messageColors);
 
-                                    string message = "{0} {1} {2}";
-                                    Formatter[] messageColors = new Formatter[]
-                                    {
-                                        new Formatter(areaName, Color.Red),
-                                        new Formatter(item.betArea, Color.Blue),
-                                        new Formatter(cont, Color.Yellow)
-                                    };
-
-                                    var first = listWM.Where(x => x[3].Equals(cont)).Select(x => x).FirstOrDefault();
-                                    if(first != null)
-                                    {
-                                        Console.WriteLineFormatted(message + $" {first[1]}", Color.White, messageColors);
-
-                                        codes.Add($"{{(101, \"{first[1]}\"),\"{areaName}\"}},// {cont}");
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLineFormatted(message, Color.White, messageColors);
-                                    }
+                                    codes.Add($"{{(101, \"{first[1]}\"),\"{areaName}\"}},// {cont}");
+                                }
+                                else
+                                {
+                                    Console.WriteLineFormatted(message, Color.White, messageColors);
                                 }
                             }
                         }
@@ -154,7 +181,8 @@ public partial class Program
                 if (id != null)
                 {
                     id = string.Format("{0:00000}", Convert.ToInt16(id));
-                    var ids = data.data.Where(x => x.gameName.ToLower() == gameName && x.betArea == id.ToString());
+                    var ids = data.data.Where(x => x.gameName.ToLower() == gameName 
+                                           && x.betArea == id.ToString()).ToList();
                     foreach (var item in ids)
                     {
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
@@ -192,20 +220,18 @@ public partial class Program
                             var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
                             var areaName = result[3].ToString();
 
-                            var ids = data.data.Where(x => x.gameName.ToLower() == gameName && x.betArea == aId);
+                            var ids = data.data.Where(x => x.gameName.ToLower() == gameName 
+                                                   && x.betArea == aId).ToList();
                             foreach (var item in ids)
                             {
-                                if (item.lang == "zh-TW")
+                                string message = "{0} {1} {2}";
+                                Formatter[] colors = new Formatter[]
                                 {
-                                    string message = "{0} {1} {2}";
-                                    Formatter[] colors = new Formatter[]
-                                    {
-                                        new Formatter(areaName, Color.Red),
-                                        new Formatter(item.betArea, Color.Blue),
-                                        new Formatter(item.context, Color.Yellow)
-                                    };
-                                    Console.WriteLineFormatted(message, Color.White, colors);
-                                }
+                                    new Formatter(areaName, Color.Red),
+                                    new Formatter(item.betArea, Color.Blue),
+                                    new Formatter(item.context, Color.Yellow)
+                                };
+                                Console.WriteLineFormatted(message, Color.White, colors);
                             }
                         }
                     }
