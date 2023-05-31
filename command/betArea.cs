@@ -58,11 +58,11 @@ public partial class Program
                         Console.WriteLine($"> {ba.gameName} {ba.gameDesc}");
                         Console.WriteLine("==============================");
 
-                        string targetGameName = "SeDie";
+                        string targetGameName = "ShaiZi";
                         if (ba.gameName.ToLower() == targetGameName.ToLower())
                         {
                             // TODO: 這裡是指定遊戲的特殊處理
-                            //Console.WriteLine("==============================");
+                            Console.WriteLine("==============================");
                         }
 
                         string head = "{0} {1} {2} {3}";
@@ -110,11 +110,11 @@ public partial class Program
                             //    areaName = $"'{areaName}'";
                             //}
 
-                            string targetAreaName = "ZhuangB";
+                            string targetAreaName = "B12";
                             if (areaName.ToLower() == targetAreaName.ToLower())
                             {
                                 // TODO: 這裡是指定 areaName 的特殊處理
-                                //Console.WriteLine("==============================");
+                                Console.WriteLine("==============================");
                             }
 
                             var ids = jsonData.data.Where(x => x.gameName.ToLower() == ba.gameName.ToLower() 
