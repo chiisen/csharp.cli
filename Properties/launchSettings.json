@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "bet-area"
+      "commandLineArgs": "multi-thread"
     }
   }
 }

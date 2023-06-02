@@ -75,6 +75,8 @@ public partial class Program
         ps();
 
         excel();
+
+        multiThread();
         #endregion 【註冊 Command】
 
         int ret = -1;
