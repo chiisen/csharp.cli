@@ -18,6 +18,11 @@ namespace csharp.cli.common
         /// <returns></returns>
         public static string ReplaceChineseNumerals(string str)
         {
+            if (str == null)
+            {
+                Console.WriteLine("Null str");
+                return null;
+            }
             str = str.Replace("一", "1");
             str = str.Replace("二", "2");
             str = str.Replace("三", "3");
