@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "json \"C:\\royal\\github\\RoyalTemporaryFile\\MG\\BetRecordHistory.json\""
+      "commandLineArgs": "bet-area-all"
     }
   }
 }

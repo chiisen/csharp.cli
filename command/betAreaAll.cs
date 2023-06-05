@@ -134,7 +134,7 @@ public partial class Program
                                               .Select(x => x).FirstOrDefault();
                             if (first != null)
                             {
-                                BetAreaAllHelper.Message("{0} {1} {2}" + $" {first[1]}", areaName, betArea, context);
+                                BetAreaAllHelper.Message("{0} {1} {2} {3}", areaName, betArea, context, first[1]);
                             }
                             else
                             {
@@ -156,6 +156,10 @@ public partial class Program
 /// </summary>
 public class BetAreaAllHelper
 {
+    private static int areaNameLens = 55;
+    private static int betAreaLens = 10;
+    private static int contextLens = 30;
+    private static int wmCodeLens = 25;
     /// <summary>
     /// 列印彩色標題
     /// </summary>
@@ -165,10 +169,10 @@ public class BetAreaAllHelper
 
         var colors = new Formatter[]
         {
-            new ("\"areaName\"", Color.Green),
-            new ("\"BetArea\"", Color.Blue),
-            new ("\"context\"", Color.Yellow),
-            new ("\"WM code\"", Color.White)
+            new ("\"areaName\"".PadRight(areaNameLens), Color.Green),
+            new ("\"BetArea\"".PadRight(betAreaLens), Color.Blue),
+            new ("\"context\"".PadRight(contextLens), Color.Yellow),
+            new ("\"WM code\"".PadRight(wmCodeLens), Color.White)
         };
         Console.WriteLineFormatted(head, Color.White, colors);
     }
@@ -179,13 +183,14 @@ public class BetAreaAllHelper
     /// <param name="areaName"></param>
     /// <param name="betArea"></param>
     /// <param name="context"></param>
-    public static void Message(string message, string areaName, string betArea, string context)
+    public static void Message(string message, string areaName, string betArea, string context, string wmCode)
     {
         var colors = new Formatter[]
         {
-            new(areaName, Color.Green),
-            new(betArea, Color.Blue),
-            new(context, Color.Yellow)
+            new(areaName.PadRight(areaNameLens), Color.Green),
+            new(betArea.PadRight(betAreaLens), Color.Blue),
+            new(context.PadRight(contextLens), Color.Yellow),
+            new(wmCode.PadRight(wmCodeLens), Color.White)
         };
         Console.WriteLineFormatted(message, Color.White, colors);
     }
@@ -201,10 +206,10 @@ public class BetAreaAllHelper
     {
         var colors = new Formatter[]
         {
-            new(areaName, Color.Green),
-            new(betArea, Color.Blue),
-            new(context, Color.Yellow),
-            new(" 沒有對應的代碼", Color.Red)
+            new(areaName.PadRight(areaNameLens), Color.Green),
+            new(betArea.PadRight(betAreaLens), Color.Blue),
+            new(context.PadRight(contextLens), Color.Yellow),
+            new("沒有對應的代碼".PadRight(25), Color.Red)
         };
         Console.WriteLineFormatted(message, Color.White, colors);
     }
