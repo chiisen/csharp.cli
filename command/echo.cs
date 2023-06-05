@@ -1,6 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using System.Globalization;
 
+namespace csharp.cli;
 
 public partial class Program
 {
@@ -8,9 +9,9 @@ public partial class Program
     /// 輸出用戶輸入的文字。
     /// 命令列引數: echo words -r 3
     /// </summary>
-    public static void echo()
+    public static void Echo()
     {
-        _ = _app.Command("echo", command =>
+        _ = App.Command("echo", command =>
         {
             // 第二層 Help 的標題
             command.Description = "輸出用戶輸入的文字。";
@@ -26,11 +27,21 @@ public partial class Program
             command.OnExecute(() =>
             {
                 var words = wordsArgument.HasValue ? wordsArgument.Value : "world";
+                if(words == null)
+                {
+                    Console.WriteLine($"null words");
+                    return 1;
+                }
                 if (upperOption.HasValue())
                 {
                     words = words.ToUpper(CultureInfo.InvariantCulture);
                 }
                 var count = repeatOption.HasValue() ? repeatOption.Value() : "1";
+                if(count == null)
+                {
+                    Console.WriteLine($"null count");
+                    return 1;
+                }
                 int repeat_count = int.Parse(count);
                 for (int i = 0; i < repeat_count; ++i)
                 {

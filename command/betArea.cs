@@ -1,169 +1,45 @@
 ﻿using Colorful;
 using csharp.cli.common;
-using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
-using Newtonsoft.Json;
 using System.Drawing;
 using System.Globalization;
-using System.Text;
 using Console = Colorful.Console;
+
+namespace csharp.cli;
 
 public partial class Program
 {
     /// <summary>
-    /// 查詢 betArea
+    /// 查詢 BetArea
     /// 命令列引數: bet-area Bacc -c "閒"
     /// </summary>
-    public static void betArea()
+    public static void BetArea()
     {
-        _ = _app.Command("bet-area", command =>
+        _ = App.Command("bet-area", command =>
         {
             // 第二層 Help 的標題
-            command.Description = "查詢 betArea";
+            command.Description = "查詢 BetArea";
             command.HelpOption("-?|-h|-help");
 
             // 輸入參數說明
             var gameNameArgument = command.Argument("[gameName]", "指定需要輸出的遊戲。");
 
             // 輸入指令說明
-            var idOption = command.Option("-i|--id", "指定輸出 betArea", CommandOptionType.SingleValue);
-            var contextOption = command.Option("-c|--context", "指定輸出 betArea", CommandOptionType.SingleValue);
+            var idOption = command.Option("-i|--id", "指定輸出 BetArea", CommandOptionType.SingleValue);
+            var contextOption = command.Option("-c|--context", "指定輸出 BetArea", CommandOptionType.SingleValue);
             var AreaNameOption = command.Option("-a|--area-name", "指定輸出 Area Name 的 csv 路徑", CommandOptionType.SingleValue);
-            var writeOption = command.Option("-w|--write", "指定輸出 Area Name 的 txt 路徑", CommandOptionType.SingleValue);
 
             command.OnExecute(() =>
             {
-                string settingPath = @$"{Environment.CurrentDirectory}\.bet-area";
-                if (File.Exists(settingPath))
-                {
-                    Console.WriteLine($"> 讀取到 .bet-area 設定檔案");
-
-                    BetArea jsonData = GetBetAreaJson();
-                    if (jsonData == null)
-                    {
-                        Console.WriteLine($"null jsonData");
-                        return 1;
-                    }
-
-                    // 只留下 lang 為 zh-TW
-                    jsonData.data = jsonData.data.Where(x => x.lang == "zh-TW").ToList();
-
-                    string settingsText = File.ReadAllText(settingPath, Encoding.UTF8);
-                    List<BetAreaSetting> settings = JsonConvert.DeserializeObject<List<BetAreaSetting>>(settingsText);
-                    foreach (var ba in settings)
-                    {
-                        Console.WriteLine($"> {ba.gameName} {ba.gameDesc}");
-                        Console.WriteLine("==============================");
-
-                        string targetGameName = "ShaiZi";
-                        if (ba.gameName.ToLower() == targetGameName.ToLower())
-                        {
-                            // TODO: 這裡是指定遊戲的特殊處理
-                            int debug = 0;
-                        }
-
-                        string head = "{0} {1} {2} {3}";
-                        Formatter[] headColors = new Formatter[]
-                        {
-                            new Formatter("\"areaName\"", Color.Red),
-                            new Formatter("\"betArea\"", Color.Blue),
-                            new Formatter("\"context\"", Color.Yellow),
-                            new Formatter("\"WM code\"", Color.White)
-                        };
-                        Console.WriteLineFormatted(head, Color.White, headColors);
-                        Console.WriteLine("==============================");
-
-                        string writePath = @$"{Environment.CurrentDirectory}\{ba.gameName}.txt";
-
-                        List<string> codes = new();
-
-                        List<Dictionary<int, string>> listWM = GetCsv(ba.pathWM);
-                        List<Dictionary<int, string>> list = GetCsv(ba.path);
-                        Dictionary<string, string> dict = new();
-                        foreach (var d in list)
-                        {
-                            var areaId = d[2].ToString();
-                            if (Common.IsNumeric(areaId) == false)
-                            {
-                                //Console.WriteLine($"areaId: {areaId} 不是數值，所以略過處理");
-                                continue;
-                            }
-                            var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
-                            var areaName = d[3].ToString();
-
-                            //跳過重複
-                            if (dict.ContainsKey(areaName) == true)
-                            {
-                                Console.WriteLine($"areaName: {areaName} 重複處理，所以略過處理");
-                                continue;
-                            }
-                            dict.Add(areaName, aId);
-                            
-                            // TODO: 去掉有引號的字串
-                            areaName = areaName.Replace("\"", "");
-
-                            //if (Common.IsLetter(areaName) == false)
-                            //{
-                            //    areaName = $"'{areaName}'";
-                            //}
-
-                            string targetAreaName = "B12";
-                            if (areaName.ToLower() == targetAreaName.ToLower())
-                            {
-                                // TODO: 這裡是指定 areaName 的特殊處理
-                                int debug = 0;
-                            }
-
-                            var ids = jsonData.data.Where(x => x.gameName.ToLower() == ba.gameName.ToLower() 
-                                                       && x.betArea == aId).ToList();
-                            foreach (var item in ids)
-                            {
-                                var cont = item.context;
-                                cont = cont.Replace(" ", "");// 去掉空白
-
-                                cont = Common.ReplaceChineseNumerals(cont);
-
-                                string message = "{0} {1} {2}";
-                                Formatter[] messageColors = new Formatter[]
-                                {
-                                    new Formatter(areaName, Color.Red),
-                                    new Formatter(item.betArea, Color.Blue),
-                                    new Formatter(cont, Color.Yellow)
-                                };
-
-                                var first = listWM.Where(x => Common.ReplaceChineseNumerals(x[3]).Equals(cont)).Select(x => x).FirstOrDefault();
-                                if(first != null)
-                                {
-                                    Console.WriteLineFormatted(message + $" {first[1]}", Color.White, messageColors);
-
-                                    codes.Add($"{{(101, \"{first[1]}\"),\"{areaName}\"}},// {cont}");
-                                }
-                                else
-                                {
-                                    Console.WriteLineFormatted(message + " 沒有對應的代碼", Color.White, messageColors);
-                                }
-                            }
-                        }
-
-                        string writeOptionString = writeOption.HasValue() ? writeOption.Value() : null;
-                        if (writeOptionString != null)
-                        {
-                            using (StreamWriter writer = new(writePath))
-                            {
-                                codes.ForEach( x =>
-                                {
-                                    writer.WriteLine(x);
-                                });
-                            }                            
-                        }                        
-                    }
-                    return 0;
-                }
-
-                BetArea data = GetBetAreaJson();
+                var data = GetBetAreaJson();
                 if (data == null)
                 {
                     Console.WriteLine($"null data");
+                    return 1;
+                }
+                if (data.data == null)
+                {
+                    Console.WriteLine($"null data.data");
                     return 1;
                 }
 
@@ -176,11 +52,12 @@ public partial class Program
 
                 gameName = gameName.ToLower(CultureInfo.InvariantCulture);
 
-                string id = idOption.HasValue() ? idOption.Value() : null;
+                var id = idOption.HasValue() ? idOption.Value() : null;
                 if (id != null)
                 {
                     id = string.Format("{0:00000}", Convert.ToInt16(id));
-                    var ids = data.data.Where(x => x.gameName.ToLower() == gameName 
+                    var ids = data.data.Where(x => x.gameName != null 
+                                           && x.gameName.ToLower() == gameName 
                                            && x.betArea == id.ToString()).ToList();
                     foreach (var item in ids)
                     {
@@ -189,10 +66,12 @@ public partial class Program
                     return 0;
                 }
 
-                string context = contextOption.HasValue() ? contextOption.Value() : null;
+                var context = contextOption.HasValue() ? contextOption.Value() : null;
                 if (context != null)
                 {
-                    var contexts = data.data.Where(x => x.gameName.ToLower() == gameName && x.context == context);
+                    var contexts = data.data.Where(x => x.gameName != null 
+                                                && x.gameName.ToLower() == gameName 
+                                                && x.context == context);
                     foreach (var item in contexts)
                     {
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
@@ -200,7 +79,7 @@ public partial class Program
                     return 0;
                 }
 
-                string areaNamePath = AreaNameOption.HasValue() ? AreaNameOption.Value() : null;
+                var areaNamePath = AreaNameOption.HasValue() ? AreaNameOption.Value() : null;
                 if (areaNamePath != null)
                 {
                     using (var reader = new StreamReader(areaNamePath))
@@ -208,8 +87,12 @@ public partial class Program
                         while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
+                            if(line == null)
+                            {
+                                continue;
+                            }
                             var values = line.Split(',');
-                            Dictionary<int, string> result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
+                            var result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
 
                             var areaId = result[2].ToString();
                             if (Common.IsNumeric(areaId) == false)
@@ -219,25 +102,61 @@ public partial class Program
                             var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
                             var areaName = result[3].ToString();
 
-                            var ids = data.data.Where(x => x.gameName.ToLower() == gameName 
+                            var ids = data.data.Where(x => x.gameName != null 
+                                                   && x.gameName.ToLower() == gameName 
                                                    && x.betArea == aId).ToList();
                             foreach (var item in ids)
                             {
-                                string message = "{0} {1} {2}";
-                                Formatter[] colors = new Formatter[]
+                                if (item == null)
                                 {
-                                    new Formatter(areaName, Color.Red),
-                                    new Formatter(item.betArea, Color.Blue),
-                                    new Formatter(item.context, Color.Yellow)
-                                };
-                                Console.WriteLineFormatted(message, Color.White, colors);
+                                    Console.WriteLine($"null item");
+                                    continue;
+                                }
+                                BetAreaHelper.Message(areaName, item.betArea, item.context);
                             }
                         }
                     }
                 }
-
                 return 0;
             });
         });
+    }
+}
+
+/// <summary>
+/// BetAreaHelper
+/// </summary>
+public class BetAreaHelper
+{
+    public static void Message(string? areaName, string? betArea, string? context)
+    {
+        bool isNull = false;
+        if(areaName == null)
+        {
+            Console.WriteLine($"null areaName");
+            isNull = true;
+        }
+        if (betArea == null)
+        {
+            Console.WriteLine($"null betArea");
+            isNull = true;
+        }
+        if (context == null)
+        {
+            Console.WriteLine($"null context");
+            isNull = true;
+        }
+        if(isNull == true)
+        {
+            return;
+        }
+        var message = "{0} {1} {2}";
+        var colors = new Formatter[]
+        {
+            new (areaName, Color.Red),
+            new (betArea, Color.Blue),
+            new (context, Color.Yellow)
+        };
+        Console.WriteLineFormatted(message, Color.White, colors);
     }
 }

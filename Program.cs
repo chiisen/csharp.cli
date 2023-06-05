@@ -1,13 +1,14 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using McMaster.Extensions.CommandLineUtils;
-using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Caching;
 
+namespace csharp.cli;
+
 public partial class Program
 {
-    private static string currentPath;
-    private static CommandLineApplication _app = new() { Name = "csharp.cli" };
+    private static string? _currentPath = "";
+    private static readonly CommandLineApplication App = new() { Name = "csharp.cli" };
 
     private static ObjectCache Cache = MemoryCache.Default;
     private static readonly int SECONDS_EXPIRATION = 600;// 指定秒數後回收
@@ -17,8 +18,12 @@ public partial class Program
         Console.WriteLine($"================");
 
         #region 顯示執行路徑
-        currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        Console.WriteLine($"執行路徑: {currentPath}");
+        var assem = Assembly.GetEntryAssembly();
+        if(assem != null)
+        {
+            _currentPath = Path.GetDirectoryName(assem.Location);
+        }        
+        Console.WriteLine($"執行路徑: {_currentPath}");
         #endregion 顯示執行路徑
 
         #region 【Logger 輸入參數】
@@ -39,10 +44,10 @@ public partial class Program
         #region 【設定 Help】
 
         // ! 設定 Help
-        _app.HelpOption("-?|-h|--help");
-        _app.OnExecute(() =>
+        App.HelpOption("-?|-h|--help");
+        App.OnExecute(() =>
         {
-            _app.ShowHelp();
+            App.ShowHelp();
             return 0;
         });
 
@@ -52,37 +57,39 @@ public partial class Program
         #region 【註冊 Command】
 
         // ! 註冊 Command
-        example();
+        Example();
 
-        echo();
+        Echo();
 
-        polly();
+        Polly();
 
-        betArea();
+        BetArea();
 
-        csv();
+        Csv();
 
-        version();
+        Version();
 
         cache();
 
-        json();
+        Json();
 
-        pwd();
+        Pwd();
 
-        environment();
+        Environment();
 
-        ps();
+        Ps();
 
-        excel();
+        Excel();
 
-        multiThread();
+        MultiThread();
+
+        BetAreaAll();
         #endregion 【註冊 Command】
 
         int ret = -1;
         try
         {
-            ret = _app.Execute(args);
+            ret = App.Execute(args);
         }
         catch (Exception ex)
         {
@@ -93,12 +100,29 @@ public partial class Program
         // ! 取的 File Version
         Assembly assembly = Assembly.GetExecutingAssembly();
         System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-        string fileVersion = fvi.FileVersion;
+        string fileVersion = "";
+        if (fvi != null 
+         && fvi.FileVersion != null)
+        {
+            fileVersion = fvi.FileVersion;
+        }
+
         #endregion 取的 File Version
 
         #region 取得 Assembly Version
         // ! 取得 Assembly Version
-        string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        string AssemblyVersion = "";
+        var execAssem = Assembly.GetExecutingAssembly();
+        if (execAssem != null 
+         && execAssem.GetName() != null)
+        {
+            var ver = execAssem.GetName().Version;
+            if(ver != null)
+            {
+                AssemblyVersion = ver.ToString();
+            }
+        }
+        
         #endregion 取得 Assembly Version
 
         Console.WriteLine($"================");

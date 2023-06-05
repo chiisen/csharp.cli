@@ -1,9 +1,17 @@
-﻿using System.Text.RegularExpressions;
+﻿using csharp.cli.model;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace csharp.cli.common
 {
     public class Common
     {
+        public static T JsonDeserialize<T>(string text)
+        {
+#pragma warning disable CS8603 // 可能有 Null 參考傳回。
+            return JsonConvert.DeserializeObject<T>(text);
+#pragma warning restore CS8603 // 可能有 Null 參考傳回。
+        }
         /// <summary>
         /// 檢查是否為數字
         /// </summary>
@@ -16,12 +24,12 @@ namespace csharp.cli.common
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string ReplaceChineseNumerals(string str)
+        public static string ReplaceChineseNumerals(string? str)
         {
             if (str == null)
             {
                 Console.WriteLine("Null str");
-                return null;
+                return "";
             }
             str = str.Replace("一", "1");
             str = str.Replace("二", "2");

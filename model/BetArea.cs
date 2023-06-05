@@ -1,5 +1,6 @@
 ﻿namespace csharp.cli.model
 {
+#pragma warning disable IDE1006 // 命名樣式
     public class BetArea
     {
         public int msgId { get; set; }
@@ -15,4 +16,5 @@
         public string? context { get; set; }
         public string? lang { get; set; }
     }
+#pragma warning restore IDE1006 // 命名樣式
 }

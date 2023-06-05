@@ -1,15 +1,16 @@
 ﻿using Polly;
 using System.Net;
 
+namespace csharp.cli;
 public partial class Program
 {
     /// <summary>
     /// 重試測試。
     /// 命令列引數: polly
     /// </summary>
-    public static void polly()
+    public static void Polly()
     {
-        _ = _app.Command("polly", command =>
+        _ = App.Command("polly", command =>
         {
             // 第二層 Help 的標題
             command.Description = "重試測試。";

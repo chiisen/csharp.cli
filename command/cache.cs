@@ -1,6 +1,8 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using System.Runtime.Caching;
 
+namespace csharp.cli;
+
 public partial class Program
 {
     /// <summary>
@@ -9,7 +11,7 @@ public partial class Program
     /// </summary>
     public static void cache()
     {
-        _ = _app.Command("cache", command =>
+        _ = App.Command("cache", (Action<CommandLineApplication>)(command =>
         {
             // 第二層 Help 的標題
             command.Description = "cache 測試";
@@ -21,7 +23,7 @@ public partial class Program
             var valueOption = command.Option("-v|--value", "指定輸出為寫入的內容", CommandOptionType.SingleValue);
             var removeOption = command.Option("-r|--remove", "移除指定快取", CommandOptionType.SingleValue);
 
-            command.OnExecute(() =>
+            command.OnExecute((Func<int>)(() =>
             {
                 var get = getOption.HasValue() ? getOption.Value() : null;
                 var set = setOption.HasValue() ? setOption.Value() : null;
@@ -29,16 +31,16 @@ public partial class Program
                 var remove = removeOption.HasValue() ? removeOption.Value() : null;
 
                 // 取得快取資料筆數
-                long cacheCount = Cache.GetCount();
+                long cacheCount = Program.Cache.GetCount();
 
                 if (get != null)
                 {
                     // 檢查快取是否存在
-                    bool isSet = Cache[get] != null;
+                    bool isSet = Program.Cache[get] != null;
                     if(isSet)
                     {
                         // 讀取快取
-                        string value = (string)Cache[get];
+                        string value = (string)Program.Cache[get];
                         Console.WriteLine($"讀取快取 key: {get} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     else
@@ -56,23 +58,23 @@ public partial class Program
                         return 1;
                     }
                     // 檢查快取是否存在
-                    bool isSet = Cache[set] != null;
+                    bool isSet = Program.Cache[set] != null;
                     if (isSet)
                     {
-                        string value = (string)Cache[set];
+                        string value = (string)Program.Cache[set];
                         Console.WriteLine($"快取已經存在 key: {set} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     else
                     {
                         // 寫入快取 (指定時間後回收快取)
-                        CacheItemPolicy policy = new()
+                        var policy = new CacheItemPolicy()
                         {
                             AbsoluteExpiration = DateTime.Now + TimeSpan.FromSeconds(SECONDS_EXPIRATION), // 指定秒數後回收
                         };
-                        Cache.Add(set, setValue, policy);
+                        Program.Cache.Add(set, (object)setValue, policy);
 
-                        string value = (string)Cache[set];
-                        cacheCount = Cache.GetCount();
+                        string value = (string)Program.Cache[set];
+                        cacheCount = Program.Cache.GetCount();
                         Console.WriteLine($"寫入快取 key: {set} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     return 0;
@@ -81,14 +83,14 @@ public partial class Program
                 if (remove != null)
                 {
                     // 檢查快取是否存在
-                    bool isSet = Cache[remove] != null;
+                    bool isSet = Program.Cache[remove] != null;
                     if (isSet)
                     {
-                        string value = (string)Cache[remove];
+                        string value = (string)Program.Cache[remove];
 
                         // 移除快取
-                        Cache.Remove(remove);
-                        cacheCount = Cache.GetCount();
+                        Program.Cache.Remove(remove);
+                        cacheCount = Program.Cache.GetCount();
                         Console.WriteLine($"移除快取 key: {remove} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     else
@@ -99,7 +101,7 @@ public partial class Program
                 }
 
                 return 0;
-            });
-        });
+            }));
+        }));
     }
 }

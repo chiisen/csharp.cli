@@ -1,15 +1,17 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using McMaster.Extensions.CommandLineUtils;
 
+namespace csharp.cli;
+
 public partial class Program
 {
     /// <summary>
     /// 範例程式
     /// 命令列引數: multi-thread "words" -r 10
     /// </summary>
-    public static void multiThread()
+    public static void MultiThread()
     {
-        _ = _app.Command("multi-thread", command =>
+        _ = App.Command("multi-thread", command =>
         {
             // 第二層 Help 的標題
             command.Description = "multi-thread 說明";
@@ -37,7 +39,7 @@ public partial class Program
                     taskList.Add(Task.Run(async () => {
                         try
                         {
-                            Random r = new(); // 宣告一個 Random 物件：r
+                            var r = new Random(); // 宣告一個 Random 物件：r
                             //r.Next(); // 括號內沒有東西則從 0 到 int 最大值(2,147,483,647)隨機取一數
                             //r.Next(10000); // 從 0 到 Maxvalue隨機取一數
                             int d = r.Next(1000, 10000); // Min 到 Max隨機取一數

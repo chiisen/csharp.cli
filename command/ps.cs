@@ -1,15 +1,14 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using System.Diagnostics;
+﻿namespace csharp.cli;
 
 public partial class Program
 {
     /// <summary>
     /// 範例程式
-    /// 命令列引數: pwd
+    /// 命令列引數: ps
     /// </summary>
-    public static void ps()
+    public static void Ps()
     {
-        _ = _app.Command("ps", command =>
+        _ = App.Command("ps", command =>
         {
             // 第二層 Help 的標題
             command.Description = "power shell 說明";
@@ -18,7 +17,7 @@ public partial class Program
             command.OnExecute(() =>
             {
                 // ! powershell 下 Get-ChildItem Env: 可以列出環境變數
-                PowerShellHelper ps = new();
+                var ps = new PowerShellHelper();
                 ps.Execute("Get-ChildItem Env:");
 
                 return 0;

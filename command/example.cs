@@ -1,14 +1,16 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 
+namespace csharp.cli;
+
 public partial class Program
 {
     /// <summary>
     /// 範例程式
     /// 命令列引數: example "words" -r 10
     /// </summary>
-    public static void example()
+    public static void Example()
     {
-        _ = _app.Command("example", command =>
+        _ = App.Command("example", command =>
         {
             // 第二層 Help 的標題
             command.Description = "example 說明";

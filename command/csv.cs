@@ -1,10 +1,11 @@
 ﻿using Colorful;
-using csharp.cli.model;
 using CsvHelper;
 using McMaster.Extensions.CommandLineUtils;
 using System.Drawing;
 using System.Globalization;
 using Console = Colorful.Console;
+
+namespace csharp.cli;
 
 public partial class Program
 {
@@ -12,9 +13,9 @@ public partial class Program
     /// 讀取 csv。
     /// 命令列引數: csv ".\WM\csv\csvFile.csv" -b Bacc
     /// </summary>
-    public static void csv()
+    public static void Csv()
     {
-        _ = _app.Command("csv", command =>
+        _ = App.Command("csv", command =>
         {
             // 第二層 Help 的標題
             command.Description = "讀取 csv。";
@@ -36,41 +37,44 @@ public partial class Program
                 }
                 Console.WriteLine($"讀取csv: {path}");
                 
-                BetArea? data = GetBetAreaJson();
+                var data = GetBetAreaJson();
                 if (data == null)
                 {
-                    Console.WriteLine($"null json");
+                    Console.WriteLine($"null data");
                     return 1;
                 }
-                else
+                if(data.data == null)
                 {
-                    // 只留下 lang 為 zh-TW
-                    data.data = data.data.Where(x => x.lang == "zh-TW").ToList();
+                    Console.WriteLine($"null data.data");
+                    return 1;
                 }
+                // 只留下 lang 為 zh-TW
+                data.data = data.data.Where(x => x.lang == "zh-TW").ToList();
 
                 var betArea = betAreaOption.HasValue() ? betAreaOption.Value() : null;
                 if (betArea == null)
                 {
-                    Console.WriteLine($"null betArea");
+                    Console.WriteLine($"null BetArea");
                     return 1;
                 }
 
-                List<Dictionary<int, string>> list = GetCsv(path);
+                var list = CsvHelper.GetCsv(path);
                 foreach (var d in list)
                 {
                     var id = d[2].ToString();
                     var name = d[3].ToString();
                     name = name.Replace("\"", "");
-                    var ids = data.data.Where(x => x.gameName.ToLower() == betArea.ToLower() 
+                    var ids = data.data.Where(x => x.gameName != null 
+                                           && x.gameName.ToLower() == betArea.ToLower() 
                                            && x.betArea == id).ToList();
                     foreach (var item in ids)
                     {
-                        string message = "{0} {1} {2}";
-                        Formatter[] colors = new Formatter[]
+                        var message = "{0} {1} {2}";
+                        var colors = new Formatter[]
                         {
-                            new Formatter(name, Color.Red),
-                            new Formatter(item.betArea, Color.Blue),
-                            new Formatter(item.context, Color.Yellow)
+                            new (name, Color.Red),
+                            new (item.betArea, Color.Blue),
+                            new (item.context, Color.Yellow)
                         };
                         Console.WriteLineFormatted(message, Color.White, colors);
                     }
@@ -79,10 +83,15 @@ public partial class Program
             });
         });
     }
-
-    public static List<Dictionary<int, string>> GetCsv(string path)
+}
+/// <summary>
+/// CsvHelper
+/// </summary>
+public class CsvHelper
+{
+    public static List<Dictionary<int, string>> GetCsv(string? path)
     {
-        List<Dictionary<int, string>> list = new();
+        var list = new List<Dictionary<int, string>>();
         if (path == null)
         {
             Console.WriteLine($"null path");
@@ -94,22 +103,22 @@ public partial class Program
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 var records = csv.GetRecords<dynamic>();
-                
-                foreach (var rec in records)
-                {
-                    var dic = new Dictionary<int, string>();
 
-                    var dics = (IDictionary<string, object>)rec;
+                foreach (var r in records)
+                {
+                    var map = new Dictionary<int, string>();
+
+                    var dics = (IDictionary<string, object>)r;
                     int index = 1;
                     foreach (var prop in dics)
                     {
-                        dic.Add(index, prop.Value as string);
+                        map.Add(index, (string)prop.Value);
                         //Console.WriteLine($"{prop.Key} {prop.Value}");
                         index++;
                     }
-                    if (dic.Count > 0)
+                    if (map.Count > 0)
                     {
-                        list.Add(dic);
+                        list.Add(map);
                     }
                 }
             }

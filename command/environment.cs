@@ -1,4 +1,4 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿namespace csharp.cli;
 
 public partial class Program
 {
@@ -6,9 +6,9 @@ public partial class Program
     /// 範例程式
     /// 命令列引數: environment
     /// </summary>
-    public static void environment()
+    public static void Environment()
     {
-        _ = _app.Command("environment", command =>
+        _ = App.Command("environment", command =>
         {
             // 第二層 Help 的標題
             command.Description = "environment 說明";
@@ -17,12 +17,8 @@ public partial class Program
             command.OnExecute(() =>
             {
                 // ! 取得環境變數
-                string envVar = Environment.GetEnvironmentVariable("path");
-                if (envVar != null)
-                {
-                    Console.WriteLine(envVar);
-                }
-
+                string envVar = System.Environment.GetEnvironmentVariable("path") ?? "";
+                Console.WriteLine(envVar);
                 return 0;
             });
         });
