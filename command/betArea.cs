@@ -17,6 +17,8 @@ public partial class Program
     /// 命令列引數: bet-area Bacc -i 1
     /// - a: csv 指定檔案路徑，列出全部的翻譯內容
     /// 命令列引數: bet-area Bacc -a C:\royal\github\RoyalTemporaryFile\WM\csv\百家樂.csv
+    /// - g: 指定 bet-area.json 檔案，列出全部的翻譯內容
+    /// 命令列引數: bet-area Bacc -a 1
     /// </summary>
     public static void BetArea()
     {
@@ -33,6 +35,7 @@ public partial class Program
             var idOption = command.Option("-i|--id", "指定輸出 BetArea", CommandOptionType.SingleValue);
             var contextOption = command.Option("-c|--context", "指定輸出 BetArea", CommandOptionType.SingleValue);
             var AreaNameOption = command.Option("-a|--area-name", "指定輸出 Area Name 的 csv 路徑", CommandOptionType.SingleValue);
+            var gameAreaOption = command.Option("-g|--game", "指定輸出遊戲的 bet-area.json 內容", CommandOptionType.SingleValue);
 
             command.OnExecute(() =>
             {
@@ -59,6 +62,18 @@ public partial class Program
                 }
 
                 gameName = gameName.ToLower(CultureInfo.InvariantCulture);
+
+                var gameArea = gameAreaOption.HasValue() ? gameAreaOption.Value() : null;
+                if (gameArea != null)
+                {
+                    var ids = data.data.Where(x => x.gameName != null
+                                           && x.gameName.ToLower() == gameName).ToList();
+                    foreach (var item in ids)
+                    {
+                        Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
+                    }
+                    return 0;
+                }
 
                 var id = idOption.HasValue() ? idOption.Value() : null;
                 if (id != null)

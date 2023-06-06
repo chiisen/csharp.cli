@@ -101,9 +101,9 @@ public partial class Program
                         areaName = areaName.Replace("\"", "");
 
                         var ids = data.data.Where(x => x.gameName != null
-                                                        && ba.gameName != null
-                                                        && x.gameName.ToLower() == ba.gameName.ToLower()
-                                                        && x.betArea == aId).ToList();
+                                                    && ba.gameName != null
+                                                    && x.gameName.ToLower() == ba.gameName.ToLower()
+                                                    && x.betArea == aId).ToList();
                         foreach (var item in ids)
                         {
                             if(item == null)
