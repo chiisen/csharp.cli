@@ -77,8 +77,13 @@ dotnet tool uninstall -g csharp.cli
 
 # bet-area
 查詢 betArea
+- c: 查詢翻譯內容
+- i: 查詢 AreaId
+- a: csv 指定檔案路徑，列出全部的翻譯內容
 ```bash=
-csharp.cli bet-area Bacc -c "閒"
+csharp.cli  bet-area Bacc -c 閒
+csharp.cli  bet-area Bacc -i 1
+csharp.cli  bet-area Bacc -a C:\royal\github\RoyalTemporaryFile\WM\csv\百家樂.csv
 ```
 # bet-area-all
 讀取 .bet-area 設定檔案，列出 bet-area 的結果

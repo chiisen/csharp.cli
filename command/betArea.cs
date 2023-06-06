@@ -11,7 +11,12 @@ public partial class Program
 {
     /// <summary>
     /// 查詢 BetArea
-    /// 命令列引數: bet-area Bacc -c "閒"
+    /// - c: 查詢翻譯內容
+    /// 命令列引數: bet-area Bacc -c 閒
+    /// - i: 查詢 AreaId
+    /// 命令列引數: bet-area Bacc -i 1
+    /// - a: csv 指定檔案路徑，列出全部的翻譯內容
+    /// 命令列引數: bet-area Bacc -a C:\royal\github\RoyalTemporaryFile\WM\csv\百家樂.csv
     /// </summary>
     public static void BetArea()
     {
@@ -42,6 +47,9 @@ public partial class Program
                     Console.WriteLine($"null data.data");
                     return 1;
                 }
+
+                // 只留下 lang 為 zh-TW
+                data.data = data.data.Where(x => x.lang == "zh-TW").ToList();
 
                 var gameName = gameNameArgument.HasValue ? gameNameArgument.Value : null;
                 if (gameName == null)
