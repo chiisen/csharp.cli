@@ -24,7 +24,7 @@ public partial class Program
         return data;
     }
     /// <summary>
-    /// 範例程式
+    /// 讀取 json 範例程式
     /// 命令列引數: json "C:\royal\github\RoyalTemporaryFile\MG\BetRecordHistory.json"
     /// 測試用只能指定特定 class 的 json 檔案
     /// </summary>
@@ -83,12 +83,12 @@ public partial class Program
 
                 var writePath = @$"{dir}\{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff")}-F.json";
                 File.WriteAllText(writePath, json);
+                Console.WriteLine($"寫入 json 檔案: {writePath}");
 
                 string jsonLine = System.Text.Json.JsonSerializer.Serialize(value);// 寫成一行
                 writePath = @$"{dir}\{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff")}-L.json";
                 File.WriteAllText(writePath, jsonLine);
-
-                Console.WriteLine($"json => path: {path}");
+                Console.WriteLine($"寫入 json 檔案: {writePath}");
                 return 0;
             });
         });

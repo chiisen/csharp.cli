@@ -3,7 +3,7 @@
 public partial class Program
 {
     /// <summary>
-    /// 範例程式
+    /// PowerShell 範例程式
     /// 命令列引數: ps
     /// </summary>
     public static void Ps()

@@ -70,37 +70,79 @@ dotnet tool uninstall -g csharp.cli
 
 ---
 
+# 編譯警告
+搜尋 #pragma warning disable 就能找到
+
+---
+
+# bet-area
+查詢 betArea
+```bash=
+csharp.cli bet-area Bacc -c "閒"
+```
+# bet-area-all
+讀取 .bet-area 設定檔案，列出 bet-area 的結果
+```bash=
+csharp.cli bet-area-all
+```
+# cache
+測試 cache
+```bash=
+csharp.cli cache -r keyName
+```
+# csv
+讀取 csv 的 AreaId 並且比對 betArea.json 的資料
+```bash=
+csharp.cli csv "C:\royal\github\RoyalTemporaryFile\WM\csv\百家樂.csv" -b Bacc
+```
 # echo
 輸出用戶輸入的文字。
 ```bash=
 csharp.cli echo "Hello World" -r 3
+```
+# environment
+取得環境變數
+```bash=
+csharp.cli environment
+```
+# example
+範例程式
+```bash=
+csharp.cli example "words" -r 10
+```
+# excel
+EXCEL 範例程式
+```bash=
+csharp.cli excel
+```
+# json
+讀取 json 範例程式
+測試用只能指定特定 class 的 json 檔案
+```bash=
+csharp.cli json "C:\royal\github\RoyalTemporaryFile\MG\BetRecordHistory.json"
+```
+# multi-thread
+multi-thread 範例程式
+```bash=
+csharp.cli multi-thread
 ```
 # polly
 重試測試。
 ```bash=
 csharp.cli polly
 ```
-
-# bet-area
-查詢 betArea
+# ps
+PowerShell 範例程式
 ```bash=
-csharp.cli bet-area LongHu -a "C:\csvFilePath.csv"
+csharp.cli ps
 ```
-
-# cache
-測試 cache
+# pwd
+顯示常用路徑
 ```bash=
-csharp.cli cache -r keyName
+csharp.cli pwd
 ```
-
 # version
 查詢版本號
 ```bash=
 csharp.cli version
-```
-
-# csv
-測試 csv
-```bash=
-csharp.cli csv ".\WM\csv\csvFile.csv" -b Bacc
 ```

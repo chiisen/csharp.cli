@@ -11,7 +11,7 @@ namespace csharp.cli;
 public partial class Program
 {
     /// <summary>
-    /// 範例程式
+    /// 讀取 .bet-area 設定檔案，列出 bet-area 的結果
     /// 命令列引數: bet-area-all
     /// 目錄內需要有一個 .bet-area 設定檔案
     /// </summary>

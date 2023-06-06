@@ -4,7 +4,7 @@ namespace csharp.cli;
 public partial class Program
 {
     /// <summary>
-    /// 範例程式
+    /// 顯示常用路徑
     /// 命令列引數: pwd
     /// </summary>
     public static void Pwd()

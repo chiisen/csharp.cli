@@ -6,8 +6,8 @@ namespace csharp.cli;
 public partial class Program
 {
     /// <summary>
-    /// 範例程式
-    /// 命令列引數: multi-thread "words" -r 10
+    /// multi-thread 範例程式
+    /// 命令列引數: multi-thread
     /// </summary>
     public static void MultiThread()
     {
@@ -17,20 +17,8 @@ public partial class Program
             command.Description = "multi-thread 說明";
             command.HelpOption("-?|-h|-help");
 
-            // 輸入參數說明
-            var wordsArgument = command.Argument("[words]", "指定需要輸出的文字。");
-
-            // 輸入指令說明
-            var repeatOption = command.Option("-r|--repeat-count", "指定輸出重複次數", CommandOptionType.SingleValue);
-
             command.OnExecute(() =>
             {
-                var words = wordsArgument.HasValue ? wordsArgument.Value : "world";
-
-                var count = repeatOption.HasValue() ? repeatOption.Value() : "1";
-
-                Console.WriteLine($"example => words: {words}, count: {count}");
-
                 List<Task> taskList = new ();
                 for (int i = 0; i < 10; i++)
                 {

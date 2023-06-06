@@ -10,8 +10,8 @@ namespace csharp.cli;
 public partial class Program
 {
     /// <summary>
-    /// 讀取 csv。
-    /// 命令列引數: csv ".\WM\csv\csvFile.csv" -b Bacc
+    /// 讀取 csv 的 AreaId 並且比對 betArea.json 的資料
+    /// 命令列引數: csv "C:\royal\github\RoyalTemporaryFile\WM\csv\百家樂.csv" -b Bacc
     /// </summary>
     public static void Csv()
     {
