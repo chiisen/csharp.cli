@@ -7,20 +7,10 @@ namespace csharp.cli;
 
 public partial class Program
 {
-    static BetArea? GetBetAreaJson()
+    public static BetArea? GetBetAreaJson()
     {
-        string json = File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}resource\BetArea.json", Encoding.UTF8);
-        if(json == null)
-        {
-            Console.WriteLine($"null json");
-            return null;
-        }
-        BetArea data = Common.JsonDeserialize<BetArea>(json);
-        if (data == null)
-        {
-            Console.WriteLine($"null data");
-            return null;
-        }
+        var json = File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}resource\BetArea.json", Encoding.UTF8);
+        var data = Common.JsonDeserialize<BetArea>(json);
         return data;
     }
     /// <summary>
@@ -51,17 +41,7 @@ public partial class Program
                 }
 
                 var jsonText = File.ReadAllText(path);
-                if(jsonText == null)
-                {
-                    Console.WriteLine($"null jsonText");
-                    return 1;
-                }
-                List<BetRecord> record = Common.JsonDeserialize<List<BetRecord>>(jsonText);
-                if(record == null)
-                {
-                    Console.WriteLine($"null record");
-                    return 1;
-                }
+                var record = Common.JsonDeserialize<List<BetRecord>>(jsonText);
 
                 var value = record
                                   .Where(x => x.createdDateUTC >= new DateTime(2023, 5, 15, 0, 0, 0)
@@ -70,23 +50,23 @@ public partial class Program
 
                 Console.WriteLine($"json => value.Count(): {value.Count()}");
 
-                string prefixKey = "dev";
+                const string prefixKey = "dev";
 
                 var betRecords = record
-                                       .Where(x => x.PlayerId != null && x.PlayerId.ToLower()[..prefixKey.Length].Equals(prefixKey))
+                                       .Where(x => x.PlayerId is not null && x.PlayerId.ToLower()[..prefixKey.Length].Equals(prefixKey))
                                        .OrderBy(x => x.createdDateUTC);
 
                 Console.WriteLine($"json => betRecords.Count(): {betRecords.Count()}");
 
-                string json = JsonConvert.SerializeObject(value, Formatting.Indented);// 格式化後寫入
+                var json = JsonConvert.SerializeObject(value, Formatting.Indented);// 格式化後寫入
                 var dir = Path.GetDirectoryName(path);
 
-                var writePath = @$"{dir}\{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff")}-F.json";
+                var writePath = @$"{dir}\{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}-F.json";
                 File.WriteAllText(writePath, json);
                 Console.WriteLine($"寫入 json 檔案: {writePath}");
 
-                string jsonLine = System.Text.Json.JsonSerializer.Serialize(value);// 寫成一行
-                writePath = @$"{dir}\{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff")}-L.json";
+                var jsonLine = System.Text.Json.JsonSerializer.Serialize(value);// 寫成一行
+                writePath = @$"{dir}\{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}-L.json";
                 File.WriteAllText(writePath, jsonLine);
                 Console.WriteLine($"寫入 json 檔案: {writePath}");
                 return 0;

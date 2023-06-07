@@ -61,15 +61,15 @@ public partial class Program
                 var list = CsvHelper.GetCsv(path);
                 foreach (var d in list)
                 {
-                    var id = d[2].ToString();
-                    var name = d[3].ToString();
+                    var id = d[(int)common.Enum.BetArea.AreaId].ToString();
+                    var name = d[(int)common.Enum.BetArea.AreaName].ToString();
                     name = name.Replace("\"", "");
-                    var ids = data.data.Where(x => x.gameName != null 
-                                           && x.gameName.ToLower() == betArea.ToLower() 
+                    var ids = data.data.Where(x => x.gameName is not null
+                                           && x.gameName.ToLower().Equals(betArea.ToLower()) 
                                            && x.betArea == id).ToList();
                     foreach (var item in ids)
                     {
-                        var message = "{0} {1} {2}";
+                        const string message = "{0} {1} {2}";
                         var colors = new Formatter[]
                         {
                             new (name, Color.Red),

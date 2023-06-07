@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using Console = Colorful.Console;
 
+
 namespace csharp.cli;
 
 public partial class Program
@@ -60,33 +61,31 @@ public partial class Program
                 }
                 foreach (var ba in settings)
                 {
-                    if(ba == null)
-                    {
-                        continue;
-                    }
+                    Console.WriteLine("==============================");
                     Console.WriteLine($"> {ba.gameName} {ba.gameDesc}");
                     Console.WriteLine("==============================");
 
-                    BetAreaAllHelper.Head();
+                    var listWm = CsvHelper.GetCsv(ba.pathWM);
+                    var list = CsvHelper.GetCsv(ba.path);
+                    var iLen = list.Max(x => x[(int)common.Enum.BetArea.AreaId].Length);
+                    var nLen = list.Max(x => x[(int)common.Enum.BetArea.AreaName].Length);
+
+                    BetAreaAllHelper.Head(nLen, iLen);
 
                     Console.WriteLine("==============================");
 
-                    var writePath = @$"{System.Environment.CurrentDirectory}\{ba.gameName}.txt";
-
-                    var listWM = CsvHelper.GetCsv(ba.pathWM);
-                    var list = CsvHelper.GetCsv(ba.path);
                     var dict = new Dictionary<string, string>();
                     foreach (var d in list)
                     {
-                        var areaId = d[2].ToString();
+                        var areaId = d[(int)common.Enum.BetArea.AreaId].ToString();
                         if (Common.IsNumeric(areaId) == false)
                         {
                             //Console.WriteLine($"areaId: {areaId} 不是數值，所以略過處理");
                             continue;
                         }
 
-                        var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
-                        var areaName = d[3].ToString();
+                        var aId = $"{Convert.ToInt16(areaId):00000}";
+                        var areaName = d[(int)common.Enum.BetArea.AreaName].ToString();
 
                         //跳過重複
                         if (dict.ContainsKey(areaName) == true)
@@ -100,17 +99,19 @@ public partial class Program
                         // TODO: 去掉有引號的字串
                         areaName = areaName.Replace("\"", "");
 
-                        var ids = data.data.Where(x => x.gameName != null
-                                                    && ba.gameName != null
-                                                    && x.gameName.ToLower() == ba.gameName.ToLower()
+                        var ids = data.data.Where(x => x.gameName is not null
+                                                    && ba.gameName is not null
+                                                    && x.gameName.ToLower().Equals(ba.gameName.ToLower())
                                                     && x.betArea == aId).ToList();
+                        if (ids.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        var cLen = ids.Where(x => x.context is not null).Max(x => x.context.Length);
+
                         foreach (var item in ids)
                         {
-                            if(item == null)
-                            {
-                                continue;
-                            }
-
                             var context = item.context;
                             if (context == null)
                             {
@@ -119,10 +120,6 @@ public partial class Program
                             context = context.Replace(" ", ""); // 去掉空白
 
                             context = Common.ReplaceChineseNumerals(context);
-                            if (context == null)
-                            {
-                                continue;
-                            }
 
                             var betArea = item.betArea;
                             if(betArea == null)
@@ -130,15 +127,15 @@ public partial class Program
                                 continue;
                             }
 
-                            var first = listWM.Where(x => Common.ReplaceChineseNumerals(x[3]).Equals(context))
+                            var first = listWm.Where(x => Common.ReplaceChineseNumerals(x[(int)common.Enum.BetArea.AreaName]).Equals(context))
                                               .Select(x => x).FirstOrDefault();
-                            if (first != null)
+                            if (first is not null)
                             {
-                                BetAreaAllHelper.Message("{0} {1} {2} {3}", areaName, betArea, context, first[1]);
+                                BetAreaAllHelper.Message("{0} {1} {2} {3}", areaName, betArea, context, first[1], nLen, iLen, cLen);
                             }
                             else
                             {
-                                BetAreaAllHelper.ErrorMessage("{0} {1} {2} {3}", areaName, betArea, context);
+                                BetAreaAllHelper.ErrorMessage("{0} {1} {2} {3}", areaName, betArea, context, nLen, iLen, cLen);
                             }
                         }
                     }
@@ -156,23 +153,23 @@ public partial class Program
 /// </summary>
 public class BetAreaAllHelper
 {
-    private static int areaNameLens = 55;
-    private static int betAreaLens = 10;
-    private static int contextLens = 30;
-    private static int wmCodeLens = 25;
+    private const int AreaNameLens = 55;
+    private const int BetAreaLens = 10;
+    private const int ContextLens = 30;
+    private const int WmCodeLens = 25;
     /// <summary>
     /// 列印彩色標題
     /// </summary>
-    public static void Head()
+    public static void Head(int nLens, int iLen)
     {
-        var head = "{0} {1} {2} {3}";
+        const string head = "{0} {1} {2} {3}";
 
         var colors = new Formatter[]
         {
-            new ("\"areaName\"".PadRight(areaNameLens), Color.Green),
-            new ("\"BetArea\"".PadRight(betAreaLens), Color.Blue),
-            new ("\"context\"".PadRight(contextLens), Color.Yellow),
-            new ("\"WM code\"".PadRight(wmCodeLens), Color.White)
+            new ("\"areaName\"".PadRight(nLens), Color.Green),
+            new ("\"BetArea\"".PadRight(iLen), Color.Blue),
+            new ("\"context\"".PadRight(ContextLens), Color.Yellow),
+            new ("\"WM code\"".PadRight(WmCodeLens), Color.White)
         };
         Console.WriteLineFormatted(head, Color.White, colors);
     }
@@ -183,14 +180,14 @@ public class BetAreaAllHelper
     /// <param name="areaName"></param>
     /// <param name="betArea"></param>
     /// <param name="context"></param>
-    public static void Message(string message, string areaName, string betArea, string context, string wmCode)
+    public static void Message(string message, string areaName, string betArea, string context, string wmCode, int nLens, int iLen, int cLen)
     {
         var colors = new Formatter[]
         {
-            new(areaName.PadRight(areaNameLens), Color.Green),
-            new(betArea.PadRight(betAreaLens), Color.Blue),
-            new(context.PadRight(contextLens), Color.Yellow),
-            new(wmCode.PadRight(wmCodeLens), Color.White)
+            new(areaName.PadRight(nLens), Color.Green),
+            new(betArea.PadRight(iLen), Color.Blue),
+            new(context.PadRight(cLen), Color.Yellow),
+            new(wmCode.PadRight(WmCodeLens), Color.White)
         };
         Console.WriteLineFormatted(message, Color.White, colors);
     }
@@ -202,13 +199,13 @@ public class BetAreaAllHelper
     /// <param name="areaName"></param>
     /// <param name="betArea"></param>
     /// <param name="context"></param>
-    public static void ErrorMessage(string message, string areaName, string betArea, string context)
+    public static void ErrorMessage(string message, string areaName, string betArea, string context, int nLens, int iLen, int cLen)
     {
         var colors = new Formatter[]
         {
-            new(areaName.PadRight(areaNameLens), Color.Green),
-            new(betArea.PadRight(betAreaLens), Color.Blue),
-            new(context.PadRight(contextLens), Color.Yellow),
+            new(areaName.PadRight(AreaNameLens), Color.Green),
+            new(betArea.PadRight(BetAreaLens), Color.Blue),
+            new(context.PadRight(ContextLens), Color.Yellow),
             new("沒有對應的代碼".PadRight(25), Color.Red)
         };
         Console.WriteLineFormatted(message, Color.White, colors);

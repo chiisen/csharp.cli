@@ -10,7 +10,7 @@ public partial class Program
     private static string? _currentPath = "";
     private static readonly CommandLineApplication App = new() { Name = "csharp.cli" };
 
-    private static ObjectCache Cache = MemoryCache.Default;
+    private static readonly ObjectCache Cache = MemoryCache.Default;
     private static readonly int SECONDS_EXPIRATION = 600;// 指定秒數後回收
 
     static int Main(string[] args)
@@ -19,7 +19,7 @@ public partial class Program
 
         #region 顯示執行路徑
         var assem = Assembly.GetEntryAssembly();
-        if(assem != null)
+        if(assem is not null)
         {
             _currentPath = Path.GetDirectoryName(assem.Location);
         }        
@@ -98,11 +98,10 @@ public partial class Program
 
         #region 取的 File Version
         // ! 取的 File Version
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-        string fileVersion = "";
-        if (fvi != null 
-         && fvi.FileVersion != null)
+        var assembly = Assembly.GetExecutingAssembly();
+        var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+        var fileVersion = "";
+        if (fvi.FileVersion is not null)
         {
             fileVersion = fvi.FileVersion;
         }
@@ -111,22 +110,21 @@ public partial class Program
 
         #region 取得 Assembly Version
         // ! 取得 Assembly Version
-        string AssemblyVersion = "";
+        var assemblyVersion = "";
         var execAssem = Assembly.GetExecutingAssembly();
-        if (execAssem != null 
-         && execAssem.GetName() != null)
+        if (execAssem?.GetName() is not null)
         {
             var ver = execAssem.GetName().Version;
-            if(ver != null)
+            if(ver is not null)
             {
-                AssemblyVersion = ver.ToString();
+                assemblyVersion = ver.ToString();
             }
         }
         
         #endregion 取得 Assembly Version
 
         Console.WriteLine($"================");
-        Console.WriteLine($" AssemblyVersion: {AssemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
+        Console.WriteLine($" AssemblyVersion: {assemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
         Console.WriteLine($"====程式結束====");
         //Console.WriteLine($"按任何鍵繼續....");
         //Console.ReadKey();

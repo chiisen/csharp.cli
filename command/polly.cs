@@ -28,7 +28,7 @@ public partial class Program
                     .Retry(3, (reponse, retryCount, context) =>
                     {
                         var result = reponse.Result;
-                        if (result != null)
+                        if (result is not null)
                         {
                             var errorMsg = result.Content
                                                  .ReadAsStringAsync()

@@ -34,7 +34,7 @@ public partial class Program
             // 輸入指令說明
             var idOption = command.Option("-i|--id", "指定輸出 BetArea", CommandOptionType.SingleValue);
             var contextOption = command.Option("-c|--context", "指定輸出 BetArea", CommandOptionType.SingleValue);
-            var AreaNameOption = command.Option("-a|--area-name", "指定輸出 Area Name 的 csv 路徑", CommandOptionType.SingleValue);
+            var areaNameOption = command.Option("-a|--area-name", "指定輸出 Area Name 的 csv 路徑", CommandOptionType.SingleValue);
             var gameAreaOption = command.Option("-g|--game", "指定輸出遊戲的 bet-area.json 內容", CommandOptionType.SingleValue);
 
             command.OnExecute(() =>
@@ -64,10 +64,10 @@ public partial class Program
                 gameName = gameName.ToLower(CultureInfo.InvariantCulture);
 
                 var gameArea = gameAreaOption.HasValue() ? gameAreaOption.Value() : null;
-                if (gameArea != null)
+                if (gameArea is not null)
                 {
-                    var ids = data.data.Where(x => x.gameName != null
-                                           && x.gameName.ToLower() == gameName).ToList();
+                    var ids = data.data.Where(x => x.gameName is not null
+                                           && x.gameName.ToLower().Equals(gameName)).ToList();
                     foreach (var item in ids)
                     {
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
@@ -76,12 +76,12 @@ public partial class Program
                 }
 
                 var id = idOption.HasValue() ? idOption.Value() : null;
-                if (id != null)
+                if (id is not null)
                 {
-                    id = string.Format("{0:00000}", Convert.ToInt16(id));
-                    var ids = data.data.Where(x => x.gameName != null 
-                                           && x.gameName.ToLower() == gameName 
-                                           && x.betArea == id.ToString()).ToList();
+                    id = $"{Convert.ToInt16(id):00000}";
+                    var ids = data.data.Where(x => x.gameName is not null 
+                                                   && x.gameName.ToLower().Equals(gameName) 
+                                                   && x.betArea == id).ToList();
                     foreach (var item in ids)
                     {
                         Console.WriteLine($"{item.betArea} {item.context} {item.lang}");
@@ -90,10 +90,10 @@ public partial class Program
                 }
 
                 var context = contextOption.HasValue() ? contextOption.Value() : null;
-                if (context != null)
+                if (context is not null)
                 {
-                    var contexts = data.data.Where(x => x.gameName != null 
-                                                && x.gameName.ToLower() == gameName 
+                    var contexts = data.data.Where(x => x.gameName is not null
+                                                && x.gameName.ToLower().Equals(gameName) 
                                                 && x.context == context);
                     foreach (var item in contexts)
                     {
@@ -102,8 +102,8 @@ public partial class Program
                     return 0;
                 }
 
-                var areaNamePath = AreaNameOption.HasValue() ? AreaNameOption.Value() : null;
-                if (areaNamePath != null)
+                var areaNamePath = areaNameOption.HasValue() ? areaNameOption.Value() : null;
+                if (areaNamePath is not null)
                 {
                     using (var reader = new StreamReader(areaNamePath))
                     {
@@ -117,17 +117,17 @@ public partial class Program
                             var values = line.Split(',');
                             var result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
 
-                            var areaId = result[2].ToString();
+                            var areaId = result[(int)common.Enum.BetArea.AreaId].ToString();
                             if (Common.IsNumeric(areaId) == false)
                             {
                                 continue;
                             }
-                            var aId = string.Format("{0:00000}", Convert.ToInt16(areaId));
-                            var areaName = result[3].ToString();
+                            var aId = $"{Convert.ToInt16(areaId):00000}";
+                            var areaName = result[(int)common.Enum.BetArea.AreaName].ToString();
 
-                            var ids = data.data.Where(x => x.gameName != null 
-                                                   && x.gameName.ToLower() == gameName 
-                                                   && x.betArea == aId).ToList();
+                            var ids = data.data.Where(x => x.gameName is not null
+                                                   && x.gameName.ToLower().Equals(gameName) 
+                                                   && x.betArea.Equals(aId)).ToList();
                             foreach (var item in ids)
                             {
                                 if (item == null)
@@ -173,7 +173,7 @@ public class BetAreaHelper
         {
             return;
         }
-        var message = "{0} {1} {2}";
+        const string message = "{0} {1} {2}";
         var colors = new Formatter[]
         {
             new (areaName, Color.Red),

@@ -31,12 +31,12 @@ public partial class Program
                 var remove = removeOption.HasValue() ? removeOption.Value() : null;
 
                 // 取得快取資料筆數
-                long cacheCount = Program.Cache.GetCount();
+                var cacheCount = Program.Cache.GetCount();
 
-                if (get != null)
+                if (get is not null)
                 {
                     // 檢查快取是否存在
-                    bool isSet = Program.Cache[get] != null;
+                    var isSet = Cache[get] is not null;
                     if(isSet)
                     {
                         // 讀取快取
@@ -50,7 +50,7 @@ public partial class Program
                     return 0;
                 }
 
-                if (set != null)
+                if (set is not null)
                 {
                     if(setValue == null)
                     {
@@ -58,7 +58,7 @@ public partial class Program
                         return 1;
                     }
                     // 檢查快取是否存在
-                    bool isSet = Program.Cache[set] != null;
+                    bool isSet = Program.Cache[set] is not null;
                     if (isSet)
                     {
                         string value = (string)Program.Cache[set];
@@ -73,17 +73,17 @@ public partial class Program
                         };
                         Program.Cache.Add(set, (object)setValue, policy);
 
-                        string value = (string)Program.Cache[set];
+                        var value = (string)Program.Cache[set];
                         cacheCount = Program.Cache.GetCount();
                         Console.WriteLine($"寫入快取 key: {set} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     return 0;
                 }
 
-                if (remove != null)
+                if (remove is not null)
                 {
                     // 檢查快取是否存在
-                    bool isSet = Program.Cache[remove] != null;
+                    bool isSet = Program.Cache[remove] is not null;
                     if (isSet)
                     {
                         string value = (string)Program.Cache[remove];
