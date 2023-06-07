@@ -124,9 +124,14 @@ public partial class Program
                     var aId = $"{Convert.ToInt16(areaId):00000}";
                     var areaName = result[(int)common.Enum.BetArea.AreaName].ToString();
 
-                    var ids = data.data.Where(x => x.gameName is not null
-                                                   && x.gameName.ToLower().Equals(gameName)
-                                                   && x.betArea.Equals(aId)).ToList();
+                    var ids = data.data.Where(x =>
+                    {
+                        if (x is null) return false;
+                        return x.gameName is not null 
+                               && x.gameName.ToLower().Equals(gameName) 
+                               && x.betArea is not null
+                               && x.betArea.Equals(aId);
+                    }).ToList();
                     foreach (var item in ids)
                     {
                         BetAreaHelper.Message(areaName, item.betArea, item.context);

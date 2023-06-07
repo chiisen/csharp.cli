@@ -61,16 +61,23 @@ public partial class Program
                 }
                 foreach (var ba in settings)
                 {
-                    Console.WriteLine("==============================");
-                    Console.WriteLine($"> {ba.gameName} {ba.gameDesc}");
-                    Console.WriteLine("==============================");
+                    Console.WriteLine("==============================", Color.Red);
+                    Console.WriteLine($"> {ba.gameName} {ba.gameDesc}", Color.Red);
+                    Console.WriteLine("==============================", Color.Red);
 
                     var listWm = CsvHelper.GetCsv(ba.pathWM);
                     var list = CsvHelper.GetCsv(ba.path);
                     var iLen = list.Max(x => x[(int)common.Enum.BetArea.AreaId].Length);
                     var nLen = list.Max(x => x[(int)common.Enum.BetArea.AreaName].Length);
+                    var cLen = data.data.Where(x =>
+                    {
+                        if (x is null) return false;
+                        if (x.gameName is null) return false;
+                        return x.gameName.ToLower().Equals(ba.gameName.ToLower()) && x.context is not null;
+                    }).Max(x => x.context.Length);
+                    var wLen = listWm.Where(x => x[(int)common.Enum.BetArea.AreaName] is not null).Max(x => x[(int)common.Enum.BetArea.AreaName].Length);
 
-                    BetAreaAllHelper.Head(nLen, iLen);
+                    BetAreaAllHelper.Head(nLen, iLen, cLen, wLen);
 
                     Console.WriteLine("==============================");
 
@@ -100,15 +107,13 @@ public partial class Program
                         areaName = areaName.Replace("\"", "");
 
                         var ids = data.data.Where(x => x.gameName is not null
-                                                    && ba.gameName is not null
-                                                    && x.gameName.ToLower().Equals(ba.gameName.ToLower())
-                                                    && x.betArea == aId).ToList();
-                        if (ids.Count == 0)
+                                                       && x.gameName.ToLower().Equals(ba.gameName.ToLower())
+                                                       && x.betArea is not null
+                                                       && x.betArea == aId).ToList();
+                        if (ids is [])
                         {
                             continue;
                         }
-
-                        var cLen = ids.Where(x => x.context is not null).Max(x => x.context.Length);
 
                         foreach (var item in ids)
                         {
@@ -131,11 +136,11 @@ public partial class Program
                                                                   .Select(x => x).FirstOrDefault();
                             if (first is not null)
                             {
-                                BetAreaAllHelper.Message("{0} {1} {2} {3}", areaName, betArea, context, first[1], nLen, iLen, cLen);
+                                BetAreaAllHelper.Message("{0} {1} {2} {3}", areaName, betArea, context, first[1], nLen, iLen, cLen, wLen);
                             }
                             else
                             {
-                                BetAreaAllHelper.ErrorMessage("{0} {1} {2} {3}", areaName, betArea, context, nLen, iLen, cLen);
+                                BetAreaAllHelper.ErrorMessage("{0} {1} {2} {3}", areaName, betArea, context, nLen, iLen, cLen, wLen);
                             }
                         }
                     }
@@ -153,23 +158,35 @@ public partial class Program
 /// </summary>
 public class BetAreaAllHelper
 {
-    private const int AreaNameLens = 55;
-    private const int BetAreaLens = 10;
-    private const int ContextLens = 30;
-    private const int WmCodeLens = 25;
     /// <summary>
     /// 列印彩色標題
     /// </summary>
-    public static void Head(int nLens, int iLen)
+    public static void Head(int nLen, int iLen, int cLen, int wLen)
     {
         const string head = "{0} {1} {2} {3}";
 
+        if (nLen < "\"areaName\"".Length)
+        {
+            nLen = "\"areaName\"".Length;
+        }
+        if (iLen < "\"BetArea\"".Length)
+        {
+            iLen = "\"BetArea\"".Length;
+        }
+        if (cLen < "\"context\"".Length)
+        {
+            cLen = "\"context\"".Length;
+        }
+        if (wLen < "沒有對應的代碼".Length)
+        {
+            wLen = "沒有對應的代碼".Length;
+        }
         var colors = new Formatter[]
         {
-            new ("\"areaName\"".PadRight(nLens), Color.Green),
+            new ("\"areaName\"".PadRight(nLen), Color.Green),
             new ("\"BetArea\"".PadRight(iLen), Color.Blue),
-            new ("\"context\"".PadRight(ContextLens), Color.Yellow),
-            new ("\"WM code\"".PadRight(WmCodeLens), Color.White)
+            new ("\"context\"".PadRight(cLen), Color.Yellow),
+            new ("\"WM code\"".PadRight(wLen), Color.White)
         };
         Console.WriteLineFormatted(head, Color.White, colors);
     }
@@ -180,14 +197,30 @@ public class BetAreaAllHelper
     /// <param name="areaName"></param>
     /// <param name="betArea"></param>
     /// <param name="context"></param>
-    public static void Message(string message, string areaName, string betArea, string context, string wmCode, int nLens, int iLen, int cLen)
+    public static void Message(string message, string areaName, string betArea, string context, string wmCode, int nLen, int iLen, int cLen, int wLen)
     {
+        if (nLen < "\"areaName\"".Length)
+        {
+            nLen = "\"areaName\"".Length;
+        }
+        if (iLen < "\"BetArea\"".Length)
+        {
+            iLen = "\"BetArea\"".Length;
+        }
+        if (cLen < "\"context\"".Length)
+        {
+            cLen = "\"context\"".Length;
+        }
+        if (wLen < "沒有對應的代碼".Length)
+        {
+            wLen = "沒有對應的代碼".Length;
+        }
         var colors = new Formatter[]
         {
-            new(areaName.PadRight(nLens), Color.Green),
+            new(areaName.PadRight(nLen), Color.Green),
             new(betArea.PadRight(iLen), Color.Blue),
             new(context.PadRight(cLen), Color.Yellow),
-            new(wmCode.PadRight(WmCodeLens), Color.White)
+            new(wmCode.PadRight(wLen), Color.White)
         };
         Console.WriteLineFormatted(message, Color.White, colors);
     }
@@ -199,14 +232,30 @@ public class BetAreaAllHelper
     /// <param name="areaName"></param>
     /// <param name="betArea"></param>
     /// <param name="context"></param>
-    public static void ErrorMessage(string message, string areaName, string betArea, string context, int nLens, int iLen, int cLen)
+    public static void ErrorMessage(string message, string areaName, string betArea, string context, int nLen, int iLen, int cLen,  int wLen)
     {
+        if (nLen < "\"areaName\"".Length)
+        {
+            nLen = "\"areaName\"".Length;
+        }
+        if (iLen < "\"BetArea\"".Length)
+        {
+            iLen = "\"BetArea\"".Length;
+        }
+        if (cLen < "\"context\"".Length)
+        {
+            cLen = "\"context\"".Length;
+        }
+        if (wLen < "沒有對應的代碼".Length)
+        {
+            wLen = "沒有對應的代碼".Length;
+        }
         var colors = new Formatter[]
         {
-            new(areaName.PadRight(AreaNameLens), Color.Green),
-            new(betArea.PadRight(BetAreaLens), Color.Blue),
-            new(context.PadRight(ContextLens), Color.Yellow),
-            new("沒有對應的代碼".PadRight(25), Color.Red)
+            new(areaName.PadRight(nLen), Color.Green),
+            new(betArea.PadRight(iLen), Color.Blue),
+            new(context.PadRight(cLen), Color.Yellow),
+            new("沒有對應的代碼".PadRight(wLen), Color.Red)
         };
         Console.WriteLineFormatted(message, Color.White, colors);
     }
