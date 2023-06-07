@@ -1,7 +1,5 @@
-﻿using Colorful;
-using csharp.cli.common;
+﻿using csharp.cli.common;
 using McMaster.Extensions.CommandLineUtils;
-using System.Drawing;
 using System.Globalization;
 using Console = Colorful.Console;
 
@@ -116,19 +114,19 @@ public partial class Program
                     var values = line.Split(',');
                     var result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
 
-                    var areaId = result[(int)common.Enum.BetArea.AreaId].ToString();
+                    var areaId = result[(int)common.Enum.BetArea.AreaId];
                     if (Common.IsNumeric(areaId) == false)
                     {
                         continue;
                     }
                     var aId = $"{Convert.ToInt16(areaId):00000}";
-                    var areaName = result[(int)common.Enum.BetArea.AreaName].ToString();
+                    var areaName = result[(int)common.Enum.BetArea.AreaName];
 
                     var ids = data.data.Where(x =>
                     {
                         if (x is null) return false;
-                        return x.gameName is not null 
-                               && x.gameName.ToLower().Equals(gameName) 
+                        return x.gameName is not null
+                               && x.gameName.ToLower().Equals(gameName)
                                && x.betArea is not null
                                && x.betArea.Equals(aId);
                     }).ToList();
@@ -144,40 +142,4 @@ public partial class Program
     }
 }
 
-/// <summary>
-/// BetAreaHelper
-/// </summary>
-public class BetAreaHelper
-{
-    public static void Message(string? areaName, string? betArea, string? context)
-    {
-        bool isNull = false;
-        if (areaName == null)
-        {
-            Console.WriteLine($"null areaName");
-            isNull = true;
-        }
-        if (betArea == null)
-        {
-            Console.WriteLine($"null betArea");
-            isNull = true;
-        }
-        if (context == null)
-        {
-            Console.WriteLine($"null context");
-            isNull = true;
-        }
-        if (isNull == true)
-        {
-            return;
-        }
-        const string message = "{0} {1} {2}";
-        var colors = new Formatter[]
-        {
-            new (areaName, Color.Red),
-            new (betArea, Color.Blue),
-            new (context, Color.Yellow)
-        };
-        Console.WriteLineFormatted(message, Color.White, colors);
-    }
-}
+

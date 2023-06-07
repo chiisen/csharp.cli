@@ -10,7 +10,7 @@ public partial class Program
     private static string? _currentPath = "";
     private static readonly CommandLineApplication App = new() { Name = "csharp.cli" };
 
-    private static readonly ObjectCache Cache = MemoryCache.Default;
+    private static readonly ObjectCache MemoryCache = System.Runtime.Caching.MemoryCache.Default;
     private static readonly int SECONDS_EXPIRATION = 600;// 指定秒數後回收
 
     static int Main(string[] args)
@@ -69,7 +69,7 @@ public partial class Program
 
         Version();
 
-        cache();
+        Cache();
 
         Json();
 
