@@ -98,29 +98,25 @@ public class CsvHelper
             return list;
         }
 
-        using (var reader = new StreamReader(path))
+        using var reader = new StreamReader(path);
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+        var records = csv.GetRecords<dynamic>();
+
+        foreach (var r in records)
         {
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            var map = new Dictionary<int, string>();
+
+            var dics = (IDictionary<string, object>)r;
+            var index = 1;
+            foreach (var prop in dics)
             {
-                var records = csv.GetRecords<dynamic>();
-
-                foreach (var r in records)
-                {
-                    var map = new Dictionary<int, string>();
-
-                    var dics = (IDictionary<string, object>)r;
-                    int index = 1;
-                    foreach (var prop in dics)
-                    {
-                        map.Add(index, (string)prop.Value);
-                        //Console.WriteLine($"{prop.Key} {prop.Value}");
-                        index++;
-                    }
-                    if (map.Count > 0)
-                    {
-                        list.Add(map);
-                    }
-                }
+                map.Add(index, (string)prop.Value);
+                //Console.WriteLine($"{prop.Key} {prop.Value}");
+                index++;
+            }
+            if (map.Count > 0)
+            {
+                list.Add(map);
             }
         }
 

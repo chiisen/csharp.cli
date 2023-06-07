@@ -41,66 +41,65 @@ public partial class Program
                     Console.WriteLine($"null table");
                     return 1;
                 }
-                using (var document = SpreadsheetDocument.Create("TestNewData.xlsx", SpreadsheetDocumentType.Workbook))
+
+                using var document = SpreadsheetDocument.Create("TestNewData.xlsx", SpreadsheetDocumentType.Workbook);
+                var workbookPart = document.AddWorkbookPart();
+                workbookPart.Workbook = new Workbook();
+
+                var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                var sheetData = new SheetData();
+                worksheetPart.Worksheet = new Worksheet(sheetData);
+
+                var sheets = workbookPart.Workbook.AppendChild(new Sheets());
+                var sheet = new Sheet() { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Sheet1" };
+
+                sheets.Append(sheet);
+
+                var headerRow = new Row();
+
+                var columns = new List<string>();
+                foreach (DataColumn column in table.Columns)
                 {
-                    var workbookPart = document.AddWorkbookPart();
-                    workbookPart.Workbook = new Workbook();
+                    columns.Add(column.ColumnName);
 
-                    var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
-                    var sheetData = new SheetData();
-                    worksheetPart.Worksheet = new Worksheet(sheetData);
-
-                    var sheets = workbookPart.Workbook.AppendChild(new Sheets());
-                    var sheet = new Sheet() { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Sheet1" };
-
-                    sheets.Append(sheet);
-
-                    var headerRow = new Row();
-
-                    var columns = new List<string>();
-                    foreach (DataColumn column in table.Columns)
+                    var cell = new Cell()
                     {
-                        columns.Add(column.ColumnName);
+                        DataType = CellValues.String,
+                        CellValue = new CellValue(column.ColumnName)
+                    };
+                    headerRow.AppendChild(cell);
+                }
+
+                sheetData.AppendChild(headerRow);
+
+                foreach (DataRow drowse in table.Rows)
+                {
+                    if (drowse == null)
+                    {
+                        continue;
+                    }
+                    var newRow = new Row();
+                    foreach (var col in columns)
+                    {
+                        var cs = drowse[col];
+                        var csStr = cs.ToString();
+                        if (csStr == null)
+                        {
+                            continue;
+                        }
 
                         var cell = new Cell()
                         {
                             DataType = CellValues.String,
-                            CellValue = new CellValue(column.ColumnName)
+                            CellValue = new CellValue(csStr)
                         };
-                        headerRow.AppendChild(cell);
+                        newRow.AppendChild(cell);
                     }
 
-                    sheetData.AppendChild(headerRow);
-
-                    foreach (DataRow drowse in table.Rows)
-                    {
-                        if (drowse == null)
-                        {
-                            continue;
-                        }
-                        var newRow = new Row();
-                        foreach (var col in columns)
-                        {
-                            var cs = drowse[col];
-                            var csStr = cs.ToString();
-                            if (csStr == null)
-                            {
-                                continue;
-                            }
-
-                            var cell = new Cell()
-                            {
-                                DataType = CellValues.String,
-                                CellValue = new CellValue(csStr)
-                            };
-                            newRow.AppendChild(cell);
-                        }
-
-                        sheetData.AppendChild(newRow);
-                    }
-
-                    workbookPart.Workbook.Save();
+                    sheetData.AppendChild(newRow);
                 }
+
+                workbookPart.Workbook.Save();
 
                 #endregion Excel
 
