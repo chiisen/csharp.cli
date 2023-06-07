@@ -2,7 +2,6 @@
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using System.Data;
 
@@ -36,22 +35,22 @@ public partial class Program
 
                 // Lets converts our object data to Datatable for a simplified logic.
                 // Datatable is most easy way to deal with complex datatypes for easy reading and formatting. 
-                DataTable table = Common.JsonDeserialize<DataTable>(JsonConvert.SerializeObject(persons));
-                if(table == null)
+                var table = Common.JsonDeserialize<DataTable>(JsonConvert.SerializeObject(persons));
+                if (table == null)
                 {
                     Console.WriteLine($"null table");
                     return 1;
                 }
-                using (SpreadsheetDocument document = SpreadsheetDocument.Create("TestNewData.xlsx", SpreadsheetDocumentType.Workbook))
+                using (var document = SpreadsheetDocument.Create("TestNewData.xlsx", SpreadsheetDocumentType.Workbook))
                 {
-                    WorkbookPart workbookPart = document.AddWorkbookPart();
+                    var workbookPart = document.AddWorkbookPart();
                     workbookPart.Workbook = new Workbook();
 
-                    WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                    var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
                     var sheetData = new SheetData();
                     worksheetPart.Worksheet = new Worksheet(sheetData);
 
-                    Sheets sheets = workbookPart.Workbook.AppendChild(new Sheets());
+                    var sheets = workbookPart.Workbook.AppendChild(new Sheets());
                     var sheet = new Sheet() { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Sheet1" };
 
                     sheets.Append(sheet);
@@ -73,20 +72,16 @@ public partial class Program
 
                     sheetData.AppendChild(headerRow);
 
-                    foreach (DataRow dsrow in table.Rows)
+                    foreach (DataRow drowse in table.Rows)
                     {
-                        if(dsrow == null)
+                        if (drowse == null)
                         {
                             continue;
                         }
                         var newRow = new Row();
-                        foreach (String col in columns)
+                        foreach (var col in columns)
                         {
-                            var cs = dsrow[col];
-                            if (cs == null)
-                            {
-                                continue;
-                            }
+                            var cs = drowse[col];
                             var csStr = cs.ToString();
                             if (csStr == null)
                             {

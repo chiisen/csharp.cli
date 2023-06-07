@@ -48,6 +48,12 @@ public partial class Program
                                               && x.createdDateUTC < new DateTime(2023, 5, 16, 0, 0, 0))
                                   .OrderBy(x => x.createdDateUTC);
 
+                if (value == null)
+                {
+                    Console.WriteLine($"null value");
+                    return 1;
+                }
+
                 Console.WriteLine($"json => value.Count(): {value.Count()}");
 
                 const string prefixKey = "dev";

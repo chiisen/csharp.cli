@@ -79,8 +79,8 @@ public partial class Program
                 if (id is not null)
                 {
                     id = $"{Convert.ToInt16(id):00000}";
-                    var ids = data.data.Where(x => x.gameName is not null 
-                                                   && x.gameName.ToLower().Equals(gameName) 
+                    var ids = data.data.Where(x => x.gameName is not null
+                                                   && x.gameName.ToLower().Equals(gameName)
                                                    && x.betArea == id).ToList();
                     foreach (var item in ids)
                     {
@@ -93,7 +93,7 @@ public partial class Program
                 if (context is not null)
                 {
                     var contexts = data.data.Where(x => x.gameName is not null
-                                                && x.gameName.ToLower().Equals(gameName) 
+                                                && x.gameName.ToLower().Equals(gameName)
                                                 && x.context == context);
                     foreach (var item in contexts)
                     {
@@ -103,43 +103,38 @@ public partial class Program
                 }
 
                 var areaNamePath = areaNameOption.HasValue() ? areaNameOption.Value() : null;
-                if (areaNamePath is not null)
+                if (areaNamePath is null) return 0;
+                
+                using (var reader = new StreamReader(areaNamePath))
                 {
-                    using (var reader = new StreamReader(areaNamePath))
+                    while (!reader.EndOfStream)
                     {
-                        while (!reader.EndOfStream)
+                        var line = reader.ReadLine();
+                        if (line == null)
                         {
-                            var line = reader.ReadLine();
-                            if(line == null)
-                            {
-                                continue;
-                            }
-                            var values = line.Split(',');
-                            var result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
+                            continue;
+                        }
+                        var values = line.Split(',');
+                        var result = values.Select((s, index) => new { s, index }).ToDictionary(x => x.index + 1, x => x.s);
 
-                            var areaId = result[(int)common.Enum.BetArea.AreaId].ToString();
-                            if (Common.IsNumeric(areaId) == false)
-                            {
-                                continue;
-                            }
-                            var aId = $"{Convert.ToInt16(areaId):00000}";
-                            var areaName = result[(int)common.Enum.BetArea.AreaName].ToString();
+                        var areaId = result[(int)common.Enum.BetArea.AreaId].ToString();
+                        if (Common.IsNumeric(areaId) == false)
+                        {
+                            continue;
+                        }
+                        var aId = $"{Convert.ToInt16(areaId):00000}";
+                        var areaName = result[(int)common.Enum.BetArea.AreaName].ToString();
 
-                            var ids = data.data.Where(x => x.gameName is not null
-                                                   && x.gameName.ToLower().Equals(gameName) 
-                                                   && x.betArea.Equals(aId)).ToList();
-                            foreach (var item in ids)
-                            {
-                                if (item == null)
-                                {
-                                    Console.WriteLine($"null item");
-                                    continue;
-                                }
-                                BetAreaHelper.Message(areaName, item.betArea, item.context);
-                            }
+                        var ids = data.data.Where(x => x.gameName is not null
+                                                       && x.gameName.ToLower().Equals(gameName)
+                                                       && x.betArea.Equals(aId)).ToList();
+                        foreach (var item in ids)
+                        {
+                            BetAreaHelper.Message(areaName, item.betArea, item.context);
                         }
                     }
                 }
+                
                 return 0;
             });
         });
@@ -154,7 +149,7 @@ public class BetAreaHelper
     public static void Message(string? areaName, string? betArea, string? context)
     {
         bool isNull = false;
-        if(areaName == null)
+        if (areaName == null)
         {
             Console.WriteLine($"null areaName");
             isNull = true;
@@ -169,7 +164,7 @@ public class BetAreaHelper
             Console.WriteLine($"null context");
             isNull = true;
         }
-        if(isNull == true)
+        if (isNull == true)
         {
             return;
         }

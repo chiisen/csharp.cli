@@ -31,16 +31,16 @@ public partial class Program
                 var remove = removeOption.HasValue() ? removeOption.Value() : null;
 
                 // 取得快取資料筆數
-                var cacheCount = Program.Cache.GetCount();
+                var cacheCount = Cache.GetCount();
 
                 if (get is not null)
                 {
                     // 檢查快取是否存在
                     var isSet = Cache[get] is not null;
-                    if(isSet)
+                    if (isSet)
                     {
                         // 讀取快取
-                        string value = (string)Program.Cache[get];
+                        var value = (string)Program.Cache[get];
                         Console.WriteLine($"讀取快取 key: {get} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     else
@@ -52,16 +52,16 @@ public partial class Program
 
                 if (set is not null)
                 {
-                    if(setValue == null)
+                    if (setValue == null)
                     {
                         Console.WriteLine($"快取 key: {set} 寫入的內容為: null，快取資料筆數: {cacheCount}");
                         return 1;
                     }
                     // 檢查快取是否存在
-                    bool isSet = Program.Cache[set] is not null;
+                    var isSet = Cache[set] is not null;
                     if (isSet)
                     {
-                        string value = (string)Program.Cache[set];
+                        var value = (string)Cache[set];
                         Console.WriteLine($"快取已經存在 key: {set} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     else
@@ -71,10 +71,10 @@ public partial class Program
                         {
                             AbsoluteExpiration = DateTime.Now + TimeSpan.FromSeconds(SECONDS_EXPIRATION), // 指定秒數後回收
                         };
-                        Program.Cache.Add(set, (object)setValue, policy);
+                        Cache.Add(set, (object)setValue, policy);
 
-                        var value = (string)Program.Cache[set];
-                        cacheCount = Program.Cache.GetCount();
+                        var value = (string)Cache[set];
+                        cacheCount = Cache.GetCount();
                         Console.WriteLine($"寫入快取 key: {set} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     return 0;

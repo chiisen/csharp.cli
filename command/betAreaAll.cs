@@ -54,7 +54,7 @@ public partial class Program
 
                 var settingsText = File.ReadAllText(settingPath, Encoding.UTF8);
                 var settings = JsonConvert.DeserializeObject<List<BetAreaSetting>>(settingsText);
-                if(settings == null)
+                if (settings == null)
                 {
                     Console.WriteLine("null settings");
                     return 1;
@@ -96,7 +96,7 @@ public partial class Program
 
                         dict.Add(areaName, aId);
 
-                        // TODO: 去掉有引號的字串
+                        // 去掉有引號的字串
                         areaName = areaName.Replace("\"", "");
 
                         var ids = data.data.Where(x => x.gameName is not null
@@ -122,13 +122,13 @@ public partial class Program
                             context = Common.ReplaceChineseNumerals(context);
 
                             var betArea = item.betArea;
-                            if(betArea == null)
+                            if (betArea == null)
                             {
                                 continue;
                             }
 
                             var first = listWm.Where(x => Common.ReplaceChineseNumerals(x[(int)common.Enum.BetArea.AreaName]).Equals(context))
-                                              .Select(x => x).FirstOrDefault();
+                                                                  .Select(x => x).FirstOrDefault();
                             if (first is not null)
                             {
                                 BetAreaAllHelper.Message("{0} {1} {2} {3}", areaName, betArea, context, first[1], nLen, iLen, cLen);

@@ -19,17 +19,17 @@ public partial class Program
 
         #region 顯示執行路徑
         var assem = Assembly.GetEntryAssembly();
-        if(assem is not null)
+        if (assem is not null)
         {
             _currentPath = Path.GetDirectoryName(assem.Location);
-        }        
+        }
         Console.WriteLine($"執行路徑: {_currentPath}");
         #endregion 顯示執行路徑
 
         #region 【Logger 輸入參數】
 
         // ! Logger 輸入參數
-        string argString = "";
+        var argString = "";
         foreach (var arg in args)
         {
             argString += arg + " ";
@@ -86,7 +86,7 @@ public partial class Program
         BetAreaAll();
         #endregion 【註冊 Command】
 
-        int ret = -1;
+        var ret = -1;
         try
         {
             ret = App.Execute(args);
@@ -115,12 +115,12 @@ public partial class Program
         if (execAssem?.GetName() is not null)
         {
             var ver = execAssem.GetName().Version;
-            if(ver is not null)
+            if (ver is not null)
             {
                 assemblyVersion = ver.ToString();
             }
         }
-        
+
         #endregion 取得 Assembly Version
 
         Console.WriteLine($"================");

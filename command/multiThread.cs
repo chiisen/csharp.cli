@@ -1,7 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using McMaster.Extensions.CommandLineUtils;
-
-namespace csharp.cli;
+﻿namespace csharp.cli;
 
 public partial class Program
 {
@@ -19,18 +16,19 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                List<Task> taskList = new ();
-                for (int i = 0; i < 10; i++)
+                var taskList = new List<Task>();
+                for (var i = 0; i < 10; i++)
                 {
-                    string id = i.ToString();
+                    var id = i.ToString();
 
-                    taskList.Add(Task.Run(async () => {
+                    taskList.Add(Task.Run(async () =>
+                    {
                         try
                         {
                             var r = new Random(); // 宣告一個 Random 物件：r
                             //r.Next(); // 括號內沒有東西則從 0 到 int 最大值(2,147,483,647)隨機取一數
                             //r.Next(10000); // 從 0 到 Maxvalue隨機取一數
-                            int d = r.Next(1000, 10000); // Min 到 Max隨機取一數
+                            var d = r.Next(1000, 10000); // Min 到 Max隨機取一數
 
                             Console.WriteLine($"id: {id}, Delay: {d} ");
                             await Task.Delay(d);
@@ -43,20 +41,24 @@ public partial class Program
                         }
                     }));
                 }
-                Task allTask = Task.WhenAll(taskList);
+                var allTask = Task.WhenAll(taskList);
                 try
                 {
                     allTask.Wait();
                 }
-                catch { }
-
-                if (allTask.Status == TaskStatus.RanToCompletion)
+                catch
                 {
-                    Console.WriteLine("success!");
+                    // ignored
                 }
-                else if (allTask.Status == TaskStatus.Faulted)
+
+                switch (allTask.Status)
                 {
-                    Console.WriteLine("something wrong");
+                    case TaskStatus.RanToCompletion:
+                        Console.WriteLine("success!");
+                        break;
+                    case TaskStatus.Faulted:
+                        Console.WriteLine("something wrong");
+                        break;
                 }
                 return 0;
             });

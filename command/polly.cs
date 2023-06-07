@@ -25,9 +25,9 @@ public partial class Program
                     .OrResult<HttpResponseMessage>(r => r.StatusCode != HttpStatusCode.OK)
 
                     // 2. 重試策略，包含重試次數
-                    .Retry(3, (reponse, retryCount, context) =>
+                    .Retry(3, (response, retryCount, context) =>
                     {
-                        var result = reponse.Result;
+                        var result = response.Result;
                         if (result is not null)
                         {
                             var errorMsg = result.Content
@@ -38,7 +38,7 @@ public partial class Program
                         }
                         else
                         {
-                            var exception = reponse.Exception;
+                            var exception = response.Exception;
                             Console.WriteLine($"標準用法，發生錯誤：{exception.Message}，第 {retryCount} 次重試");
                         }
 
@@ -55,9 +55,9 @@ public partial class Program
         });
     }
 
-    static HttpResponseMessage FailResponse()
+    private static HttpResponseMessage FailResponse()
     {
-        HttpResponseMessage httpResponseMessage = new HttpResponseMessage
+        var httpResponseMessage = new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.BadGateway
         };

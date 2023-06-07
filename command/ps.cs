@@ -16,7 +16,7 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                // ! powershell 下 Get-ChildItem Env: 可以列出環境變數
+                // ! power shell 下 Get-ChildItem Env: 可以列出環境變數
                 var ps = new PowerShellHelper();
                 ps.Execute("Get-ChildItem Env:");
 

@@ -17,7 +17,7 @@ public partial class Program
             command.OnExecute(() =>
             {
                 // ! 取得環境變數
-                string envVar = System.Environment.GetEnvironmentVariable("path") ?? "";
+                var envVar = System.Environment.GetEnvironmentVariable("path") ?? "";
                 Console.WriteLine(envVar);
                 return 0;
             });

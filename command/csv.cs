@@ -36,14 +36,14 @@ public partial class Program
                     return 1;
                 }
                 Console.WriteLine($"讀取csv: {path}");
-                
+
                 var data = GetBetAreaJson();
                 if (data == null)
                 {
                     Console.WriteLine($"null data");
                     return 1;
                 }
-                if(data.data == null)
+                if (data.data == null)
                 {
                     Console.WriteLine($"null data.data");
                     return 1;
@@ -65,7 +65,7 @@ public partial class Program
                     var name = d[(int)common.Enum.BetArea.AreaName].ToString();
                     name = name.Replace("\"", "");
                     var ids = data.data.Where(x => x.gameName is not null
-                                           && x.gameName.ToLower().Equals(betArea.ToLower()) 
+                                           && x.gameName.ToLower().Equals(betArea.ToLower())
                                            && x.betArea == id).ToList();
                     foreach (var item in ids)
                     {

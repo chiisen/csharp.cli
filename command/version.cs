@@ -15,8 +15,7 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                string strCmdText;
-                strCmdText = "/C dotnet tool list -g";
+                const string strCmdText = "/C dotnet tool list -g";
                 System.Diagnostics.Process.Start("CMD.exe", strCmdText);
                 return 0;
             });

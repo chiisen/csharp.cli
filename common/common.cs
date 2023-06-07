@@ -1,5 +1,4 @@
-﻿using csharp.cli.model;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 
 namespace csharp.cli.common

@@ -21,14 +21,9 @@ public partial class Program
                 Console.WriteLine($"Physical location {AppDomain.CurrentDomain.BaseDirectory}");
                 Console.WriteLine($"AppContext.BaseDir {AppContext.BaseDirectory}");
                 var processModule = Process.GetCurrentProcess().MainModule;
-                if (processModule is not null)
-                {
-                    Console.WriteLine($"Runtime Call {Path.GetDirectoryName(processModule.FileName)}");
-                }
-                else
-                {
-                    Console.WriteLine("null processModule");
-                }
+                Console.WriteLine(processModule is not null
+                    ? $"Runtime Call {Path.GetDirectoryName(processModule.FileName)}"
+                    : "null processModule");
 
                 return 0;
             });

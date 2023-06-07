@@ -27,7 +27,7 @@ public partial class Program
             command.OnExecute(() =>
             {
                 var words = wordsArgument.HasValue ? wordsArgument.Value : "world";
-                if(words == null)
+                if (words == null)
                 {
                     Console.WriteLine($"null words");
                     return 1;
@@ -37,13 +37,13 @@ public partial class Program
                     words = words.ToUpper(CultureInfo.InvariantCulture);
                 }
                 var count = repeatOption.HasValue() ? repeatOption.Value() : "1";
-                if(count == null)
+                if (count == null)
                 {
                     Console.WriteLine($"null count");
                     return 1;
                 }
-                int repeat_count = int.Parse(count);
-                for (int i = 0; i < repeat_count; ++i)
+                var repeatCount = int.Parse(count);
+                for (var i = 0; i < repeatCount; ++i)
                 {
                     Console.WriteLine(words);
                 }
