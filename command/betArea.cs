@@ -52,6 +52,9 @@ public partial class Program
                 // 只留下 lang 為 zh-TW
                 data.data = data.data.Where(x => x.lang == "zh-TW").ToList();
 
+                // 去掉 null 的資料
+                data.data = data.data.Where(x => x is not null).ToList();
+
                 var gameName = gameNameArgument.HasValue ? gameNameArgument.Value : null;
                 if (gameName == null)
                 {

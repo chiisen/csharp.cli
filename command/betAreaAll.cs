@@ -36,7 +36,7 @@ public partial class Program
 
                 Console.WriteLine($"> 讀取到 .bet-area 設定檔案");
 
-                var data = cli.Program.GetBetAreaJson();
+                var data = GetBetAreaJson();
                 if (data == null)
                 {
                     Console.WriteLine($"null data");
@@ -51,6 +51,9 @@ public partial class Program
                 // 只留下 lang 為 zh-TW
                 data.data = data.data.Where(x => x.lang == "zh-TW").ToList();
 
+                // 去掉 null 的資料
+                data.data = data.data.Where(x => x is not null).ToList();
+
                 var settingsText = File.ReadAllText(settingPath, Encoding.UTF8);
                 var settings = JsonConvert.DeserializeObject<List<BetAreaSetting>>(settingsText);
                 if (settings == null)
@@ -60,6 +63,11 @@ public partial class Program
                 }
                 foreach (var ba in settings)
                 {
+                    if (ba.gameName is null)
+                    {
+                        continue;
+                    }
+
                     Console.WriteLine("==============================", Color.Red);
                     Console.WriteLine($"> {ba.gameName} {ba.gameDesc}", Color.Red);
                     Console.WriteLine("==============================", Color.Red);
@@ -70,10 +78,13 @@ public partial class Program
                     var nLen = list.Max(x => x[(int)common.Enum.BetArea.AreaName].Length);
                     var cLen = data.data.Where(x =>
                     {
-                        if (x is null) return false;
                         if (x.gameName is null) return false;
-                        return x.gameName.ToLower().Equals(ba.gameName.ToLower()) && x.context is not null;
-                    }).Max(x => x.context.Length);
+                        return x.context switch
+                        {
+                            null => false,
+                            _ => x.gameName.ToLower().Equals(ba.gameName.ToLower())
+                        };
+                    }).Max(x => x.context?.Length ?? 0);
                     var wLen = listWm.Where(x => x[(int)common.Enum.BetArea.AreaName] is not null).Max(x => x[(int)common.Enum.BetArea.AreaName].Length);
 
                     BetAreaAllHelper.Head(nLen, iLen, cLen, wLen);
