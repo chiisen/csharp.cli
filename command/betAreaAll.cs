@@ -25,7 +25,7 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                Console.WriteLine($"> 目錄內需要有一個 .bet-area 設定檔案");
+                Console.WriteLine($"> 目錄內需要有一個 .bet-area 設定檔案", Color.Yellow);
 
                 var settingPath = @$"{System.Environment.CurrentDirectory}\.bet-area";
                 if (File.Exists(settingPath) == false)
@@ -34,7 +34,7 @@ public partial class Program
                     return 1;
                 }
 
-                Console.WriteLine($"> 讀取到 .bet-area 設定檔案");
+                Console.WriteLine($"> 讀取到 .bet-area 設定檔案", Color.Green);
 
                 var data = GetBetAreaJson();
                 if (data == null)
@@ -68,9 +68,9 @@ public partial class Program
                         continue;
                     }
 
-                    Console.WriteLine("==============================", Color.Red);
-                    Console.WriteLine($"> {ba.gameName} {ba.gameDesc}", Color.Red);
-                    Console.WriteLine("==============================", Color.Red);
+                    Console.WriteLine("==============================", Color.Yellow);
+                    Console.WriteLine($"> {ba.gameName} {ba.gameDesc}", Color.Yellow);
+                    Console.WriteLine("==============================", Color.Yellow);
 
                     var listWm = CsvHelper.GetCsv(ba.pathWM);
                     var list = CsvHelper.GetCsv(ba.path);

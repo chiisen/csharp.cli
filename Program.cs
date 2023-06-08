@@ -1,7 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
+
+using System.Drawing;
 using McMaster.Extensions.CommandLineUtils;
 using System.Reflection;
 using System.Runtime.Caching;
+using Console = Colorful.Console;
 
 namespace csharp.cli;
 
@@ -13,9 +16,9 @@ public partial class Program
     private static readonly ObjectCache MemoryCache = System.Runtime.Caching.MemoryCache.Default;
     private static readonly int SECONDS_EXPIRATION = 600;// 指定秒數後回收
 
-    static int Main(string[] args)
+    private static int Main(string[] args)
     {
-        Console.WriteLine($"================");
+        Console.WriteLine($"^^^^^^^^^^^^^^^^", Color.Chartreuse);
 
         #region 顯示執行路徑
         var assem = Assembly.GetEntryAssembly();
@@ -23,7 +26,8 @@ public partial class Program
         {
             _currentPath = Path.GetDirectoryName(assem.Location);
         }
-        Console.WriteLine($"執行路徑: {_currentPath}");
+        Console.WriteLine($"執行路徑: {_currentPath}", Color.Aqua);
+        Console.WriteLine($"================", Color.Aqua);
         #endregion 顯示執行路徑
 
         #region 【Logger 輸入參數】
@@ -84,6 +88,8 @@ public partial class Program
         MultiThread();
 
         BetAreaAll();
+
+        Coverage();
         #endregion 【註冊 Command】
 
         var ret = -1;
@@ -123,9 +129,9 @@ public partial class Program
 
         #endregion 取得 Assembly Version
 
-        Console.WriteLine($"================");
+        Console.WriteLine($"================", Color.Blue);
         Console.WriteLine($" AssemblyVersion: {assemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
-        Console.WriteLine($"====程式結束====");
+        Console.WriteLine($"^^^^程式結束^^^^", Color.Green);
         //Console.WriteLine($"按任何鍵繼續....");
         //Console.ReadKey();
 
