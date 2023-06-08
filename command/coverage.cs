@@ -1,5 +1,10 @@
-﻿using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
+﻿using csharp.cli.common;
+using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
+using System.Drawing;
+using Console = Colorful.Console;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace csharp.cli;
 
@@ -18,18 +23,65 @@ public partial class Program
             command.HelpOption("-?|-h|-help");
 
             // 輸入參數說明
-            var wordsArgument = command.Argument("[words]", "指定需要輸出的文字。");
+            var jsonPathArgument = command.Argument("[words]", "指定 Json 格式的注單資料。");
 
             // 輸入指令說明
-            var repeatOption = command.Option("-r|--repeat-count", "指定輸出重複次數", CommandOptionType.SingleValue);
+            var gidOption = command.Option("-g|--gid", "指定 gid", CommandOptionType.SingleValue);
 
             command.OnExecute(() =>
             {
-                var words = wordsArgument.HasValue ? wordsArgument.Value : "world";
+                var jsonPath = jsonPathArgument.HasValue ? jsonPathArgument.Value : null;
+                if (jsonPath is null)
+                {
+                    Console.WriteLine($"null jsonPath");
+                    return 1;
+                }
 
-                var count = repeatOption.HasValue() ? repeatOption.Value() : "1";
+                string? jsonText = null;
+                try
+                {
+                    jsonText = File.ReadAllText(jsonPath);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"{e}", Color.Yellow);
+                }
+                if (jsonText is null)
+                {
+                    Console.WriteLine($"null jsonText", Color.Red);
+                    return 1;
+                }
+                var record = Common.JsonDeserialize<List<WMDataReportResponse.Result>>(jsonText);
+                if (record is null)
+                {
+                    Console.WriteLine($"null record");
+                    return 1;
+                }
+                var gid = gidOption.HasValue() ? gidOption.Value() : null;
+                if (gid is null)
+                {
+                    Console.WriteLine($"null gid");
+                    return 1;
+                }
 
-                Console.WriteLine($"coverage => words: {words}, count: {count}");
+                var id = int.Parse(gid);
+
+                var r = record.Where(x => WmConvertHelper.BetCodeToRcg(x).Equals("") && x.gid == id)
+                                                 .GroupBy(n => n.betCode)
+                                                 .SelectMany(group => string.IsNullOrEmpty(group.Key)
+                                                                                           ? group as IEnumerable<WMDataReportResponse.Result>
+                                                                                           : new[] { group.First() })
+                                                .Select(x => new { x.gid, x.betCode, x.betResult, x.commission })
+                                                .OrderBy(n => n.betCode)
+                                                .ToList();
+
+                r = r.OrderByDescending(x => x.betCode).ToList();
+
+                r.ForEach(x =>
+                {
+                    Console.WriteLine($"{x.betCode}", Color.Yellow);
+                });
+
                 return 0;
             });
         });
