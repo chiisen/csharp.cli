@@ -1,15 +1,17 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using System.Runtime.Caching;
 
+namespace csharp.cli;
+
 public partial class Program
 {
     /// <summary>
     /// 範例程式
-    /// 命令列引數: cache "words" -r 10
+    /// 命令列引數: cache -r keyName
     /// </summary>
-    public static void cache()
+    public static void Cache()
     {
-        _ = _app.Command("cache", command =>
+        _ = App.Command("cache", (Action<CommandLineApplication>)(command =>
         {
             // 第二層 Help 的標題
             command.Description = "cache 測試";
@@ -21,7 +23,7 @@ public partial class Program
             var valueOption = command.Option("-v|--value", "指定輸出為寫入的內容", CommandOptionType.SingleValue);
             var removeOption = command.Option("-r|--remove", "移除指定快取", CommandOptionType.SingleValue);
 
-            command.OnExecute(() =>
+            command.OnExecute((Func<int>)(() =>
             {
                 var get = getOption.HasValue() ? getOption.Value() : null;
                 var set = setOption.HasValue() ? setOption.Value() : null;
@@ -29,16 +31,16 @@ public partial class Program
                 var remove = removeOption.HasValue() ? removeOption.Value() : null;
 
                 // 取得快取資料筆數
-                long cacheCount = Cache.GetCount();
+                var cacheCount = MemoryCache.GetCount();
 
-                if (get != null)
+                if (get is not null)
                 {
                     // 檢查快取是否存在
-                    bool isSet = Cache[get] != null;
-                    if(isSet)
+                    var isSet = MemoryCache[get] is not null;
+                    if (isSet)
                     {
                         // 讀取快取
-                        string value = (string)Cache[get];
+                        var value = (string)cli.Program.MemoryCache[get];
                         Console.WriteLine($"讀取快取 key: {get} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     else
@@ -48,47 +50,47 @@ public partial class Program
                     return 0;
                 }
 
-                if (set != null)
+                if (set is not null)
                 {
-                    if(setValue == null)
+                    if (setValue == null)
                     {
                         Console.WriteLine($"快取 key: {set} 寫入的內容為: null，快取資料筆數: {cacheCount}");
                         return 1;
                     }
                     // 檢查快取是否存在
-                    bool isSet = Cache[set] != null;
+                    var isSet = MemoryCache[set] is not null;
                     if (isSet)
                     {
-                        string value = (string)Cache[set];
+                        var value = (string)MemoryCache[set];
                         Console.WriteLine($"快取已經存在 key: {set} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     else
                     {
                         // 寫入快取 (指定時間後回收快取)
-                        CacheItemPolicy policy = new()
+                        var policy = new CacheItemPolicy()
                         {
                             AbsoluteExpiration = DateTime.Now + TimeSpan.FromSeconds(SECONDS_EXPIRATION), // 指定秒數後回收
                         };
-                        Cache.Add(set, setValue, policy);
+                        MemoryCache.Add(set, (object)setValue, policy);
 
-                        string value = (string)Cache[set];
-                        cacheCount = Cache.GetCount();
+                        var value = (string)MemoryCache[set];
+                        cacheCount = MemoryCache.GetCount();
                         Console.WriteLine($"寫入快取 key: {set} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     return 0;
                 }
 
-                if (remove != null)
+                if (remove is not null)
                 {
                     // 檢查快取是否存在
-                    bool isSet = Cache[remove] != null;
+                    bool isSet = cli.Program.MemoryCache[remove] is not null;
                     if (isSet)
                     {
-                        string value = (string)Cache[remove];
+                        string value = (string)cli.Program.MemoryCache[remove];
 
                         // 移除快取
-                        Cache.Remove(remove);
-                        cacheCount = Cache.GetCount();
+                        cli.Program.MemoryCache.Remove(remove);
+                        cacheCount = cli.Program.MemoryCache.GetCount();
                         Console.WriteLine($"移除快取 key: {remove} value: {value}，快取資料筆數: {cacheCount}");
                     }
                     else
@@ -99,7 +101,7 @@ public partial class Program
                 }
 
                 return 0;
-            });
-        });
+            }));
+        }));
     }
 }

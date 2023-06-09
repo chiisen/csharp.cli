@@ -1,16 +1,16 @@
-echo ã€è«‹è¼¸å…¥ .\install.batã€‘
+echo ¡i½Ğ¿é¤J .\install.bat¡j
 
-echo ã€è§£é™¤å®‰è£å…¨åŸŸå¥—ä»¶ã€‘
+echo ¡i¸Ñ°£¦w¸Ë¥ş°ì®M¥ó¡j
 del .\nupkg\*.nupkg
 
-echo ã€æ‰“åŒ…å…¨åŸŸå¥—ä»¶ã€‘
+echo ¡i¥´¥]¥ş°ì®M¥ó¡j
 dotnet pack
 
-echo ã€è§£é™¤å®‰è£å…¨åŸŸå¥—ä»¶ã€‘
+echo ¡i¸Ñ°£¦w¸Ë¥ş°ì®M¥ó¡j
 dotnet tool uninstall -g csharp.cli
 
-echo ã€å®‰è£å…¨åŸŸå¥—ä»¶ã€‘
+echo ¡i¦w¸Ë¥ş°ì®M¥ó¡j
 dotnet tool install --global --add-source .\nupkg csharp.cli
 
-echo ã€æŸ¥çœ‹å…¨åŸŸå¥—ä»¶ã€‘
+echo ¡i¬d¬İ¥ş°ì®M¥ó¡j
 dotnet tool list -g

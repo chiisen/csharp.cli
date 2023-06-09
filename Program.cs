@@ -1,27 +1,39 @@
 ﻿// See https://aka.ms/new-console-template for more information
+
+using System.Drawing;
 using McMaster.Extensions.CommandLineUtils;
 using System.Reflection;
 using System.Runtime.Caching;
+using Console = Colorful.Console;
+
+namespace csharp.cli;
 
 public partial class Program
 {
-    private static string currentPath;
-    private static CommandLineApplication _app = new() { Name = "csharp.cli" };
+    private static string? _currentPath = "";
+    private static readonly CommandLineApplication App = new() { Name = "csharp.cli" };
 
-    private static ObjectCache Cache = MemoryCache.Default;
+    private static readonly ObjectCache MemoryCache = System.Runtime.Caching.MemoryCache.Default;
     private static readonly int SECONDS_EXPIRATION = 600;// 指定秒數後回收
 
-    static int Main(string[] args)
+    private static int Main(string[] args)
     {
+        Console.WriteLine($"^^^^^^^^^^^^^^^^", Color.Chartreuse);
+
         #region 顯示執行路徑
-        currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        Console.WriteLine($"執行路徑: {currentPath}");
+        var assem = Assembly.GetEntryAssembly();
+        if (assem is not null)
+        {
+            _currentPath = Path.GetDirectoryName(assem.Location);
+        }
+        Console.WriteLine($"執行路徑: {_currentPath}", Color.Aqua);
+        Console.WriteLine($"================", Color.Aqua);
         #endregion 顯示執行路徑
 
         #region 【Logger 輸入參數】
 
         // ! Logger 輸入參數
-        string argString = "";
+        var argString = "";
         foreach (var arg in args)
         {
             argString += arg + " ";
@@ -36,10 +48,10 @@ public partial class Program
         #region 【設定 Help】
 
         // ! 設定 Help
-        _app.HelpOption("-?|-h|--help");
-        _app.OnExecute(() =>
+        App.HelpOption("-?|-h|--help");
+        App.OnExecute(() =>
         {
-            _app.ShowHelp();
+            App.ShowHelp();
             return 0;
         });
 
@@ -49,27 +61,41 @@ public partial class Program
         #region 【註冊 Command】
 
         // ! 註冊 Command
-        example();
+        Example();
 
-        echo();
+        Echo();
 
-        polly();
+        Polly();
 
-        betArea();
+        BetArea();
 
-        csv();
+        Csv();
 
-        version();
+        Version();
 
-        cache();
+        Cache();
 
-        json();
+        Json();
+
+        Pwd();
+
+        Environment();
+
+        Ps();
+
+        Excel();
+
+        MultiThread();
+
+        BetAreaAll();
+
+        Coverage();
         #endregion 【註冊 Command】
 
-        int ret = -1;
+        var ret = -1;
         try
         {
-            ret = _app.Execute(args);
+            ret = App.Execute(args);
         }
         catch (Exception ex)
         {
@@ -78,19 +104,36 @@ public partial class Program
 
         #region 取的 File Version
         // ! 取的 File Version
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-        string fileVersion = fvi.FileVersion;
+        var assembly = Assembly.GetExecutingAssembly();
+        var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+        var fileVersion = "";
+        if (fvi.FileVersion is not null)
+        {
+            fileVersion = fvi.FileVersion;
+        }
+
         #endregion 取的 File Version
 
         #region 取得 Assembly Version
         // ! 取得 Assembly Version
-        string AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        var assemblyVersion = "";
+        var execAssem = Assembly.GetExecutingAssembly();
+        if (execAssem?.GetName() is not null)
+        {
+            var ver = execAssem.GetName().Version;
+            if (ver is not null)
+            {
+                assemblyVersion = ver.ToString();
+            }
+        }
+
         #endregion 取得 Assembly Version
 
-        Console.WriteLine($" AssemblyVersion: {AssemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
-        Console.WriteLine($"按任何鍵繼續....");
-        Console.ReadKey();
+        Console.WriteLine($"================", Color.Blue);
+        Console.WriteLine($" AssemblyVersion: {assemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
+        Console.WriteLine($"^^^^程式結束^^^^", Color.Green);
+        //Console.WriteLine($"按任何鍵繼續....");
+        //Console.ReadKey();
 
         return 0;
     }

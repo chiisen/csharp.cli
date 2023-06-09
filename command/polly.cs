@@ -1,15 +1,16 @@
 ﻿using Polly;
 using System.Net;
 
+namespace csharp.cli;
 public partial class Program
 {
     /// <summary>
     /// 重試測試。
     /// 命令列引數: polly
     /// </summary>
-    public static void polly()
+    public static void Polly()
     {
-        _ = _app.Command("polly", command =>
+        _ = App.Command("polly", command =>
         {
             // 第二層 Help 的標題
             command.Description = "重試測試。";
@@ -24,10 +25,10 @@ public partial class Program
                     .OrResult<HttpResponseMessage>(r => r.StatusCode != HttpStatusCode.OK)
 
                     // 2. 重試策略，包含重試次數
-                    .Retry(3, (reponse, retryCount, context) =>
+                    .Retry(3, (response, retryCount, context) =>
                     {
-                        var result = reponse.Result;
-                        if (result != null)
+                        var result = response.Result;
+                        if (result is not null)
                         {
                             var errorMsg = result.Content
                                                  .ReadAsStringAsync()
@@ -37,7 +38,7 @@ public partial class Program
                         }
                         else
                         {
-                            var exception = reponse.Exception;
+                            var exception = response.Exception;
                             Console.WriteLine($"標準用法，發生錯誤：{exception.Message}，第 {retryCount} 次重試");
                         }
 
@@ -54,9 +55,9 @@ public partial class Program
         });
     }
 
-    static HttpResponseMessage FailResponse()
+    private static HttpResponseMessage FailResponse()
     {
-        HttpResponseMessage httpResponseMessage = new HttpResponseMessage
+        var httpResponseMessage = new HttpResponseMessage
         {
             StatusCode = HttpStatusCode.BadGateway
         };
