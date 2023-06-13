@@ -27,21 +27,41 @@ public partial class Program
                 {
                     // ! MS-SQL
                     var result = H1Helper.Query(id);
+                    if (result.Count == 0)
+                    {
+                        Console.WriteLine($"result not find.", Color.Red);
+                        return 1;
+                    }
+
+                    //var enamehMap = result
+                    //    .Where( x => x.Club_id is not null)
+                    //    .GroupBy(x => x.Club_id)
+                    //    .ToDictionary(x => x.Key, x => x.ToList());
 
                     result.ForEach(x =>
                     {
-                        Console.WriteLine($"Club_id: {x.Club_id}, TandemID: {x.TandemID}, ReportTime: {x.ReportTime}", Color.Aqua);
+                        Console.WriteLine($"Club_id: '{x.Club_id}', TandemID: '{x.TandemID}', ReportTime: {x.ReportTime}", Color.Aqua);
 
-                        if (x.TandemID == null)
+                        if (x.TandemID is null)
                         {
                             Console.WriteLine($"null TandemID", Color.Yellow);
                             return;
                         }
-                        var result2 = W1Helper.Query(x.TandemID.ToString());
+
+                        var tId = x.TandemID.ToString();
+                        var result2 = W1Helper.Query(tId);
+                        if (result2.Count == 0)
+                        {
+                            Console.WriteLine($"result2 not find(tId: '{tId}').", Color.Red);
+                            return;
+                        }
                         var r = result2.ToList();
                         r.ForEach(y =>
                         {
-                            Console.WriteLine($"id: {y.id}, game_id: {y.Game_id}, Club_id: {y.Club_id} reportdatetime: {y.ReportDatetime}, recordcount: {y.RecordCount}", Color.Green);
+                            //var ename = enamehMap.ContainsKey(y.Club_id)
+                            //    ? enamehMap.FirstOrDefault().Club_Cname
+                            //    : "";
+                            Console.WriteLine($"id: '{y.id}', game_id: {y.Game_id}, Club_id: {y.Club_id}, Club_Ename: , reportdatetime: {y.ReportDatetime}, recordcount: {y.RecordCount}", Color.Green);
                         });
                     });
 

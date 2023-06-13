@@ -140,6 +140,8 @@ public partial class Program
         #endregion 取得 Assembly Version
 
         Console.WriteLine($"================", Color.Blue);
+        Console.WriteLine($"csharp.cli find-id -? 或 -help 可以查第二層說明", Color.Yellow);
+        Console.WriteLine($"================", Color.Blue);
         Console.WriteLine($" AssemblyVersion: {assemblyVersion}\r\n FileVersion: {fileVersion}\r\n 回傳值為: {ret}");
         Console.WriteLine($"^^^^程式結束^^^^", Color.Green);
         //Console.WriteLine($"按任何鍵繼續....");
