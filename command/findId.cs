@@ -49,7 +49,7 @@ WHERE club_ename = @ename;";
                     using var conn = new NpgsqlConnection(connString);
                     var result = conn.Query<Wallet>(strSql, par).ToList();
                     var r = result.FirstOrDefault();
-                    Console.WriteLine($"id: {r.Club_id}", Color.Green);
+                    Console.WriteLine($"id: {r?.Club_id}", Color.Green);
 
                     return 1;
                 }
@@ -70,7 +70,7 @@ WHERE club_id = @id;";
                     using var conn = new NpgsqlConnection(connString);
                     var result = conn.Query<Wallet>(strSql, par).ToList();
                     var r = result.FirstOrDefault();
-                    Console.WriteLine($"Ename: {r.Club_Ename}", Color.Green);
+                    Console.WriteLine($"Ename: {r?.Club_Ename}", Color.Green);
                 }
 
                 Console.WriteLine($"請輸入參數.", Color.Red);

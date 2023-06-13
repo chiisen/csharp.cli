@@ -36,7 +36,7 @@ public partial class Program
 
                 using var conn = new NpgsqlConnection(connString);
                 var result = conn.Query<BetRecord>(strSql, par).ToList();
-                result = result.Where(x => x.GameCode.Equals("SMG_10000Wishes")).ToList();
+                result = result.Where(x => x.GameCode != null && x.GameCode.Equals("SMG_10000Wishes")).ToList();
                 result.ForEach(x =>
                 {
                     Console.WriteLine($"{x.BetUID}", Color.Green);
