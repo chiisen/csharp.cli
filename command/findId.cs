@@ -51,7 +51,7 @@ WHERE club_ename = @ename;";
                     var r = result.FirstOrDefault();
                     Console.WriteLine($"id: {r?.Club_id}", Color.Green);
 
-                    return 1;
+                    return 0;
                 }
                 else if (id is not null)
                 {
@@ -71,9 +71,11 @@ WHERE club_id = @id;";
                     var result = conn.Query<Wallet>(strSql, par).ToList();
                     var r = result.FirstOrDefault();
                     Console.WriteLine($"Ename: {r?.Club_Ename}", Color.Green);
+
+                    return 0;
                 }
 
-                Console.WriteLine($"請輸入參數.", Color.Red);
+                Console.WriteLine($"請輸入查詢參數.", Color.Red);
                 return 1;
             });
         });

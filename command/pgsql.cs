@@ -22,6 +22,7 @@ public partial class Program
 
             command.OnExecute(() =>
             {
+                const string gameCode = "SMG_10000Wishes";
                 const string connString = "Server=wallet-dev-postgresql.db-dev;Database=centerwallet;User Id=cwapi;Password='3Yw9*N|OKR2C';Pooling=true;Minimum Pool Size=5;Maximum Pool Size=150;";
                 var startTime = new DateTime(2023, 5, 16, 0, 0, 0);
                 var endTime = new DateTime(2023, 5, 16, 23, 59, 59);
@@ -30,16 +31,16 @@ public partial class Program
 		              FROM   t_mg_bet_record
 		              WHERE gameendtimeutc >= @startTime 
 		              AND gameendtimeutc <= @endTime";
-                var par = new DynamicParameters(connString);
-                par.Add("@startTime", startTime);
-                par.Add("@endTime", endTime);
+                var parameters = new DynamicParameters();
+                parameters.Add("@startTime", startTime);
+                parameters.Add("@endTime", endTime);
 
-                using var conn = new NpgsqlConnection(connString);
-                var result = conn.Query<BetRecord>(strSql, par).ToList();
-                result = result.Where(x => x.GameCode != null && x.GameCode.Equals("SMG_10000Wishes")).ToList();
+                using var connection = new NpgsqlConnection(connString);
+                var result = connection.Query<BetRecord>(strSql, parameters).ToList();
+                result = result.Where(x => x.GameCode is gameCode).ToList();
                 result.ForEach(x =>
                 {
-                    Console.WriteLine($"{x.BetUID}", Color.Green);
+                    Console.WriteLine($"BetUID: {x.BetUID}, GameCode: {x.GameCode}, gameStartTimeUTC: {x.gameStartTimeUTC}", Color.Green);
                 });
 
                 return 0;

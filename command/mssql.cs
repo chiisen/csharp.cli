@@ -22,10 +22,9 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                var connString =
-                    "Data Source=daydb-svc.h1-db-dev;Initial Catalog=HKNetGame_HJ;User ID=Wallet;Password=rfv761!!$;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Pooling=true;Min Pool Size=10;Max Pool Size=150;";
+                const string connString = "Data Source=daydb-svc.h1-db-dev;Initial Catalog=HKNetGame_HJ;User ID=Wallet;Password=rfv761!!$;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Pooling=true;Min Pool Size=10;Max Pool Size=150;";
                 using var connection = new SqlConnection(connString);
-                var strSql = @"SELECT
+                const string strSql = @"SELECT
     DISTINCT Game_id,
     MaHao
 FROM T_JTZD_ALL

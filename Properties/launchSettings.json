@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "find-id -i 2005161782"
+      "commandLineArgs": "h1-bet-check -i 2200000111"
     }
   }
 }
