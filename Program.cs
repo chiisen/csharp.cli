@@ -90,6 +90,8 @@ public partial class Program
         BetAreaAll();
 
         Coverage();
+
+        pgsql();
         #endregion 【註冊 Command】
 
         var ret = -1;

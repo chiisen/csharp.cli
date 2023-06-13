@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "coverage C:\\royal\\github\\RoyalTemporaryFile\\WM\\t_wm_bet_record.json -g 101"
+      "commandLineArgs": "pgsql"
     }
   }
 }
