@@ -92,6 +92,8 @@ public partial class Program
         Coverage();
 
         pgsql();
+
+        mssql();
         #endregion 【註冊 Command】
 
         var ret = -1;
