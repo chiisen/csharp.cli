@@ -94,6 +94,12 @@ public partial class Program
         pgsql();
 
         mssql();
+
+        h1BetCheck();
+
+        Example0();
+
+        findId();
         #endregion 【註冊 Command】
 
         var ret = -1;

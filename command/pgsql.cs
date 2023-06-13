@@ -1,7 +1,7 @@
 ﻿using csharp.cli.model;
-using System.Drawing;
 using Dapper;
 using Npgsql;
+using System.Drawing;
 using Console = Colorful.Console;
 
 namespace csharp.cli;

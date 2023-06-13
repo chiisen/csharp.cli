@@ -1,8 +1,6 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using System.Data.SqlClient;
-using Dapper;
-using System.Linq;
+﻿using Dapper;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using Console = Colorful.Console;
 
