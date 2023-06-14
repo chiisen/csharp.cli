@@ -13,7 +13,7 @@
             "program": "${workspaceFolder}/bin/Debug/net7.0/CSHARP.CLI.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
+            "console": "integratedTerminal",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart"
         }
