@@ -95,7 +95,7 @@ public partial class Program
 
         mssql();
 
-        h1BetCheck();
+        H1BetCheck();
 
         Example0();
 

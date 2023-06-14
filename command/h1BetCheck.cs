@@ -10,7 +10,7 @@ public partial class Program
     /// 範例程式
     /// 命令列引數: h1BetCheck
     /// </summary>
-    public static void h1BetCheck()
+    public static void H1BetCheck()
     {
         _ = App.Command("h1-bet-check", command =>
         {
@@ -26,21 +26,36 @@ public partial class Program
                 if (id is not null)
                 {
                     // ! MS-SQL
-                    var result = H1Helper.Query(id);
-                    if (result.Count == 0)
+                    var h1Result = H1Helper.Query(id);
+                    if (h1Result is null)
                     {
-                        Console.WriteLine($"result not find.", Color.Red);
+                        Console.WriteLine($"null h1Result.", Color.Red);
+                        return 1;
+                    }
+                    if (h1Result.Count == 0)
+                    {
+                        Console.WriteLine($"h1Result not find(id: '{id}').", Color.Red);
+                        Console.WriteLine($"h1Result SQL: '{H1Helper.GetSql()}'", Color.Yellow);
+                        // ! 確認是否有連線
+                        Console.WriteLine($"h1Result Version: '{H1Helper.Version()}'", Color.Green);
                         return 1;
                     }
 
-                    //var enamehMap = result
-                    //    .Where( x => x.Club_id is not null)
-                    //    .GroupBy(x => x.Club_id)
-                    //    .ToDictionary(x => x.Key, x => x.ToList());
-
-                    result.ForEach(x =>
+#pragma warning disable CS8714 // 型別無法作為型別參數用於泛型型別或方法中。型別引數的可 Null 性與 'notnull' 限制式不符合。
+                    var enamehMap = h1Result
+                        .Where(x => x.Club_id is not null)
+                        .GroupBy(x => x.Club_id)
+                        .ToDictionary(x => x.Key, x => x.ToList());
+#pragma warning restore CS8714 // 型別無法作為型別參數用於泛型型別或方法中。型別引數的可 Null 性與 'notnull' 限制式不符合。
+                    if (enamehMap is null)
                     {
-                        Console.WriteLine($"Club_id: '{x.Club_id}', TandemID: '{x.TandemID}', ReportTime: {x.ReportTime}", Color.Aqua);
+                        Console.WriteLine($"null enamehMap.", Color.Red);
+                        return 1;
+                    }
+
+                    h1Result.ForEach(x =>
+                    {
+                        Console.WriteLine($"<H1> Club_id: '{x.Club_id}', TandemID: '{x.TandemID}', ReportTime----: {x.ReportTime:yyyy-MM-dd_HH-mm-ss-fff}", Color.Aqua);
 
                         if (x.TandemID is null)
                         {
@@ -49,19 +64,34 @@ public partial class Program
                         }
 
                         var tId = x.TandemID.ToString();
-                        var result2 = W1Helper.Query(tId);
-                        if (result2.Count == 0)
+                        var w1Result = W1Helper.Query(tId);
+                        if (w1Result.Count == 0)
                         {
-                            Console.WriteLine($"result2 not find(tId: '{tId}').", Color.Red);
+                            Console.WriteLine($"w1Result not find(tId: '{tId}')", Color.Red);
+                            Console.WriteLine($"w1Result SQL: '{W1Helper.GetSql()}'", Color.Yellow);
+                            // ! 確認是否有連線
+                            Console.WriteLine($"w1Result Version: '{W1Helper.Version()}'", Color.Green);
                             return;
                         }
-                        var r = result2.ToList();
+                        var r = w1Result.ToList();
                         r.ForEach(y =>
                         {
-                            //var ename = enamehMap.ContainsKey(y.Club_id)
-                            //    ? enamehMap.FirstOrDefault().Club_Cname
-                            //    : "";
-                            Console.WriteLine($"id: '{y.id}', game_id: {y.Game_id}, Club_id: {y.Club_id}, Club_Ename: , reportdatetime: {y.ReportDatetime}, recordcount: {y.RecordCount}", Color.Green);
+                            if (y.Club_id is null)
+                            {
+                                Console.WriteLine($"null y.Club_id", Color.Red);
+                                return;
+                            }
+                            var ename = "【找不到】";
+                            if (enamehMap.TryGetValue(y.Club_id, out var value))
+                            {
+                                if (value is not null)
+                                {
+                                    ename = value.FirstOrDefault()?.Club_Ename ?? "【無值】";
+                                }
+                            }
+
+                            y.id ??= "【無值】";
+                            Console.WriteLine($"<W1> Club_id: '{y.Club_id}', id:       '{y.id.Trim()}', reportdatetime: {y.ReportDatetime:yyyy-MM-dd_HH-mm-ss-fff}, Club_Ename: '{ename}', recordcount: {y.RecordCount}", Color.Chartreuse);
                         });
                     });
 
