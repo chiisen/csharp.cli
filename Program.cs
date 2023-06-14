@@ -5,6 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using System.Reflection;
 using System.Runtime.Caching;
 using Console = Colorful.Console;
+using Serilog;
 
 namespace csharp.cli;
 
@@ -18,6 +19,38 @@ public partial class Program
 
     private static int Main(string[] args)
     {
+        #region 測試Serilog
+
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .WriteTo.Console()
+            .WriteTo.File("logs/cli.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.Seq("http://localhost:5341")
+            .CreateLogger();
+        
+        try
+        {
+            // 這裡請放你原本主程式要寫的所有程式碼！
+            var now = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff");
+            Log.Verbose($"Hello {now}");
+            Log.Debug($"Hello {now}");
+            Log.Information($"Hello {now}");
+            Log.Warning($"Hello {now}");
+            Log.Error($"Hello {now}");
+            Log.Fatal($"Hello {now}");
+        }
+        catch (Exception ex)
+        {
+            // 紀錄你的應用程式中未被捕捉的例外 (Unhandled Exception)
+            Log.Error(ex, "Something went wrong");
+        }
+        finally
+        {
+            Log.CloseAndFlush(); // 非常重要的一段！
+        }
+
+        #endregion 測試Serilog
+
         Console.WriteLine($"^^^^^^^^^^^^^^^^", Color.Chartreuse);
 
         #region 顯示執行路徑
