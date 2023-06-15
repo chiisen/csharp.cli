@@ -1,4 +1,5 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿using Colorful;
+using McMaster.Extensions.CommandLineUtils;
 using System.Drawing;
 using Console = Colorful.Console;
 
@@ -53,17 +54,24 @@ public partial class Program
                         return 1;
                     }
 
-                    h1Result.ForEach(x =>
+                    h1Result.ForEach(h1 =>
                     {
-                        Console.WriteLine($"<H1> Club_id: '{x.Club_id}', TandemID: '{x.TandemID}', ReportTime----: {x.ReportTime:yyyy-MM-dd_HH-mm-ss-fff}", Color.Aqua);
+                        const string h1Message = "<H1> Club_id: '{0}', TandemID: '{1}', ReportTime----: {2}";
+                        var h1Colors = new Formatter[]
+                        {
+                            new (h1.Club_id, Color.Red),
+                            new (h1.TandemID, Color.Blue),
+                            new ($"{h1.ReportTime:yyyy-MM-dd_HH-mm-ss-fff}", Color.Yellow)
+                        };
+                        Console.WriteLineFormatted(h1Message, Color.White, h1Colors);
 
-                        if (x.TandemID is null)
+                        if (h1.TandemID is null)
                         {
                             Console.WriteLine($"null TandemID", Color.Yellow);
                             return;
                         }
 
-                        var tId = x.TandemID.ToString();
+                        var tId = h1.TandemID.ToString();
                         var w1Result = W1Helper.Query(tId);
                         if (w1Result.Count == 0)
                         {
@@ -73,16 +81,16 @@ public partial class Program
                             Console.WriteLine($"w1Result Version: '{W1Helper.Version()}'", Color.Green);
                             return;
                         }
-                        var r = w1Result.ToList();
-                        r.ForEach(y =>
+                        var result = w1Result.ToList();
+                        result.ForEach(w1 =>
                         {
-                            if (y.Club_id is null)
+                            if (w1.Club_id is null)
                             {
                                 Console.WriteLine($"null y.Club_id", Color.Red);
                                 return;
                             }
                             var ename = "【找不到】";
-                            if (enamehMap.TryGetValue(y.Club_id, out var value))
+                            if (enamehMap.TryGetValue(w1.Club_id, out var value))
                             {
                                 if (value is not null)
                                 {
@@ -90,8 +98,20 @@ public partial class Program
                                 }
                             }
 
-                            y.id ??= "【無值】";
-                            Console.WriteLine($"<W1> Club_id: '{y.Club_id}', id:       '{y.id.Trim()}', reportdatetime: {y.ReportDatetime:yyyy-MM-dd_HH-mm-ss-fff}, Club_Ename: '{ename}', recordcount: {y.RecordCount}", Color.Chartreuse);
+                            w1.id ??= "【無值】";
+
+                            const string w1Message = "<W1> Club_id: '{0}', id:       '{1}', reportdatetime: {2}, Club_Ename: '{3}', recordcount: {4}";
+                            var w1Colors = new Formatter[]
+                            {
+                                new (w1.Club_id, Color.Red),
+                                new (w1.id.Trim(), Color.Blue),
+                                new ($"{w1.ReportDatetime:yyyy-MM-dd_HH-mm-ss-fff}", Color.Yellow),
+                                new (ename, Color.Green),
+                                new (w1.RecordCount, Color.Aquamarine)
+                            };
+                            Console.WriteLineFormatted(w1Message, Color.White, w1Colors);
+
+                            Console.WriteLine("==================", Color.Blue);
                         });
                     });
 
