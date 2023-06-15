@@ -130,6 +130,8 @@ public partial class Program
         findId();
 
         commit();
+
+        Redis();
         #endregion 【註冊 Command】
 
         var ret = -1;
