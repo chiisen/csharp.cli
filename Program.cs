@@ -128,6 +128,8 @@ public partial class Program
         Example0();
 
         findId();
+
+        commit();
         #endregion 【註冊 Command】
 
         var ret = -1;
