@@ -66,12 +66,7 @@ public partial class Program
         #region 【Logger 輸入參數】
 
         // ! Logger 輸入參數
-        var argString = "";
-        foreach (var arg in args)
-        {
-            argString += arg + " ";
-
-        }
+        var argString = args.Aggregate("", (current, arg) => current + (arg + " "));
         Console.WriteLine($"輸入參數:csharp.cli {argString}");
         Console.WriteLine($"====================");
 
