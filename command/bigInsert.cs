@@ -72,14 +72,16 @@ public partial class Program
             //DeleteAll();
 
             var dt = new DataTable();
-            dt.Columns.Add("BId", typeof(int));
-            dt.Columns.Add("BName", typeof(string));
+            const string feid1 = "BigId";
+            const string feid2 = "BigName";
+            dt.Columns.Add(feid1, typeof(int));
+            dt.Columns.Add(feid2, typeof(string));
 
             for (var i = 0; i < _objCount; i++)
             {
                 var row = dt.NewRow();
-                row["BId"] = i;
-                row["BName"] = "BigInsert" + i;
+                row[feid1] = i;
+                row[feid2] = "BigInsert" + i;
 
                 dt.Rows.Add(row);
             }
@@ -105,9 +107,9 @@ public partial class Program
             // BulkCopyTimeout：逾時秒數
             sqlBulkCopy.BulkCopyTimeout = 60;
 
-            // ColumnMappings：如果我們資料來源的 DataTable 的 ColumnName 跟要寫入的資料表的 ColumnName 是不一樣的，或是只寫入部分的欄位，就要在 ColumnMappings 新增額外的對應。
-            sqlBulkCopy.ColumnMappings.Add("BId", "BId");
-            sqlBulkCopy.ColumnMappings.Add("BName", "BName");
+            //ColumnMappings：如果我們資料來源的 DataTable 的 ColumnName 跟要寫入的資料表的 ColumnName 是不一樣的，或是只寫入部分的欄位，就要在 ColumnMappings 新增額外的對應。
+            sqlBulkCopy.ColumnMappings.Add(feid1, "BId");
+            sqlBulkCopy.ColumnMappings.Add(feid2, "BName");
 
             // DestinationTableName：要寫入的資料表名稱
             sqlBulkCopy.DestinationTableName = "dbo.BigInsertTable";
