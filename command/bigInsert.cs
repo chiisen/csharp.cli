@@ -28,9 +28,9 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                BigInsertHelper.SqlBulkCopyUpdate();
+                //BigInsertHelper.SqlBulkCopyUpdate();
 
-                //BigInsertHelper.SqlBulkCopyInsert();
+                BigInsertHelper.SqlBulkCopyInsert();
                 //BigInsertHelper.DapperInsert();
 
                 return 0;
@@ -113,8 +113,17 @@ public partial class Program
             sqlBulkCopy.DestinationTableName = "dbo.BigInsertTable";
 
             // WriteToServer()：寫入資料的方法
-            sqlBulkCopy.WriteToServer(dt);
-            scope.Complete();// ! 沒有執行 Complete() 資料寫入會全部取消
+
+            try
+            {
+                sqlBulkCopy.WriteToServer(dt);
+                scope.Complete();// ! 沒有執行 Complete() 資料寫入會全部取消
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e}", Color.Red);
+                throw;
+            }
             sw.Stop();
             Console.WriteLine($"SqlBulkCopyInsert - sw: {sw.ElapsedMilliseconds}", Color.Azure);
         }
