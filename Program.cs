@@ -132,6 +132,8 @@ public partial class Program
         commit();
 
         Redis();
+
+        BigInsert();
         #endregion 【註冊 Command】
 
         var ret = -1;

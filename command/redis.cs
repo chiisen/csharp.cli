@@ -22,17 +22,22 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                var connectionString = "127.0.0.1:6379, abortConnect=false, connectRetry=5, connectTimeout=5000, syncTimeout=5000";
+                const string connectionString = "127.0.0.1:6379, abortConnect=false, connectRetry=5, connectTimeout=5000, syncTimeout=5000";
                 var options = ConfigurationOptions.Parse(connectionString);
                 options.AllowAdmin = true;
                 options.ReconnectRetryPolicy = new ExponentialRetry(3000);
 
-                IConnectionMultiplexer _connectionMultiplexer = ConnectionMultiplexer.Connect(options);
-                var redis = _connectionMultiplexer.GetDatabase(0);
+                IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(options);
+                var redis = connectionMultiplexer.GetDatabase(0);
 
-                var cacheKey = "Summaries";
+                const string cacheKey = "Summaries";
                 var data = redis.StringGet(cacheKey);
-                var ret = data.HasValue ? JsonConvert.DeserializeObject<string>(data) : default;
+                if (data == RedisValue.EmptyString)
+                {
+                    Console.WriteLine($"empty data", Color.Red);
+                    return 1;
+                }
+                var ret = data.HasValue ? JsonConvert.DeserializeObject<string>(data!) : default;
 
                 Console.WriteLine($"{ret}", Color.Azure);
                 return 0;

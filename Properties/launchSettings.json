@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "redis"
+      "commandLineArgs": "big-insert"
     }
   }
 }
