@@ -1,5 +1,7 @@
 echo 【請輸入 .\install.bat】
 
+cd csharp.cli
+
 echo 【解除安裝全域套件】
 del .\nupkg\*.nupkg
 
@@ -14,3 +16,5 @@ dotnet tool install --global --add-source .\nupkg csharp.cli
 
 echo 【查看全域套件】
 dotnet tool list -g
+
+cd ..

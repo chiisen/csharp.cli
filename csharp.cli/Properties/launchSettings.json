@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "csharp.cli": {
+      "commandName": "Project",
+      "commandLineArgs": "plinq"
+    }
+  }
+}
