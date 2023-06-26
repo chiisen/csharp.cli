@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/CSHARP.CLI.csproj",
+                "${workspaceFolder}/csharp.cli/CSHARP.CLI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/CSHARP.CLI.csproj",
+                "${workspaceFolder}/csharp.cli/CSHARP.CLI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/CSHARP.CLI.csproj"
+                "${workspaceFolder}/csharp.cli/CSHARP.CLI.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
