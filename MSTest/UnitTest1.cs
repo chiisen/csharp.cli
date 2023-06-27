@@ -1,4 +1,5 @@
 using FluentAssertions;
+using System.Diagnostics;
 
 namespace MSTest
 {
@@ -14,6 +15,16 @@ namespace MSTest
     public class UnitTest1
     {
         [TestMethod]
+        public void TestMethod_Path()
+        {
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+
+            Trace.WriteLine($"Launched from {Environment.CurrentDirectory}");
+            Trace.WriteLine($"Physical location {AppDomain.CurrentDomain.BaseDirectory}");
+            Trace.WriteLine($"AppContext.BaseDir {AppContext.BaseDirectory}");
+            Trace.WriteLine($"Runtime Call {Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)}");
+        }
+        [TestMethod]
         public void TestMethod_Add()
         {
             int num1 = 1;
@@ -25,15 +36,21 @@ namespace MSTest
         [TestMethod]
         public void TestMethod_Basic()
         {
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+
             // object
             object? obj = null;
             obj.Should().BeNull("because the obj is null");
             //obj.Should().NotBeNull();
 
+            Trace.WriteLine("測試 object 完畢!");
+
             // string 
             var something = "something";
             //something.Should().BeEmpty();
             something.Should().NotBeEmpty();
+
+            Trace.WriteLine("測試 string 完畢!");
 
             // datetime 
             /*
@@ -55,14 +72,20 @@ namespace MSTest
             };
             dic.Should().NotBeEmpty();
 
+            Trace.WriteLine("測試 dictionary 完畢!");
+
             // type
             something.Should().BeOfType<string>("because a {0} is set", typeof(string));
             something.Should().BeOfType(typeof(string), "because a {0} is set", typeof(string));
+
+            Trace.WriteLine("測試 type 完畢!");
 
             // equal 
             string otherObject = "whatever";
             //something.Should().Be(otherObject, "because they have the same values");
             something.Should().NotBe(otherObject);
+
+            Trace.WriteLine("測試 equal 完畢!");
 
             // exception 
             /*
