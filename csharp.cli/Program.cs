@@ -136,6 +136,8 @@ public partial class Program
         BigInsert();
 
         Plinq();
+
+        addGames();
         #endregion 【註冊 Command】
 
         var ret = -1;

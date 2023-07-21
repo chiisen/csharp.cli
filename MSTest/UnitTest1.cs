@@ -22,7 +22,7 @@ namespace MSTest
             Trace.WriteLine($"Launched from {Environment.CurrentDirectory}");
             Trace.WriteLine($"Physical location {AppDomain.CurrentDomain.BaseDirectory}");
             Trace.WriteLine($"AppContext.BaseDir {AppContext.BaseDirectory}");
-            Trace.WriteLine($"Runtime Call {Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)}");
+            Trace.WriteLine($"Runtime Call {Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName)}");
         }
         [TestMethod]
         public void TestMethod_Add()

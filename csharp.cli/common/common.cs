@@ -1,15 +1,25 @@
-﻿using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 
 namespace csharp.cli.common
 {
-    public class Common
+    public static class Common
     {
         public static T JsonDeserialize<T>(string text)
         {
+
+            try
+            {
 #pragma warning disable CS8603 // 可能有 Null 參考傳回。
-            return JsonConvert.DeserializeObject<T>(text);
+                return JsonConvert.DeserializeObject<T>(text);
 #pragma warning restore CS8603 // 可能有 Null 參考傳回。
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         /// <summary>
         /// 檢查是否為數字
@@ -51,6 +61,32 @@ namespace csharp.cli.common
         public static bool IsLetter(string str)
         {
             return Regex.Matches(str, "[a-zA-Z]").Count > 0;
+        }
+        /// <summary>
+        /// 移除換行符號
+        /// </summary>
+        /// <returns></returns>
+        public static string StringRemoveMultiLine(string target)
+        {
+            return target.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+        }
+        /// <summary>
+        /// 取得字串後方的註解
+        /// </summary>
+        /// <returns></returns>
+        public static (string diff, string replace) GetTheCommentAfterTheString(this string source, string target)
+        {
+            var diff = "";
+            if (source.Length > target.Length)
+            {
+                for (var j = target.Length - 1; j < source.Length; j++)
+                {
+                    diff += source[j];
+                }
+                var singleLine = StringRemoveMultiLine(target);
+                return (diff, singleLine + diff);
+            }
+            return ("", "");
         }
     }
 }
