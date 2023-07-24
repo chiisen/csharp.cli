@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "add-games \"C:/royal/adminapi_core5/AdminAPI_Core5/StaticFile/json/PWAWebSiteDataVersion.K8SDEV.json\""
+      "commandLineArgs": "add-games \"C:/royal/adminapi_core5/AdminAPI_Core5/StaticFile/json/PWAWebSiteSlotGameMG.json\""
     }
   }
 }

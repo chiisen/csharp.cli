@@ -140,6 +140,8 @@ public partial class Program
         addGames();
 
         autoSort();
+
+        updateVersion();
         #endregion 【註冊 Command】
 
         var ret = -1;

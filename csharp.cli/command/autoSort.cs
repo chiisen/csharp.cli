@@ -57,7 +57,8 @@ public partial class Program
                     return 1;
                 }
 
-                int count = 0;
+                // TODO: 自動排序，可選參考 csv 設定檔案，調整排序順序，代補全
+                var count = 0;
                 record.ForEach(x =>
                 {
                     count += 1;
