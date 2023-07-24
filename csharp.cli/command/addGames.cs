@@ -9,8 +9,8 @@ namespace csharp.cli;
 public partial class Program
 {
     /// <summary>
-    /// 範例程式
-    /// 命令列引數: addGames
+    /// 新增遊戲
+    /// 命令列引數: add-games "C:/royal/adminapi_core5/AdminAPI_Core5/StaticFile/json/PWAWebSiteDataVersion.K8SDEV.json"
     /// </summary>
     public static void addGames()
     {
@@ -20,12 +20,20 @@ public partial class Program
             command.Description = "addGames 說明";
             command.HelpOption("-?|-h|-help");
 
+            // 輸入參數說明
+            var path = command.Argument("[jsonPaths]", "指定檔案路徑。");
+
             command.OnExecute(() =>
             {
                 Console.WriteLine($"addGames", Color.Azure);
 
-                const string env = "DEV";
-                const string jsonPath = $"C:/royal/gitlab/adminapi_core5/AdminAPI_Core5/StaticFile/json/PWAWebSiteDataVersion.K8S{env}.json";
+                var jsonPath = path.HasValue ? path.Value : null;
+                if (jsonPath == null)
+                {
+                    Console.WriteLine($"null jsonPath");
+                    return 1;
+                }
+
                 string? jsonText = null;
                 try
                 {
@@ -92,13 +100,14 @@ public partial class Program
                         Console.WriteLine($"{target}", Color.DarkRed);
                         Console.WriteLine($"{source}", Color.Red);
 
-                        var ret = Common.GetTheCommentAfterTheString(source, target);
-                        Console.WriteLine($"{ret.diff}", Color.MediumVioletRed);
-                        targetSplit[i] = ret.replace;
+                        var str = Common.GetTheCommentAfterTheString(source, target);
+                        Console.WriteLine($"{str.diff}", Color.MediumVioletRed);
+                        targetSplit[i] = str.replace;
                     }
                 }
 
-                var result = string.Join("", targetSplit.ToArray());
+                // 寫成一行
+                var result = string.Join("\n", targetSplit.ToArray());
 
 
                 try
