@@ -21,13 +21,21 @@ public partial class Program
     /// <summary>
     /// 新增遊戲(參數太多，需要配合 Redis)
     /// 命令列引數: add-games "C:/royal/gitlab/adminapi_core5/AdminAPI_Core5/StaticFile/json/PWAWebSiteSlotGameJOKER.json"
+    /// 指定要新增的遊戲清單，會產生對應的檔案
     /// </summary>
     /*
-    Redis 範例:
+
+    Redis 格式:
     {
         "csvPath": "C:/Users/sam/Downloads/JOKER.csv",
         "localCode": "Game_JOKER_"
     }
+
+    csv 格式：
+    排序,遊戲代碼,遊戲名稱
+    13,ue8mt39rhzpps,詛咒Deluxe
+    14,uygm7axgh91qk,葉賢Deluxe
+
     */
     public static void addGames()
     {
