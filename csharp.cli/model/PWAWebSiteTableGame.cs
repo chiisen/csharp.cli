@@ -49,5 +49,9 @@
         /// 顯示排序
         /// </summary>
         public int sort { get; set; }
+        public PWAWebSiteTableGame Clone()
+        {
+            return (PWAWebSiteTableGame)this.MemberwiseClone();
+        }
     }
 }
