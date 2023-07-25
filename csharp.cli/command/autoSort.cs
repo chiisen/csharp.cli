@@ -11,7 +11,7 @@ public partial class Program
 {
     /// <summary>
     /// 自動排序
-    /// 命令列引數: auto-sort "C:/royal/adminapi_core5/AdminAPI_Core5/StaticFile/json/PWAWebSiteSlotGameMG.json"
+    /// 命令列引數: auto-sort "C:/royal/gitlab/adminapi_core5_ACCS-108/AdminAPI_Core5/StaticFile/json/PWAWebSiteSlotGameAE.json"
     /// </summary>
     public static void autoSort()
     {
