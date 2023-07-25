@@ -1,8 +1,7 @@
-﻿using System.Drawing;
-using Console = Colorful.Console;
-using StackExchange.Redis;
+﻿using csharp.cli.helper;
 using Newtonsoft.Json;
-
+using System.Drawing;
+using Console = Colorful.Console;
 
 namespace csharp.cli;
 
@@ -22,22 +21,13 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                const string connectionString = "127.0.0.1:6379, abortConnect=false, connectRetry=5, connectTimeout=5000, syncTimeout=5000";
-                var options = ConfigurationOptions.Parse(connectionString);
-                options.AllowAdmin = true;
-                options.ReconnectRetryPolicy = new ExponentialRetry(3000);
-
-                IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(options);
-                var redis = connectionMultiplexer.GetDatabase(0);
-
-                const string cacheKey = "Summaries";
-                var data = redis.StringGet(cacheKey);
-                if (data == RedisValue.EmptyString)
+                var data = RedisHelper.GetValue<string>("Summaries");
+                if (data == string.Empty)
                 {
                     Console.WriteLine($"empty data", Color.Red);
                     return 1;
                 }
-                var ret = data.HasValue ? JsonConvert.DeserializeObject<string>(data!) : default;
+                var ret = JsonConvert.DeserializeObject<string>(data!);
 
                 Console.WriteLine($"{ret}", Color.Azure);
                 return 0;

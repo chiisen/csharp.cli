@@ -1,9 +1,7 @@
 ﻿using csharp.cli.common;
+using csharp.cli.helper;
 using csharp.cli.model;
-using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
-using StackExchange.Redis;
-using System.Reflection.Metadata;
 using Color = System.Drawing.Color;
 using Console = Colorful.Console;
 
@@ -80,23 +78,7 @@ public partial class Program
                 var addGame = record.FirstOrDefault();
                 if (addGame != null)
                 {
-                    const string connectionString = "127.0.0.1:6379, abortConnect=false, connectRetry=5, connectTimeout=5000, syncTimeout=5000";
-                    var options = ConfigurationOptions.Parse(connectionString);
-                    options.AllowAdmin = true;
-                    options.ReconnectRetryPolicy = new ExponentialRetry(3000);
-
-                    IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(options);
-                    var redis = connectionMultiplexer.GetDatabase(0);
-
-                    const string cacheKey = "add-games";
-                    var data = redis.StringGet(cacheKey);
-                    if (data == RedisValue.EmptyString)
-                    {
-                        Console.WriteLine($"empty data", Color.Red);
-                        return 1;
-                    }
-
-                    var info = data.HasValue ? JsonConvert.DeserializeObject<addGamesRedisInfo>(data!) : default;
+                    var info = RedisHelper.GetValue<addGamesRedisInfo>("add-games");
                     if (info.csvPath is null)
                     {
                         Console.WriteLine($"null info.csvPath");
