@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "auto-sort \"C:/royal/gitlab/adminapi_core5_ACCS-108/AdminAPI_Core5/StaticFile/json/PWAWebSiteSlotGameDS.json\""
+      "commandLineArgs": "auto-sort \"C:/royal/gitlab/adminapi_core5_ACCS-108/AdminAPI_Core5/StaticFile/json/PWAWebSiteSlotGamePG.json\" -s 1"
     }
   }
 }
