@@ -142,6 +142,8 @@ public partial class Program
         autoSort();
 
         updateVersion();
+
+        addCustomer();
         #endregion 【註冊 Command】
 
         var ret = -1;

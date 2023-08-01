@@ -9,7 +9,7 @@
 	<ToolCommandName>csharp.cli</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
 	<AssemblyVersion>1.0.1.101</AssemblyVersion>
-	<FileVersion>2023.0726.0757.1210</FileVersion>
+	<FileVersion>2023.0801.1010.1216</FileVersion>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Version>$(AssemblyVersion)</Version>
 	<ApplicationIcon>resource\csharp.cli.ico</ApplicationIcon>
@@ -40,7 +40,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="resource\AdminAPI_Core5\Controllers\Game\Game##CUSTOMER1##ApiController.cs" />
+    <Compile Remove="resource\AdminAPI_Core5\Controllers\Report\Report##CUSTOMER1##GameController.cs" />
+    <Compile Remove="resource\AdminAPI_Core5\Models\Game\##CUSTOMER1##ApiModel.cs" />
+    <Compile Remove="resource\AdminAPI_Core5\Services\DataLayer\Api\##CUSTOMER1##ApiDataLayer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="resource\csharp.cli.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="resource\AdminAPI_Core5\Controllers\Game\Game##CUSTOMER1##ApiController.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resource\AdminAPI_Core5\Controllers\Report\Report##CUSTOMER1##GameController.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resource\AdminAPI_Core5\Models\Game\##CUSTOMER1##ApiModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resource\AdminAPI_Core5\Services\DataLayer\Api\##CUSTOMER1##ApiDataLayer.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
