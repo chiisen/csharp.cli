@@ -23,7 +23,7 @@ public partial class Program
     /// 命令列引數: add-customer
     /// </summary>
     /// <remarks>
-    /// See <a href="file:///$(SolutionDir)/csharp.cli/command/addGames.cs">Readme.md</a> for an example file.
+    /// See <c>file:///$(SolutionDir)/csharp.cli/csharp.cli/command/addGames.cs</c> for an example file.
     /// </remarks>
     public static void addCustomer()
     {
