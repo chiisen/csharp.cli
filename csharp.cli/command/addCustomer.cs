@@ -1,8 +1,20 @@
-﻿using System.Drawing;
-using System.Text;
+﻿using csharp.cli.helper;
+using System.Drawing;
 using Console = Colorful.Console;
 
 namespace csharp.cli;
+
+/// <summary>
+/// addCustomer 的 Redis 設定資訊
+/// </summary>
+public class addCustomerRedisInfo
+{
+    public string action { get; set; }
+    public string source { get; set; }
+    public string destination { get; set; }
+    public string fileName { get; set; }
+    public List<string>? content { get; set; }
+}
 
 public partial class Program
 {
@@ -10,6 +22,9 @@ public partial class Program
     /// 範例程式
     /// 命令列引數: add-customer
     /// </summary>
+    /// <remarks>
+    /// See <a href="file:///$(SolutionDir)/csharp.cli/command/addGames.cs">Readme.md</a> for an example file.
+    /// </remarks>
     public static void addCustomer()
     {
         _ = App.Command("add-customer", command =>
@@ -32,11 +47,79 @@ public partial class Program
                 }
                 var sourceFolder = @$"{AppDomain.CurrentDomain.BaseDirectory}";
                 var destinationFolder = @$"{System.Environment.CurrentDirectory}\";
-                var sourceFile = @$"{sourceFolder}resource\AdminAPI_Core5\Controllers\Game\Game##CUSTOMER1##ApiController.cs";
-                var destinationFile = @$"{destinationFolder}AdminAPI_Core5\Controllers\Game\Game{code}ApiController.cs";
 
-                // To overwrite the destination file if it already exists.
-                File.Copy(sourceFile, destinationFile, true);
+                var list = RedisHelper.GetValue<List<addCustomerRedisInfo>>("add-customer");
+                if (list is null)
+                {
+                    Console.WriteLine($"null list");
+                    return 1;
+                }
+
+                var c1Code = customerCode.ToLower();
+                c1Code = c1Code[..1].ToUpper() + c1Code[1..];
+
+                var c2Code = customerCode.ToLower();
+
+                foreach (var info in list)
+                {
+                    switch (info.action)
+                    {
+                        case "COPY":
+                        {
+                            var fileName = info.fileName.Replace("##CUSTOMER##", customerCode);
+
+                            fileName = fileName.Replace("##CUSTOMER1##", c1Code);
+
+                            fileName = fileName.Replace("##CUSTOMER2##", c2Code);
+
+                            var sourceFile = @$"{sourceFolder}{info.source}{info.fileName}";
+                            if (File.Exists(sourceFile) is false)
+                            {
+                                Console.WriteLine($"檔案不存在: {sourceFile}");
+                                return 1;
+                            }
+
+                            var destinationFile = @$"{destinationFolder}{info.destination}{fileName}";
+
+                            var path = @$"{destinationFolder}{info.destination}";
+                            Directory.CreateDirectory(path);
+
+                            // To overwrite the destination file if it already exists.
+                            File.Copy(sourceFile, destinationFile, true);
+
+                            var newText = File.ReadAllText(destinationFile);
+                            newText = newText.Replace("##CUSTOMER##", customerCode);
+                            newText = newText.Replace("##CUSTOMER1##", c1Code);
+                            newText = newText.Replace("##CUSTOMER2##", c2Code);
+
+                            File.WriteAllText(destinationFile, newText);
+
+                            break;
+                        }
+                        case "INSERT":
+                        {
+                            var destinationFile = @$"{destinationFolder}{info.destination}{info.fileName}";
+                            var newText = File.ReadAllText(destinationFile);
+                            var contentList = new List<string>();
+                            info.content.ForEach(x =>
+                            {
+                                var y = x.Replace("##CUSTOMER##", customerCode);
+                                y = y.Replace("##CUSTOMER##", c1Code);
+                                y = x.Replace("##CUSTOMER##", c2Code);
+                                contentList.Add(y);
+                            });
+
+                            var oneline = string.Join("\r", contentList);
+                            oneline += "\r";
+                            oneline += info.source;
+                            newText = newText.Replace(info.source, oneline);
+
+                            File.WriteAllText(destinationFile, newText);
+                                break;
+                        }
+                    }
+                }
+                
                 return 0;
             });
         });

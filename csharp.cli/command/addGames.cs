@@ -24,12 +24,12 @@ public partial class Program
     /// 指定要新增的遊戲清單，會產生對應的檔案
     /// </summary>
     /*
-
-    Redis 格式:
+Redis 格式:
     {
         "csvPath": "C:/Users/sam/Downloads/JOKER.csv",
         "localCode": "Game_JOKER_"
     }
+    
 
     csv 格式：
     排序,遊戲代碼,遊戲名稱
