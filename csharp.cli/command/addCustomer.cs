@@ -55,9 +55,14 @@ public partial class Program
                     return 1;
                 }
 
+                // 全大寫
+                customerCode = customerCode.ToUpper();
+
+                // 第一個字大寫
                 var c1Code = customerCode.ToLower();
                 c1Code = c1Code[..1].ToUpper() + c1Code[1..];
 
+                // 全小寫
                 var c2Code = customerCode.ToLower();
 
                 foreach (var info in list)
