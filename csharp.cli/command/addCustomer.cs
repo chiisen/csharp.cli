@@ -101,13 +101,18 @@ public partial class Program
                         case "INSERT":
                         {
                             var destinationFile = @$"{destinationFolder}{info.destination}{info.fileName}";
+                            if (File.Exists(destinationFile) is false)
+                            {
+                                Console.WriteLine($"檔案不存在: {destinationFile}");
+                                return 1;
+                            }
                             var newText = File.ReadAllText(destinationFile);
                             var contentList = new List<string>();
                             info.content.ForEach(x =>
                             {
                                 var y = x.Replace("##CUSTOMER##", customerCode);
-                                y = y.Replace("##CUSTOMER##", c1Code);
-                                y = x.Replace("##CUSTOMER##", c2Code);
+                                y = y.Replace("##CUSTOMER1##", c1Code);
+                                y = y.Replace("##CUSTOMER2##", c2Code);
                                 contentList.Add(y);
                             });
 
