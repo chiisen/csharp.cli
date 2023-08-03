@@ -22,9 +22,6 @@ public partial class Program
     /// 範例程式
     /// 命令列引數: add-customer
     /// </summary>
-    /// <remarks>
-    /// See <c>file:///$(SolutionDir)/csharp.cli/csharp.cli/command/addGames.cs</c> for an example file.
-    /// </remarks>
     public static void addCustomer()
     {
         _ = App.Command("add-customer", command =>
