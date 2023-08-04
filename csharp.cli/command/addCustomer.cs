@@ -89,6 +89,8 @@ public partial class Program
                             // To overwrite the destination file if it already exists.
                             File.Copy(sourceFile, destinationFile, true);
 
+                            Console.WriteLine($"新增客戶-檔案: {destinationFile}");
+
                             var newText = File.ReadAllText(destinationFile);
                             newText = newText.Replace("##CUSTOMER##", customerCode);
                             newText = newText.Replace("##CUSTOMER1##", c1Code);
@@ -114,6 +116,8 @@ public partial class Program
                                 y = y.Replace("##CUSTOMER1##", c1Code);
                                 y = y.Replace("##CUSTOMER2##", c2Code);
                                 contentList.Add(y);
+
+                                Console.WriteLine($"新增客戶-程式碼: {y}");
                             });
 
                             var oneline = string.Join("\r", contentList);
@@ -122,7 +126,7 @@ public partial class Program
                             newText = newText.Replace(info.source, oneline);
 
                             File.WriteAllText(destinationFile, newText);
-                                break;
+                            break;
                         }
                     }
                 }
