@@ -1,6 +1,7 @@
 ﻿using csharp.cli.helper;
 using System.Drawing;
 using Console = Colorful.Console;
+using System.Text.RegularExpressions;
 
 namespace csharp.cli;
 
@@ -96,6 +97,13 @@ public partial class Program
                             newText = newText.Replace("##CUSTOMER1##", c1Code);
                             newText = newText.Replace("##CUSTOMER2##", c2Code);
 
+                            /*
+                                const string pattern = @"(\r)+";
+                                const string replacement = "\r\n";
+                                newText = Regex.Replace(newText, pattern, replacement);
+
+                                newText = newText.Replace("\r", "\r\n");// 調整為 CRLF
+                                */
                             File.WriteAllText(destinationFile, newText);
 
                             break;
@@ -120,10 +128,19 @@ public partial class Program
                                 Console.WriteLine($"新增客戶-程式碼: {y}");
                             });
 
-                            var oneline = string.Join("\r", contentList);
-                            oneline += "\r";
+                            var oneline = string.Join("\r\n", contentList);
+                            oneline += "\r\n";
                             oneline += info.source;
+
                             newText = newText.Replace(info.source, oneline);
+
+                            /*
+                                const string pattern = @"(\r)+";
+                                const string replacement = "\r\n";
+                                newText = Regex.Replace(newText, pattern, replacement);
+
+                                newText = newText.Replace("\r", "\r\n");// 調整為 CRLF
+                                */
 
                             File.WriteAllText(destinationFile, newText);
                             break;
