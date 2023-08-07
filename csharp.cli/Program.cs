@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Caching;
 using Console = Colorful.Console;
 using Serilog;
+using csharp.cli.helper;
 
 namespace csharp.cli;
 
@@ -52,6 +53,8 @@ public partial class Program
         #endregion 測試Serilog
 
         Console.WriteLine($"^^^^^^^^^^^^^^^^", Color.Chartreuse);
+
+        RedisHelper.SetValue<string>("start-time", DateTime.Now.ToString("yyyy-M-d hh:mm:ss"));
 
         #region 顯示執行路徑
         var assem = Assembly.GetEntryAssembly();
@@ -190,6 +193,8 @@ public partial class Program
         Console.WriteLine($"^^^^程式結束^^^^", Color.Green);
         //Console.WriteLine($"按任何鍵繼續....");
         //Console.ReadKey();
+
+        RedisHelper.SetValue<string>("end-time", DateTime.Now.ToString("yyyy-M-d hh:mm:ss"));
 
         return 0;
     }

@@ -110,7 +110,7 @@ public partial class Program
                             }
                             var newText = File.ReadAllText(destinationFile);
                             var contentList = new List<string>();
-                            info.content.ForEach(x =>
+                            info.content?.ForEach(x =>
                             {
                                 var y = x.Replace("##CUSTOMER##", customerCode);
                                 y = y.Replace("##CUSTOMER1##", c1Code);
