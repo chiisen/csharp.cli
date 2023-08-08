@@ -77,7 +77,7 @@ namespace APPAPI.Services.DataLayer.Api
     }
 
     /// <summary>
-    /// PM 進線
+    /// ##CUSTOMER## 進線
     /// </summary>
     /// <param name="paramList"></param>
     /// <param name="clientIP"></param>
@@ -110,13 +110,19 @@ namespace APPAPI.Services.DataLayer.Api
                     currency = await this._jwtService.ParseToken(JwtColumn.ForwardGameCurrency),
                 });
 
+                // ##CUSTOMER## 在進線前要設定限注
+                var sw = System.Diagnostics.Stopwatch.StartNew();
+                _ = this._w1WalletDataLayer.SetLimit(this._dbConnection.daydb, GameClubNameModel.##CUSTOMER##);
+                sw.Stop();
+                this._logScope.DicStepData.Add("##CUSTOMER1##ApiDataLayer-SetLimit", sw.ElapsedMilliseconds);
+
                 return forwardGameResult;
             });
         return result;
     }
 
     /// <summary>
-    /// 取得報表
+    /// ##CUSTOMER## 取得報表
     /// </summary>
     /// <param name="paramList"></param>
     /// <returns></returns>
