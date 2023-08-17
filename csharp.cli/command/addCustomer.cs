@@ -46,10 +46,11 @@ public partial class Program
                 var sourceFolder = @$"{AppDomain.CurrentDomain.BaseDirectory}";
                 var destinationFolder = @$"{System.Environment.CurrentDirectory}\";
 
-                var list = RedisHelper.GetValue<List<addCustomerRedisInfo>>("add-customer");
+                const string redisKey = "add-customer";
+                var list = RedisHelper.GetValue<List<addCustomerRedisInfo>>(redisKey);
                 if (list is null)
                 {
-                    Console.WriteLine($"null list");
+                    Console.WriteLine($"null list ({RedisHelper.GetProjectName()}:{redisKey})");
                     return 1;
                 }
 

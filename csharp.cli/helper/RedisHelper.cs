@@ -27,7 +27,7 @@ namespace csharp.cli.helper
             IsInitialized = true;
         }
 
-        private static string GetProjectName()
+        public static string GetProjectName()
         {
             // 取得目前執行的 assembly
             var asm = Assembly.GetExecutingAssembly();
