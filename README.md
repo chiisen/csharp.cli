@@ -91,6 +91,25 @@ csharp.cli  bet-area Bacc -a 1
 
 ---
 
+# add-customer
+利用 Redis 上的 Json 設定腳本，自動修改或新增目標路徑的內容
+Redis 為本地端，並非遠端，所以不用擔心安全性問題，連線字串為: 127.0.0.1@6379
+Redis 的 Windows 版本下載網址: https://github.com/MicrosoftArchive/redis/releases
+Redos 的 Client 端下載網址: https://github.com/qishibo/AnotherRedisDesktopManager
+Redis 的 Client 端也可以用 choco install another-redis-desktop-manager 安裝
+或是用winget install qishibo.AnotherRedisDesktopManager 安裝
+Redis 的唯一 key 為 `csharp.cli:add-customer`
+腳本參考: https://hackmd.io/@chiisen/B1Drd6djn
+目前只有 COPY 新增檔案、INSERT 新增程式碼
+腳本中的 ##CUSTOMER## 為全大寫，例如: PME
+腳本中的 ##CUSTOMER1## 為第一個字大寫，例如: Pme
+腳本中的 ##CUSTOMER2## 為全小寫，例如: pme
+```bash=
+csharp.cli add-customer
+``` 
+
+---
+
 # bet-area-all
 讀取 .bet-area 設定檔案，列出 bet-area 的結果
 ```bash=
