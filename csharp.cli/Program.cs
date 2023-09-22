@@ -147,6 +147,8 @@ public partial class Program
         updateVersion();
 
         addCustomer();
+
+        eventNews();
         #endregion 【註冊 Command】
 
         var ret = -1;
