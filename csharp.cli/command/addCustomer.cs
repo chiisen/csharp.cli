@@ -1,7 +1,6 @@
 ﻿using csharp.cli.helper;
 using System.Drawing;
 using Console = Colorful.Console;
-using System.Text.RegularExpressions;
 
 namespace csharp.cli;
 
@@ -80,86 +79,86 @@ public partial class Program
                     switch (info.action)
                     {
                         case "COPY":
-                        {
-                            var fileName = info.fileName.Replace("##CUSTOMER##", customerCode);
-
-                            fileName = fileName.Replace("##CUSTOMER1##", c1Code);
-
-                            fileName = fileName.Replace("##CUSTOMER2##", c2Code);
-
-                            var sourceFile = @$"{sourceFolder}{info.source}{info.fileName}";
-                            if (File.Exists(sourceFile) is false)
                             {
-                                Console.WriteLine($"檔案不存在: {sourceFile}");
-                                return 1;
+                                var fileName = info.fileName.Replace("##CUSTOMER##", customerCode);
+
+                                fileName = fileName.Replace("##CUSTOMER1##", c1Code);
+
+                                fileName = fileName.Replace("##CUSTOMER2##", c2Code);
+
+                                var sourceFile = @$"{sourceFolder}{info.source}{info.fileName}";
+                                if (File.Exists(sourceFile) is false)
+                                {
+                                    Console.WriteLine($"檔案不存在: {sourceFile}");
+                                    return 1;
+                                }
+
+                                var destinationFile = @$"{destinationFolder}{info.destination}{fileName}";
+
+                                var path = @$"{destinationFolder}{info.destination}";
+                                Directory.CreateDirectory(path);
+
+                                // To overwrite the destination file if it already exists.
+                                File.Copy(sourceFile, destinationFile, true);
+
+                                Console.WriteLine($"新增客戶-檔案: {destinationFile}");
+
+                                var newText = File.ReadAllText(destinationFile);
+                                newText = newText.Replace("##CUSTOMER##", customerCode);
+                                newText = newText.Replace("##CUSTOMER1##", c1Code);
+                                newText = newText.Replace("##CUSTOMER2##", c2Code);
+
+                                /*
+                                    const string pattern = @"(\r)+";
+                                    const string replacement = "\r\n";
+                                    newText = Regex.Replace(newText, pattern, replacement);
+
+                                    newText = newText.Replace("\r", "\r\n");// 調整為 CRLF
+                                    */
+                                File.WriteAllText(destinationFile, newText);
+
+                                break;
                             }
-
-                            var destinationFile = @$"{destinationFolder}{info.destination}{fileName}";
-
-                            var path = @$"{destinationFolder}{info.destination}";
-                            Directory.CreateDirectory(path);
-
-                            // To overwrite the destination file if it already exists.
-                            File.Copy(sourceFile, destinationFile, true);
-
-                            Console.WriteLine($"新增客戶-檔案: {destinationFile}");
-
-                            var newText = File.ReadAllText(destinationFile);
-                            newText = newText.Replace("##CUSTOMER##", customerCode);
-                            newText = newText.Replace("##CUSTOMER1##", c1Code);
-                            newText = newText.Replace("##CUSTOMER2##", c2Code);
-
-                            /*
-                                const string pattern = @"(\r)+";
-                                const string replacement = "\r\n";
-                                newText = Regex.Replace(newText, pattern, replacement);
-
-                                newText = newText.Replace("\r", "\r\n");// 調整為 CRLF
-                                */
-                            File.WriteAllText(destinationFile, newText);
-
-                            break;
-                        }
                         case "INSERT":
-                        {
-                            var destinationFile = @$"{destinationFolder}{info.destination}{info.fileName}";
-                            if (File.Exists(destinationFile) is false)
                             {
-                                Console.WriteLine($"檔案不存在: {destinationFile}");
-                                return 1;
+                                var destinationFile = @$"{destinationFolder}{info.destination}{info.fileName}";
+                                if (File.Exists(destinationFile) is false)
+                                {
+                                    Console.WriteLine($"檔案不存在: {destinationFile}");
+                                    return 1;
+                                }
+                                var newText = File.ReadAllText(destinationFile);
+                                var contentList = new List<string>();
+                                info.content?.ForEach(x =>
+                                {
+                                    var y = x.Replace("##CUSTOMER##", customerCode);
+                                    y = y.Replace("##CUSTOMER1##", c1Code);
+                                    y = y.Replace("##CUSTOMER2##", c2Code);
+                                    contentList.Add(y);
+
+                                    Console.WriteLine($"新增客戶-程式碼: {y}");
+                                });
+
+                                var oneline = string.Join("\r\n", contentList);
+                                oneline += "\r\n";
+                                oneline += info.source;
+
+                                newText = newText.Replace(info.source, oneline);
+
+                                /*
+                                    const string pattern = @"(\r)+";
+                                    const string replacement = "\r\n";
+                                    newText = Regex.Replace(newText, pattern, replacement);
+
+                                    newText = newText.Replace("\r", "\r\n");// 調整為 CRLF
+                                    */
+
+                                File.WriteAllText(destinationFile, newText);
+                                break;
                             }
-                            var newText = File.ReadAllText(destinationFile);
-                            var contentList = new List<string>();
-                            info.content?.ForEach(x =>
-                            {
-                                var y = x.Replace("##CUSTOMER##", customerCode);
-                                y = y.Replace("##CUSTOMER1##", c1Code);
-                                y = y.Replace("##CUSTOMER2##", c2Code);
-                                contentList.Add(y);
-
-                                Console.WriteLine($"新增客戶-程式碼: {y}");
-                            });
-
-                            var oneline = string.Join("\r\n", contentList);
-                            oneline += "\r\n";
-                            oneline += info.source;
-
-                            newText = newText.Replace(info.source, oneline);
-
-                            /*
-                                const string pattern = @"(\r)+";
-                                const string replacement = "\r\n";
-                                newText = Regex.Replace(newText, pattern, replacement);
-
-                                newText = newText.Replace("\r", "\r\n");// 調整為 CRLF
-                                */
-
-                            File.WriteAllText(destinationFile, newText);
-                            break;
-                        }
                     }
                 }
-                
+
                 return 0;
             });
         });

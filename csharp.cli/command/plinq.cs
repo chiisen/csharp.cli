@@ -33,7 +33,7 @@ public partial class Program
 
                 // 不過事實上你可以強迫 PLINQ 採用平行處理, 那就是下達.WithExecutionMode(ParallelExecutionMode.ForceParallelism)
                 var resultsPLINQ = from f in files.AsParallel().WithExecutionMode(ParallelExecutionMode.ForceParallelism) where f.Contains("ab") == true select f;
-                
+
                 var resultsListPLINQ = resultsPLINQ.ToList();
                 Console.WriteLine("PLINQ - Found {0} files.", resultsListPLINQ.Count);
 
@@ -51,7 +51,7 @@ public partial class Program
                 sw.Stop();
                 Console.WriteLine($"sw: {sw.ElapsedMilliseconds}");
 
-                
+
                 return 0;
             });
         });

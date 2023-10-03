@@ -1,10 +1,8 @@
 ﻿using csharp.cli.common;
 using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
-using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
 using System.Drawing;
-using static csharp.cli.model.WMDataReportResponse;
 using Console = Colorful.Console;
 
 namespace csharp.cli;

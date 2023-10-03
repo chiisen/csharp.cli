@@ -3,7 +3,7 @@
 public partial class Program
 {
     /// <summary>
-    /// 取得環境變數
+    /// 取得環境變數 "path"
     /// 命令列引數: environment
     /// </summary>
     public static void Environment()

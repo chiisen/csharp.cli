@@ -1,12 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Drawing;
+using csharp.cli.helper;
 using McMaster.Extensions.CommandLineUtils;
+using Serilog;
+using System.Drawing;
 using System.Reflection;
 using System.Runtime.Caching;
 using Console = Colorful.Console;
-using Serilog;
-using csharp.cli.helper;
 
 namespace csharp.cli;
 
@@ -28,7 +28,7 @@ public partial class Program
             .WriteTo.File("logs/cli.txt", rollingInterval: RollingInterval.Day)
             .WriteTo.Seq("http://localhost:5341")
             .CreateLogger();
-        
+
         try
         {
             // 這裡請放你原本主程式要寫的所有程式碼！

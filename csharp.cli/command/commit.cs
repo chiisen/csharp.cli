@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using Console = Colorful.Console;
+﻿using Console = Colorful.Console;
 
 namespace csharp.cli;
 
@@ -45,7 +44,7 @@ public partial class Program
                     ps.Execute(cmd);
                     //ps.Execute("pause");
                 }
-                
+
                 return 0;
             });
         });

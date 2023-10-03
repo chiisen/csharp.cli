@@ -93,7 +93,7 @@ Redis 格式:
                         return 1;
                     }
                     Console.WriteLine($"讀取 csv 設定檔案: {info.csvPath}");
-                    
+
                     var list = CsvHelper.GetCsv(info.csvPath);
                     var count = 0;
                     foreach (var d in list)

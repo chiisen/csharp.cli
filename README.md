@@ -143,9 +143,15 @@ csharp.cli echo "Hello World" -r 3
 ---
 
 # environment
-取得環境變數
+取得環境變數 "path"
 ```bash=
 csharp.cli environment
+```
+
+# event-news
+Event News (工作自動化)
+```bash=
+csharp.cli event-news "EXCEL完整路徑與檔案名稱" "sheet名稱"
 ```
 
 ---
@@ -159,9 +165,9 @@ csharp.cli example "words" -r 10
 ---
 
 # excel
-EXCEL 範例程式
+EXCEL 讀寫測試範例
 ```bash=
-csharp.cli excel
+csharp.cli excel "EXCEL的完整路徑與檔案名稱" "sheet名稱"
 ```
 
 ---

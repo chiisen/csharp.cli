@@ -93,5 +93,5 @@ namespace MSTest
                 .Which.Message.Should().Be("Other Message");
             */
         }
-    } 
+    }
 }

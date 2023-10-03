@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "event-news \"C:\\Users\\sam\\Downloads\\H1活動消息.xlsx\" \"品牌活動\""
+      "commandLineArgs": "excel \"C:\\Users\\sam\\Downloads\\H1活動消息.xlsx\" \"品牌活動\""
     }
   }
 }
