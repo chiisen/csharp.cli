@@ -13,9 +13,9 @@
             Odds = 4
         }
         /// <summary>
-        /// AddGames
+        /// 新增遊戲的 CSV 欄位設定
         /// </summary>
-        public enum AddGames
+        public enum AddGamesCsvField
         {
             Sort = 1,
             GameId = 2,

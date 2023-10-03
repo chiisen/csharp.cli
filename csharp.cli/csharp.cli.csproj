@@ -8,8 +8,8 @@
 	<PackAsTool>true</PackAsTool>
 	<ToolCommandName>csharp.cli</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
-	<AssemblyVersion>1.0.1.108</AssemblyVersion>
-	<FileVersion>2023.1003.0759.1301</FileVersion>
+	<AssemblyVersion>1.0.1.109</AssemblyVersion>
+	<FileVersion>2023.1003.0954.1340</FileVersion>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Version>$(AssemblyVersion)</Version>
 	<ApplicationIcon>resource\csharp.cli.ico</ApplicationIcon>

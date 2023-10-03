@@ -108,6 +108,11 @@ Redis 的唯一 key 為 `csharp.cli:add-customer`
 csharp.cli add-customer
 ``` 
 
+# add-games
+新增遊戲(多數參數會由 Redis 上提供)
+```bash=
+csharp.cli add-games "thirdPartyId 廠商的英文代號"
+``` 
 ---
 
 # bet-area-all
