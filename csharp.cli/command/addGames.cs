@@ -1,9 +1,7 @@
 ﻿using csharp.cli.common;
 using csharp.cli.helper;
 using csharp.cli.model;
-using Newtonsoft.Json;
 using System.Diagnostics;
-using static csharp.cli.common.Enum;
 using Color = System.Drawing.Color;
 using Console = Colorful.Console;
 
@@ -57,79 +55,6 @@ Redis 格式:
     14,uygm7axgh91qk,葉賢Deluxe
 
     */
-
-    public class AddGamesProcess
-    {
-        public int Process<T>(AddGamesRedisInfo info, List<Dictionary<int, string>> csvList, string sourceJsonText) where T : PWAWebSiteJDB
-        {
-            var sourceJsonList = Common.JsonDeserialize<List<T>>(sourceJsonText);
-            if (sourceJsonList is null)
-            {
-                Console.WriteLine($"無法轉為 List");
-                return 1;
-            }
-
-            // 取的第一筆廠商資料做為新增遊戲的範本
-            var addGameTemplate = sourceJsonList.FirstOrDefault();
-            if (addGameTemplate is null)
-            {
-                Console.WriteLine($"無法取的一筆資料當範本");
-                return 1;
-            }
-
-            // 建立新增遊戲清單
-            var newGameList = new List<T>(sourceJsonList);
-            var count = 0;
-            foreach (var field in csvList)
-            {
-                var sort = field[(int)AddGamesCsvField.Sort].ToString();
-                var gameId = field[(int)AddGamesCsvField.GameId].ToString();
-                var gameName = field[(int)AddGamesCsvField.GameName].ToString();
-
-                var newGameItem = addGameTemplate.Clone();
-                newGameItem.id = gameId;
-                newGameItem.imageName = gameId;
-                newGameItem.name = gameName;
-                newGameItem.sort = int.Parse(sort);
-                newGameItem.localizationCode = $"{info.LocalCode}{gameId}";
-
-                // 判斷有沒有重複的遊戲代碼
-                var exist = newGameList.Where(x => x.id.Equals(gameId)).Select(x => x).FirstOrDefault();
-                if (exist is not null)
-                {
-                    newGameList.Add((T)newGameItem);
-                }
-                else
-                {
-                    Console.WriteLine($"重複的新增遊戲: [{count}] {gameId} {gameName}", Color.Red);
-                }
-
-                Console.WriteLine($"新增遊戲: [{count}] {gameId} {gameName}");
-                count++;
-            }
-
-            // 將新的遊戲清單寫入檔案
-            var newGameJson = JsonConvert.SerializeObject(newGameList, Formatting.Indented);// 格式化後寫入
-            try
-            {
-                var newGameJsonPath = @$"{System.Environment.CurrentDirectory}\{Path.GetFileNameWithoutExtension(info.JsonPath)}.newGames.json";
-
-                Console.WriteLine($"開始寫入 json 遊戲列表 {newGameJsonPath}");
-
-                File.WriteAllText(newGameJsonPath, newGameJson);
-
-                Console.WriteLine($"結束寫入 json 遊戲列表 {newGameJsonPath}");
-            }
-            catch (Exception e)
-            {
-                System.Console.WriteLine(e);
-                throw;
-            }
-
-            return 0;
-        }
-    }
-
     public static void addGames()
     {
         _ = App.Command("add-games", command =>
@@ -218,9 +143,49 @@ Redis 格式:
                 var addGameProcess = new AddGamesProcess();
                 switch (tpId)
                 {
+                    case "GR":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteGR>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "Golden":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteGolden>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "FC":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteFC>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "DS":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteDS>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
                     case "JDB":
                     {
                         if (addGameProcess.Process<PWAWebSiteJDB>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "MG":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteMG>(info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }

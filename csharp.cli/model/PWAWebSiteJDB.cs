@@ -3,7 +3,7 @@
     /// <summary>
     /// JDB 遊戲清單
     /// </summary>
-    public class PWAWebSiteJDB
+    public class PWAWebSiteJDB : PWAWebSite
     {
         /// <summary>
         /// ServerId
@@ -49,7 +49,7 @@
         /// 顯示排序
         /// </summary>
         public int sort { get; set; }
-        public PWAWebSiteJDB Clone()
+        public PWAWebSite Clone()
         {
             return (PWAWebSiteJDB)this.MemberwiseClone();
         }

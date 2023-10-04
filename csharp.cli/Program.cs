@@ -22,10 +22,9 @@ public partial class Program
     private static int Main(string[] args)
     {
         #region 測試Serilog
-
         var sw = Stopwatch.StartNew();
-
-        Log.Logger = new LoggerConfiguration()
+        /*
+         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .WriteTo.Console()
             .WriteTo.File("logs/cli.txt", rollingInterval: RollingInterval.Day)
@@ -35,7 +34,10 @@ public partial class Program
         sw.Stop();
 
         Console.WriteLine($"測試Serilog - sw: {sw.ElapsedMilliseconds}", Color.Azure);
+        */
 
+
+        /*
         try
         {
             sw = Stopwatch.StartNew();
@@ -62,6 +64,7 @@ public partial class Program
         {
             Log.CloseAndFlush(); // 非常重要的一段！
         }
+        */
 
         #endregion 測試Serilog
 
@@ -69,6 +72,8 @@ public partial class Program
         Console.WriteLine($"^^^^^^^^^^^^^^^^", Color.Chartreuse);
 
 
+        #region start-time
+        /*
         sw = Stopwatch.StartNew();
 
         RedisHelper.SetValue<string>("start-time", DateTime.Now.ToString("yyyy-M-d hh:mm:ss"));
@@ -76,6 +81,10 @@ public partial class Program
         sw.Stop();
 
         Console.WriteLine($"start-time - sw: {sw.ElapsedMilliseconds}", Color.Azure);
+        */
+        #endregion start-time
+
+
 
 
         #region 顯示執行路徑
@@ -260,7 +269,8 @@ public partial class Program
         //Console.WriteLine($"按任何鍵繼續....");
         //Console.ReadKey();
 
-
+        #region end-time
+        /*
         sw = Stopwatch.StartNew();
 
         RedisHelper.SetValue<string>("end-time", DateTime.Now.ToString("yyyy-M-d hh:mm:ss"));
@@ -268,6 +278,9 @@ public partial class Program
         sw.Stop();
 
         Console.WriteLine($"end-time - sw: {sw.ElapsedMilliseconds}", Color.Azure);
+        */
+        #endregion end-time
+
 
         return 0;
     }
