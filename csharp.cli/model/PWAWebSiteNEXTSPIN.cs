@@ -1,9 +1,9 @@
 ﻿namespace csharp.cli.model
 {
     /// <summary>
-    /// FC 遊戲清單
+    /// META 遊戲清單
     /// </summary>
-    public class PWAWebSiteFC : PWAWebSite
+    public class PWAWebSiteNEXTSPIN : PWAWebSite
     {
         /// <summary>
         /// ServerId
@@ -51,7 +51,7 @@
         public int sort { get; set; }
         public PWAWebSite Clone()
         {
-            return (PWAWebSiteFC)this.MemberwiseClone();
+            return (PWAWebSiteNEXTSPIN)this.MemberwiseClone();
         }
     }
 }

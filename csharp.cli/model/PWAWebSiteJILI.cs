@@ -1,18 +1,14 @@
 ﻿namespace csharp.cli.model
 {
     /// <summary>
-    /// FC 遊戲清單
+    /// JILI 遊戲清單
     /// </summary>
-    public class PWAWebSiteFC : PWAWebSite
+    public class PWAWebSiteJILI : PWAWebSite
     {
         /// <summary>
         /// ServerId
         /// </summary>
         public string serverId { get; set; }
-        /// <summary>
-        /// mType
-        /// </summary>
-        public int mType { get; set; }
         /// <summary>
         /// 遊戲id
         /// </summary>
@@ -25,6 +21,10 @@
         /// 名稱
         /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// mType
+        /// </summary>
+        public int mType { get; set; }
         /// <summary>
         /// 圖片路徑
         /// </summary>
@@ -45,13 +45,13 @@
         /// 分類id清單
         /// </summary>
         public int[] categoryIdList { get; set; }
-        /// <summary>
+        /// <summary> 
         /// 顯示排序
         /// </summary>
         public int sort { get; set; }
         public PWAWebSite Clone()
         {
-            return (PWAWebSiteFC)this.MemberwiseClone();
+            return (PWAWebSiteJILI)this.MemberwiseClone();
         }
     }
 }

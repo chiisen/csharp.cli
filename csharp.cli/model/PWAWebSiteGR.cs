@@ -1,7 +1,7 @@
 ﻿namespace csharp.cli.model
 {
     /// <summary>
-    /// JDB 遊戲清單
+    /// GR 遊戲清單
     /// </summary>
     public class PWAWebSiteGR : PWAWebSite
     {

@@ -38,7 +38,7 @@ public partial class Program
     /// 指定要新增的遊戲清單，會產生對應的檔案
     /// </summary>
     /*
-Redis 格式:
+Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
 [
     {
         "ThirdPartyId": "JDB",
@@ -143,6 +143,38 @@ Redis 格式:
                 var addGameProcess = new AddGamesProcess();
                 switch (tpId)
                 {
+                    case "PG":
+                    {
+                        if (addGameProcess.Process<PWAWebSitePG>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "NEXTSPIN":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteNEXTSPIN>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "META":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteMETA>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "JILI":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteJILI>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
                     case "GR":
                     {
                         if (addGameProcess.Process<PWAWebSiteGR>(info, csvList, sourceJsonText) == 1)
