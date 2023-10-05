@@ -127,6 +127,12 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 string? sourceJsonText = null;
                 try
                 {
+                    if (!File.Exists(info.JsonPath))
+                    {
+                        Console.WriteLine($"JSON 檔案: {info.JsonPath} 不存在");
+                        return 1;
+                    }
+
                     sourceJsonText = File.ReadAllText(info.JsonPath);
                 }
                 catch (Exception e)
