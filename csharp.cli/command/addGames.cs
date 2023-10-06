@@ -165,6 +165,14 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                         }
                         break;
                     }
+                    case "MG":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteMG>(info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
                     case "META":
                     {
                         if (addGameProcess.Process<PWAWebSiteMETA>(info, csvList, sourceJsonText) == 1)
@@ -216,14 +224,6 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     case "JDB":
                     {
                         if (addGameProcess.Process<PWAWebSiteJDB>(info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "MG":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteMG>(info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
