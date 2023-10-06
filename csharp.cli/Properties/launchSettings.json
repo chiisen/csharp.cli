@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "add-games \"PG\""
+      "commandLineArgs": "add-games \"PP\""
     }
   }
 }
