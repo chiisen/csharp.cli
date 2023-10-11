@@ -1,4 +1,6 @@
-﻿namespace csharp.cli.model
+﻿using System.Text.Json.Serialization;
+
+namespace csharp.cli.model
 {
     /// <summary>
     /// JDB 遊戲清單
@@ -22,7 +24,7 @@
         /// </summary>
         public string name { get; set; }
         /// <summary>
-        /// mType
+        /// gType (只有 JDB 使用)
         /// </summary>
         public int gType { get; set; }
         /// <summary>
@@ -49,6 +51,11 @@
         /// 顯示排序
         /// </summary>
         public int sort { get; set; }
+        /// <summary>
+        /// mType(未使用)
+        /// </summary>
+        [JsonIgnore]
+        public int mType { get; set; }
         public PWAWebSite Clone()
         {
             return (PWAWebSiteJDB)this.MemberwiseClone();

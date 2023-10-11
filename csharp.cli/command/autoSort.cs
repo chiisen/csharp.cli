@@ -54,7 +54,7 @@ public partial class Program
                     return 1;
                 }
 
-                var record = Common.JsonDeserialize<List<PWAWebSiteTableGame4>>(jsonText);
+                var record = Common.JsonDeserialize<List<PWAWebSite>>(jsonText);
                 if (record is null)
                 {
                     Console.WriteLine($"null record");

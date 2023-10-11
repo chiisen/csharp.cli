@@ -7,7 +7,7 @@ namespace csharp.cli.common
 {
     public class AddGamesProcess
     {
-        public int Process<T>(AddGamesRedisInfo info, List<Dictionary<int, string>> csvList, string sourceJsonText) where T : PWAWebSite
+        public int Process<T>(string tpId, AddGamesRedisInfo info, List<Dictionary<int, string>> csvList, string sourceJsonText) where T : PWAWebSite
         {
             var sourceJsonList = Common.JsonDeserialize<List<T>>(sourceJsonText);
             if (sourceJsonList is null)
@@ -26,6 +26,7 @@ namespace csharp.cli.common
 
             // 建立新增遊戲清單
             var newGameList = new List<T>(sourceJsonList);
+            var gameList = new List<T>(sourceJsonList);// TODO: 這個變數只處理舊有的遊戲清單，不包含新增的遊戲清單
             var count = 0;
             foreach (var field in csvList)
             {
@@ -68,7 +69,98 @@ namespace csharp.cli.common
             }
             catch (Exception e)
             {
-                System.Console.WriteLine(e);
+                Console.WriteLine(e);
+                throw;
+            }
+
+            
+
+            try
+            {
+                var newGameSqlPath = @$"{Environment.CurrentDirectory}\{Path.GetFileNameWithoutExtension(info.JsonPath)}.newGames.sql";
+
+                Console.WriteLine($"開始寫入 sql 遊戲列表 {newGameSqlPath}");
+
+                var valueList = new List<string>();
+
+                var insert = @$"INSERT INTO[dbo].[T_Game_MappingInfo] (
+                [serverId],
+                [gameId],
+                [gameClubId],
+                [gameName],
+                [imagePath],
+                [imageName],
+                [active],
+                [localizationCode],
+                [categoryIdList],
+                [sort],
+                [gameType],
+                [thirdPartyId],
+                [mType],
+                [gType]
+                )
+                VALUES";
+
+                var values = @$"(
+                 '@serverId',
+                 '@gameId',
+                 @gameClubId,
+                 '@gameName',
+                 '@imagePath',
+                 '@imageName',
+                 @active,
+                 '@localizationCode',
+                 '@categoryIdList',
+                 @sort,
+                 @gameType,
+                 '@thirdPartyId',
+                 @mType,
+                 @gType
+                )";
+
+                var first = true;
+                for (var i = 0; i < gameList.Count; i++)
+                {
+                    var oneItemValues = "";
+                    if (first)
+                    {
+                        oneItemValues = insert + values;
+                        first = false;
+                    }
+                    else
+                    {
+                        oneItemValues = values;
+                    }
+                    
+                    oneItemValues = oneItemValues.Replace("@serverId", newGameList[i].serverId);
+                    oneItemValues = oneItemValues.Replace("@gameId", newGameList[i].id);
+                    oneItemValues = oneItemValues.Replace("@gameClubId", newGameList[i].clubId.ToString());
+                    oneItemValues = oneItemValues.Replace("@gameName", newGameList[i].name);
+                    oneItemValues = oneItemValues.Replace("@imagePath", newGameList[i].imagePath);
+                    oneItemValues = oneItemValues.Replace("@imageName", newGameList[i].imageName);
+                    oneItemValues = oneItemValues.Replace("@active", (newGameList[i].active ? "1": "0"));
+                    oneItemValues = oneItemValues.Replace("@localizationCode", newGameList[i].localizationCode);
+                    oneItemValues = oneItemValues.Replace("@categoryIdList", string.Join(",", newGameList[i].categoryIdList));
+                    oneItemValues = oneItemValues.Replace("@sort", newGameList[i].sort.ToString());
+
+                    // 給預設值
+                    oneItemValues = oneItemValues.Replace("@gameType", "0");
+                    oneItemValues = oneItemValues.Replace("@thirdPartyId", tpId);
+
+                    // 取值，但是通常是 2 選 1 (只有 JDB 用 gType)
+                    oneItemValues = oneItemValues.Replace("@mType", newGameList[i].mType.ToString());
+                    oneItemValues = oneItemValues.Replace("@gType", newGameList[i].gType.ToString());
+
+                    valueList.Add(oneItemValues);
+                }
+
+                File.WriteAllText(newGameSqlPath, string.Join(",", valueList) + ";");
+
+                Console.WriteLine($"結束寫入 sql 遊戲列表 {newGameSqlPath}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
                 throw;
             }
 

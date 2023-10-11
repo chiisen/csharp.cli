@@ -6,13 +6,25 @@
     public interface PWAWebSite
     {
         /// <summary>
+        /// ServerId
+        /// </summary>
+        public string serverId { get; set; }
+        /// <summary>
         /// 遊戲id
         /// </summary>
         public string id { get; set; }
         /// <summary>
+        /// 館別id
+        /// </summary>
+        public int clubId { get; set; }
+        /// <summary>
         /// 圖片名稱
         /// </summary>
         public string imageName { get; set; }
+        /// <summary>
+        /// 圖片路徑
+        /// </summary>
+        public string imagePath { get; set; }
         /// <summary>
         /// 是否啟用
         /// </summary>
@@ -38,6 +50,14 @@
         /// 6 是其他
         /// </summary>
         public int[] categoryIdList { get; set; }
+        /// <summary>
+        /// mType
+        /// </summary>
+        public int mType { get; set; }
+        /// <summary>
+        /// gType (只有 JDB 使用)
+        /// </summary>
+        public int gType { get; set; }
 
         public PWAWebSite Clone();
     }

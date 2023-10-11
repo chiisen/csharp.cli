@@ -1,4 +1,6 @@
-﻿namespace csharp.cli.model
+﻿using System.Text.Json.Serialization;
+
+namespace csharp.cli.model
 {
     /// <summary>
     /// MT 遊戲清單
@@ -53,6 +55,11 @@
         /// 顯示排序
         /// </summary>
         public int sort { get; set; } // 沒 sort 欄位
+        /// <summary>
+        /// gType(未使用)
+        /// </summary>
+        [JsonIgnore] 
+        public int gType { get; set; }
         public PWAWebSite Clone()
         {
             return (PWAWebSiteMT)this.MemberwiseClone();

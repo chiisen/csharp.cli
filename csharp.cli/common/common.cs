@@ -10,9 +10,13 @@ namespace csharp.cli.common
 
             try
             {
-#pragma warning disable CS8603 // 可能有 Null 參考傳回。
+                if (string.IsNullOrEmpty(text))
+                {
+                    var errorMassage = $"{text} is Null or Empty";
+                    Console.WriteLine(errorMassage);
+                    throw new Exception(errorMassage);
+                }
                 return JsonConvert.DeserializeObject<T>(text);
-#pragma warning restore CS8603 // 可能有 Null 參考傳回。
             }
             catch (Exception e)
             {

@@ -1,4 +1,6 @@
-﻿namespace csharp.cli.model
+﻿using System.Text.Json.Serialization;
+
+namespace csharp.cli.model
 {
     /// <summary>
     /// GR 遊戲清單
@@ -49,6 +51,11 @@
         /// 顯示排序
         /// </summary>
         public int sort { get; set; }
+        /// <summary>
+        /// gType(未使用)
+        /// </summary>
+        [JsonIgnore]
+        public int gType { get; set; }
         public PWAWebSite Clone()
         {
             return (PWAWebSiteGR)this.MemberwiseClone();

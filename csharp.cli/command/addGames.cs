@@ -151,7 +151,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 {
                     case "MT":
                     {
-                        if (addGameProcess.Process<PWAWebSiteMT>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteMT>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -159,7 +159,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "TP":
                     {
-                        if (addGameProcess.Process<PWAWebSiteTP>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteTP>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -167,7 +167,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "PP":
                     {
-                        if (addGameProcess.Process<PWAWebSitePP>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSitePP>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -175,7 +175,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "PG":
                     {
-                        if (addGameProcess.Process<PWAWebSitePG>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSitePG>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -183,7 +183,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "NEXTSPIN":
                     {
-                        if (addGameProcess.Process<PWAWebSiteNEXTSPIN>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteNEXTSPIN>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -191,7 +191,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "MG":
                     {
-                        if (addGameProcess.Process<PWAWebSiteMG>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteMG>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -199,7 +199,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "META":
                     {
-                        if (addGameProcess.Process<PWAWebSiteMETA>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteMETA>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -207,7 +207,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "JILI":
                     {
-                        if (addGameProcess.Process<PWAWebSiteJILI>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteJILI>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -215,7 +215,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "GR":
                     {
-                        if (addGameProcess.Process<PWAWebSiteGR>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteGR>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -223,7 +223,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "Golden":
                     {
-                        if (addGameProcess.Process<PWAWebSiteGolden>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteGolden>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -231,7 +231,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "FC":
                     {
-                        if (addGameProcess.Process<PWAWebSiteFC>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteFC>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -239,7 +239,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "DS":
                     {
-                        if (addGameProcess.Process<PWAWebSiteDS>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteDS>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
@@ -247,7 +247,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                     }
                     case "JDB":
                     {
-                        if (addGameProcess.Process<PWAWebSiteJDB>(info, csvList, sourceJsonText) == 1)
+                        if (addGameProcess.Process<PWAWebSiteJDB>(tpId, info, csvList, sourceJsonText) == 1)
                         {
                             return 1;
                         }
