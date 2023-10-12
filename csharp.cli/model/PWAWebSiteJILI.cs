@@ -56,6 +56,25 @@ namespace csharp.cli.model
         /// </summary>
         [JsonIgnore] 
         public int gType { get; set; }
+        /// <summary>
+        /// RCG 專用
+        /// </summary>
+        [JsonIgnore]
+        public bool supportWeb { get; set; }
+        /// <summary>
+        /// RCG 專用
+        /// </summary>
+        [JsonIgnore]
+        public bool supportMobile { get; set; }
+        [JsonIgnore]
+        public string code { get; set; }
+        [JsonIgnore]
+        public string @class { get; set; }
+        /// <summary>
+        /// RCG 專用 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競RCG 專用
+        /// </summary>
+        [JsonIgnore]
+        public string gameType { get; set; }
         public PWAWebSite Clone()
         {
             return (PWAWebSiteJILI)this.MemberwiseClone();

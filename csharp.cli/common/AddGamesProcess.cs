@@ -42,7 +42,6 @@ namespace csharp.cli.common
                 newGameItem.localizationCode = $"{info.LocalCode}{gameId}";
                 newGameItem.categoryIdList = Array.Empty<int>();
 
-                // 判斷有沒有重複的遊戲代碼
                 var exist = newGameList.Where(x => x.id.Equals(gameId) && x.active == true).Select(x => x).FirstOrDefault();
                 if (exist is not null)
                 {
@@ -136,11 +135,28 @@ namespace csharp.cli.common
                     oneItemValues = oneItemValues.Replace("@gameId", newGameList[i].id.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
                     oneItemValues = oneItemValues.Replace("@gameClubId", newGameList[i].clubId.ToString());
                     oneItemValues = oneItemValues.Replace("@gameName", newGameList[i].name.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-                    oneItemValues = oneItemValues.Replace("@imagePath", newGameList[i].imagePath.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-                    oneItemValues = oneItemValues.Replace("@imageName", newGameList[i].imageName.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+                    if (newGameList[i].imagePath is not null)
+                    {
+                        oneItemValues = 
+                            oneItemValues.Replace("@imagePath",
+                                newGameList[i].imagePath.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+                    }
+
+                    if (newGameList[i].imageName is not null)
+                    {
+                        oneItemValues =
+                            oneItemValues.Replace("@imageName",
+                                newGameList[i].imageName.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+                    }
+
                     oneItemValues = oneItemValues.Replace("@active", (newGameList[i].active ? "1": "0"));
                     oneItemValues = oneItemValues.Replace("@localizationCode", newGameList[i].localizationCode.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-                    oneItemValues = oneItemValues.Replace("@categoryIdList", string.Join(",", newGameList[i].categoryIdList));
+                    
+                    if(newGameList[i].categoryIdList is not null)
+                    {
+                        oneItemValues = oneItemValues.Replace("@categoryIdList", string.Join(",", newGameList[i].categoryIdList));
+                    }
+
                     oneItemValues = oneItemValues.Replace("@sort", newGameList[i].sort.ToString());
 
                     // 給預設值
@@ -150,6 +166,10 @@ namespace csharp.cli.common
                     // 取值，但是通常是 2 選 1 (只有 JDB 用 gType)
                     oneItemValues = oneItemValues.Replace("@mType", newGameList[i].mType.ToString());
                     oneItemValues = oneItemValues.Replace("@gType", newGameList[i].gType.ToString());
+
+                    // RCG 專用
+                    oneItemValues = oneItemValues.Replace("@supportWeb", (newGameList[i].supportWeb ? "1" : "0"));
+                    oneItemValues = oneItemValues.Replace("@supportMobile", (newGameList[i].supportMobile ? "1" : "0"));
 
                     valueList.Add(oneItemValues);
                 }

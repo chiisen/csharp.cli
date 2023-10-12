@@ -58,6 +58,20 @@
         /// gType (只有 JDB 使用)
         /// </summary>
         public int gType { get; set; }
+        /// <summary>
+        /// RCG 專用
+        /// </summary>
+        public bool supportWeb { get; set; }
+        /// <summary>
+        /// RCG 專用
+        /// </summary>
+        public bool supportMobile { get; set; }
+        public string code { get; set; }
+        public string @class { get; set; }
+        /// <summary>
+        /// RCG 專用 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競RCG 專用
+        /// </summary>
+        public string gameType { get; set; }
 
         public PWAWebSite Clone();
     }

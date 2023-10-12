@@ -3,9 +3,9 @@
 namespace csharp.cli.model
 {
     /// <summary>
-    /// PP 遊戲清單
+    /// AE 遊戲清單
     /// </summary>
-    public class PWAWebSitePP : PWAWebSite
+    public class PWAWebSiteAE : PWAWebSite
     {
         /// <summary>
         /// ServerId
@@ -54,30 +54,30 @@ namespace csharp.cli.model
         /// <summary>
         /// gType(未使用)
         /// </summary>
-        [JsonIgnore] public int gType { get; set; }
+        [JsonIgnore]
+        public int gType { get; set; }
         /// <summary>
         /// RCG 專用
         /// </summary>
-        [JsonIgnore]
+        [JsonIgnore] 
         public bool supportWeb { get; set; }
         /// <summary>
         /// RCG 專用
         /// </summary>
-        [JsonIgnore]
+        [JsonIgnore] 
         public bool supportMobile { get; set; }
-        [JsonIgnore]
+        [JsonIgnore] 
         public string code { get; set; }
-        [JsonIgnore]
+        [JsonIgnore] 
         public string @class { get; set; }
         /// <summary>
         /// RCG 專用 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競RCG 專用
         /// </summary>
-        [JsonIgnore]
+        [JsonIgnore] 
         public string gameType { get; set; }
-
         public PWAWebSite Clone()
         {
-            return (PWAWebSitePP)this.MemberwiseClone();
+            return (PWAWebSiteAE)this.MemberwiseClone();
         }
     }
 }
