@@ -9,7 +9,7 @@
 	<ToolCommandName>csharp.cli</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
 	<AssemblyVersion>1.0.1.109</AssemblyVersion>
-	<FileVersion>2023.1012.1000.1479</FileVersion>
+	<FileVersion>2023.1012.1016.1482</FileVersion>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Version>$(AssemblyVersion)</Version>
 	<ApplicationIcon>resource\csharp.cli.ico</ApplicationIcon>
@@ -86,6 +86,12 @@
 
   <ItemGroup>
     <None Update="resource\betArea.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\INSERT_RCG.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\VALUES_RCG.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

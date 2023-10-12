@@ -82,40 +82,11 @@ namespace csharp.cli.common
 
                 var valueList = new List<string>();
 
-                var insert = @$"INSERT INTO[dbo].[T_Game_MappingInfo] (
-                [serverId],
-                [gameId],
-                [gameClubId],
-                [gameName],
-                [imagePath],
-                [imageName],
-                [active],
-                [localizationCode],
-                [categoryIdList],
-                [sort],
-                [gameType],
-                [thirdPartyId],
-                [mType],
-                [gType]
-                )
-                VALUES";
-
-                var values = @$"(
-                 '@serverId',
-                 '@gameId',
-                 @gameClubId,
-                 '@gameName',
-                 '@imagePath',
-                 '@imageName',
-                 @active,
-                 '@localizationCode',
-                 '@categoryIdList',
-                 @sort,
-                 @gameType,
-                 '@thirdPartyId',
-                 @mType,
-                 @gType
-                )";
+                var destinationFolder = @$"{Environment.CurrentDirectory}\";
+                var destinationInsertFile = @$"{destinationFolder}\resource\PWAWebSite\INSERT_RCG.sql";
+                var insertText = File.ReadAllText(destinationInsertFile);
+                var destinationValuesFile = @$"{destinationFolder}\resource\PWAWebSite\VALUES_RCG.sql";
+                var valuesText = File.ReadAllText(destinationValuesFile);
 
                 var first = true;
                 for (var i = 0; i < gameList.Count; i++)
@@ -123,12 +94,12 @@ namespace csharp.cli.common
                     var oneItemValues = "";
                     if (first)
                     {
-                        oneItemValues = insert + values;
+                        oneItemValues = insertText + valuesText;
                         first = false;
                     }
                     else
                     {
-                        oneItemValues = values;
+                        oneItemValues = valuesText;
                     }
                     
                     oneItemValues = oneItemValues.Replace("@serverId", newGameList[i].serverId);
