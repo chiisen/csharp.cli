@@ -133,13 +133,13 @@ namespace csharp.cli.common
                     }
                     
                     oneItemValues = oneItemValues.Replace("@serverId", newGameList[i].serverId);
-                    oneItemValues = oneItemValues.Replace("@gameId", newGameList[i].id);
+                    oneItemValues = oneItemValues.Replace("@gameId", newGameList[i].id.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
                     oneItemValues = oneItemValues.Replace("@gameClubId", newGameList[i].clubId.ToString());
-                    oneItemValues = oneItemValues.Replace("@gameName", newGameList[i].name);
-                    oneItemValues = oneItemValues.Replace("@imagePath", newGameList[i].imagePath);
-                    oneItemValues = oneItemValues.Replace("@imageName", newGameList[i].imageName);
+                    oneItemValues = oneItemValues.Replace("@gameName", newGameList[i].name.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+                    oneItemValues = oneItemValues.Replace("@imagePath", newGameList[i].imagePath.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+                    oneItemValues = oneItemValues.Replace("@imageName", newGameList[i].imageName.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
                     oneItemValues = oneItemValues.Replace("@active", (newGameList[i].active ? "1": "0"));
-                    oneItemValues = oneItemValues.Replace("@localizationCode", newGameList[i].localizationCode);
+                    oneItemValues = oneItemValues.Replace("@localizationCode", newGameList[i].localizationCode.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
                     oneItemValues = oneItemValues.Replace("@categoryIdList", string.Join(",", newGameList[i].categoryIdList));
                     oneItemValues = oneItemValues.Replace("@sort", newGameList[i].sort.ToString());
 
