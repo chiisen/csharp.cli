@@ -50,7 +50,13 @@ namespace csharp.cli.model
         /// <summary>
         /// 同 id 欄位
         /// </summary>
-        public string GameCode { get; set; }
+        public string GameCode 
+        {
+            get
+            {
+                return id;
+            }
+        }
         /// <summary>
         /// 顯示排序
         /// </summary>

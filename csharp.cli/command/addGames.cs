@@ -149,6 +149,30 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 var addGameProcess = new AddGamesProcess();
                 switch (tpId)
                 {
+                    case "Royal":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteRoyal>(tpId, info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "AE":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteAE>(tpId, info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
+                    case "JOKER":
+                    {
+                        if (addGameProcess.Process<PWAWebSiteJOKER>(tpId, info, csvList, sourceJsonText) == 1)
+                        {
+                            return 1;
+                        }
+                        break;
+                    }
                     case "MP":
                     {
                         if (addGameProcess.Process<PWAWebSiteMP>(tpId, info, csvList, sourceJsonText) == 1)

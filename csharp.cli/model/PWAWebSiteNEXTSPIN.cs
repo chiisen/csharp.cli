@@ -3,7 +3,7 @@
 namespace csharp.cli.model
 {
     /// <summary>
-    /// META 遊戲清單
+    /// NEXTSPIN 遊戲清單
     /// </summary>
     public class PWAWebSiteNEXTSPIN : PWAWebSite
     {

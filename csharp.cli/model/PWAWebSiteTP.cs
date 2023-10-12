@@ -3,7 +3,7 @@
 namespace csharp.cli.model
 {
     /// <summary>
-    /// META 遊戲清單
+    /// TP 遊戲清單
     /// </summary>
     public class PWAWebSiteTP : PWAWebSite
     {
