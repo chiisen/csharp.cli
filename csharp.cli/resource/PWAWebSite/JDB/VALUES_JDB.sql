@@ -1,0 +1,15 @@
+﻿(
+                 '@serverId',
+                 '@gameId',
+                 @gameClubId,
+                 '@gameName',
+                 @gType,
+                 '@imagePath',
+                 '@imageName',
+                 @active,
+                 '@localizationCode',
+                 '@categoryIdList',
+                 @sort,
+                 'JDB',
+                 3
+                )

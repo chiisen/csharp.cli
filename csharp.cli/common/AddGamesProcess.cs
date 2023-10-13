@@ -5,9 +5,12 @@ using static csharp.cli.common.Enum;
 
 namespace csharp.cli.common
 {
+    /// <summary>
+    /// 新增遊戲列表的處理物件
+    /// </summary>
     public class AddGamesProcess
     {
-        public int Process<T>(string tpId, AddGamesRedisInfo info, List<Dictionary<int, string>> csvList, string sourceJsonText) where T : PWAWebSite
+        public int Process<T>(string tpId, AddGamesRedisInfo info, List<Dictionary<int, string>> csvList, string sourceJsonText) where T : PWAWebSite, new()
         {
             var sourceJsonList = Common.JsonDeserialize<List<T>>(sourceJsonText);
             if (sourceJsonList is null)
@@ -78,14 +81,14 @@ namespace csharp.cli.common
             {
                 var newGameSqlPath = @$"{Environment.CurrentDirectory}\{Path.GetFileNameWithoutExtension(info.JsonPath)}.newGames.sql";
 
-                Console.WriteLine($"開始寫入 sql 遊戲列表 {newGameSqlPath}");
+                Console.WriteLine($"開始寫入 sql 遊戲列表【不包含新增遊戲】 {newGameSqlPath}");
 
                 var valueList = new List<string>();
 
                 var destinationFolder = @$"{Environment.CurrentDirectory}\";
-                var destinationInsertFile = @$"{destinationFolder}\resource\PWAWebSite\INSERT_RCG.sql";
+                var destinationInsertFile = @$"{destinationFolder}\resource\PWAWebSite\{tpId}\INSERT_{tpId}.sql";
                 var insertText = File.ReadAllText(destinationInsertFile);
-                var destinationValuesFile = @$"{destinationFolder}\resource\PWAWebSite\VALUES_RCG.sql";
+                var destinationValuesFile = @$"{destinationFolder}\resource\PWAWebSite\{tpId}\VALUES_{tpId}.sql";
                 var valuesText = File.ReadAllText(destinationValuesFile);
 
                 var first = true;
@@ -101,53 +104,16 @@ namespace csharp.cli.common
                     {
                         oneItemValues = valuesText;
                     }
-                    
-                    oneItemValues = oneItemValues.Replace("@serverId", newGameList[i].serverId);
-                    oneItemValues = oneItemValues.Replace("@gameId", newGameList[i].id.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-                    oneItemValues = oneItemValues.Replace("@gameClubId", newGameList[i].clubId.ToString());
-                    oneItemValues = oneItemValues.Replace("@gameName", newGameList[i].name.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-                    if (newGameList[i].imagePath is not null)
-                    {
-                        oneItemValues = 
-                            oneItemValues.Replace("@imagePath",
-                                newGameList[i].imagePath.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-                    }
 
-                    if (newGameList[i].imageName is not null)
-                    {
-                        oneItemValues =
-                            oneItemValues.Replace("@imageName",
-                                newGameList[i].imageName.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-                    }
-
-                    oneItemValues = oneItemValues.Replace("@active", (newGameList[i].active ? "1": "0"));
-                    oneItemValues = oneItemValues.Replace("@localizationCode", newGameList[i].localizationCode.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-                    
-                    if(newGameList[i].categoryIdList is not null)
-                    {
-                        oneItemValues = oneItemValues.Replace("@categoryIdList", string.Join(",", newGameList[i].categoryIdList));
-                    }
-
-                    oneItemValues = oneItemValues.Replace("@sort", newGameList[i].sort.ToString());
-
-                    // 給預設值
-                    oneItemValues = oneItemValues.Replace("@gameType", "0");
-                    oneItemValues = oneItemValues.Replace("@thirdPartyId", tpId);
-
-                    // 取值，但是通常是 2 選 1 (只有 JDB 用 gType)
-                    oneItemValues = oneItemValues.Replace("@mType", newGameList[i].mType.ToString());
-                    oneItemValues = oneItemValues.Replace("@gType", newGameList[i].gType.ToString());
-
-                    // RCG 專用
-                    oneItemValues = oneItemValues.Replace("@supportWeb", (newGameList[i].supportWeb ? "1" : "0"));
-                    oneItemValues = oneItemValues.Replace("@supportMobile", (newGameList[i].supportMobile ? "1" : "0"));
+                    var replace = new T();
+                    oneItemValues = replace.Replace(oneItemValues, newGameList[i]);
 
                     valueList.Add(oneItemValues);
                 }
 
                 File.WriteAllText(newGameSqlPath, string.Join(",", valueList) + ";");
 
-                Console.WriteLine($"結束寫入 sql 遊戲列表 {newGameSqlPath}");
+                Console.WriteLine($"結束寫入 sql 遊戲列表【不包含新增遊戲】共{gameList.Count}筆 {newGameSqlPath}");
             }
             catch (Exception e)
             {

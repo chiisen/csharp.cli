@@ -1,16 +1,15 @@
-﻿                (
+﻿(
                  '@serverId',
                  '@gameId',
                  @gameClubId,
                  '@gameName',
+                 @mType,
                  '@imagePath',
                  '@imageName',
                  @active,
                  '@localizationCode',
                  '@categoryIdList',
                  @sort,
-                 @gameType,
-                 '@thirdPartyId',
-                 @mType,
-                 @gType
+                 'PG',
+                 3
                 )

@@ -3,15 +3,14 @@
                 [gameId],
                 [gameClubId],
                 [gameName],
+                [mType],
                 [imagePath],
                 [imageName],
                 [active],
                 [localizationCode],
                 [categoryIdList],
-                [sort],
-                [gameType],
+                [sort],                
                 [thirdPartyId],
-                [mType],
-                [gType]
+                [gameType]
                 )
                 VALUES

@@ -79,5 +79,41 @@ namespace csharp.cli.model
         {
             return (PWAWebSiteJILI)this.MemberwiseClone();
         }
+        public string Replace(string values, PWAWebSite item)
+        {
+            // JSON 樣板
+            /*
+             {
+                "serverId": "2000000002",
+                "id": "212",
+                "clubId": 22,
+                "name": "獵龍大亨2",
+                "mType": 0,
+                "imagePath": "JILI",
+                "imageName": "212",
+                "active": true,
+                "localizationCode": "Game_JILI_212",
+                "categoryIdList": [
+                  1,
+                  3
+                ],
+                "sort": 4
+              },
+             */
+            // 查 "PWAWebSiteClub2" JILI 是 3 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競
+            values = values.Replace("@serverId", item.serverId);
+            values = values.Replace("@gameId", item.id.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@gameClubId", item.clubId.ToString());
+            values = values.Replace("@gameName", item.name.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@mType", item.mType.ToString());
+            values = values.Replace("@imagePath", item.imagePath.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@imageName", item.imageName.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@active", (item.active ? "1" : "0"));
+            values = values.Replace("@localizationCode", item.localizationCode.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@categoryIdList", string.Join(",", item.categoryIdList));
+            values = values.Replace("@sort", item.sort.ToString());
+
+            return values;
+        }
     }
 }

@@ -74,5 +74,6 @@
         public string gameType { get; set; }
 
         public PWAWebSite Clone();
+        public string Replace(string values, PWAWebSite item);
     }
 }

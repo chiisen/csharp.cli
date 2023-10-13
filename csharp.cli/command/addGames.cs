@@ -1,6 +1,9 @@
 ﻿using csharp.cli.common;
 using csharp.cli.helper;
 using csharp.cli.model;
+using McMaster.Extensions.CommandLineUtils;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Color = System.Drawing.Color;
 using Console = Colorful.Console;
@@ -147,157 +150,39 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
 
                 // 轉換為對應的廠商格式
                 var addGameProcess = new AddGamesProcess();
-                switch (tpId)
+                var selectAddGameProcess = new Dictionary<string, Func<string, AddGamesRedisInfo, List<Dictionary<int, string>>, string, int>>()
                 {
-                    case "RCG":
+                    { "RCG", addGameProcess.Process<PWAWebSiteRCG> },
+                    { "Royal", addGameProcess.Process<PWAWebSiteRoyal> },
+                    { "AE", addGameProcess.Process<PWAWebSiteAE> },
+                    { "JOKER", addGameProcess.Process<PWAWebSiteJOKER> },
+                    { "MP", addGameProcess.Process<PWAWebSiteMP> },
+                    { "MT", addGameProcess.Process<PWAWebSiteMT> },
+                    { "TP", addGameProcess.Process<PWAWebSiteTP> },
+                    { "PP", addGameProcess.Process<PWAWebSitePP> },
+                    { "PG", addGameProcess.Process<PWAWebSitePG> },
+                    { "NEXTSPIN", addGameProcess.Process<PWAWebSiteNEXTSPIN> },
+                    { "MG", addGameProcess.Process<PWAWebSiteMG> },
+                    { "META", addGameProcess.Process<PWAWebSiteMETA> },
+                    { "JILI", addGameProcess.Process<PWAWebSiteJILI> },
+                    { "GR", addGameProcess.Process<PWAWebSiteGR> },
+                    { "Golden", addGameProcess.Process<PWAWebSiteGolden> },
+                    { "FC", addGameProcess.Process<PWAWebSiteFC> },
+                    { "DS", addGameProcess.Process<PWAWebSiteDS> },
+                    { "JDB", addGameProcess.Process<PWAWebSiteJDB> },
+                };
+
+                if (selectAddGameProcess.ContainsKey(tpId))
+                {
+                    if (selectAddGameProcess[tpId](tpId, info, csvList, sourceJsonText) == 1)
                     {
-                        if (addGameProcess.Process<PWAWebSiteRCG>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "Royal":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteRoyal>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "AE":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteAE>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "JOKER":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteJOKER>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "MP":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteMP>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "MT":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteMT>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "TP":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteTP>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "PP":
-                    {
-                        if (addGameProcess.Process<PWAWebSitePP>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "PG":
-                    {
-                        if (addGameProcess.Process<PWAWebSitePG>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "NEXTSPIN":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteNEXTSPIN>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "MG":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteMG>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "META":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteMETA>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "JILI":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteJILI>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "GR":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteGR>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "Golden":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteGolden>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "FC":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteFC>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "DS":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteDS>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    case "JDB":
-                    {
-                        if (addGameProcess.Process<PWAWebSiteJDB>(tpId, info, csvList, sourceJsonText) == 1)
-                        {
-                            return 1;
-                        }
-                        break;
-                    }
-                    default:
-                    {
-                        Console.WriteLine($"無法處理 {tpId} 的 thirdPartyId 設定");
                         return 1;
                     }
+                }
+                else
+                {
+                    Console.WriteLine($"無法處理 {tpId} 的 thirdPartyId 設定");
+                    return 1;
                 }
 
                 return 0;
