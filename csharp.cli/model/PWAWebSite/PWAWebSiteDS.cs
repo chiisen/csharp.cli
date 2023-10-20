@@ -10,19 +10,19 @@ namespace csharp.cli.model
         /// <summary>
         /// ServerId
         /// </summary>
-        public string serverId { get; set; }
+        public string? serverId { get; set; }
         /// <summary>
         /// 圖片名稱
         /// </summary>
-        public string imageName { get; set; }
+        public string? imageName { get; set; }
         /// <summary>
         /// 遊戲id
         /// </summary>
-        public string id { get; set; }
+        public string? id { get; set; }
         /// <summary>
         /// 名稱
         /// </summary>
-        public string name { get; set; }
+        public string? name { get; set; }
         /// <summary>
         /// 館別id
         /// </summary>
@@ -30,7 +30,7 @@ namespace csharp.cli.model
         /// <summary>
         /// 圖片路徑
         /// </summary>
-        public string imagePath { get; set; }
+        public string? imagePath { get; set; }
         /// <summary>
         /// 是否啟用
         /// </summary>

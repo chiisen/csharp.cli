@@ -18,19 +18,19 @@ public class AddGamesRedisInfo
     /// <summary>
     /// 廠商英文編號
     /// </summary>
-    public string ThirdPartyId { get; set; }
+    public string? ThirdPartyId { get; set; }
     /// <summary>
     /// 新增遊戲的 csv 設定檔案
     /// </summary>
-    public string CsvPath { get; set; }
+    public string? CsvPath { get; set; }
     /// <summary>
     /// 翻譯代號
     /// </summary>
-    public string LocalCode { get; set; }
+    public string? LocalCode { get; set; }
     /// <summary>
     /// 原始的 Json 檔案路徑
     /// </summary>
-    public string JsonPath { get; set; }
+    public string? JsonPath { get; set; }
 }
 
 public partial class Program

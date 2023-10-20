@@ -9,10 +9,10 @@ namespace csharp.cli;
 /// </summary>
 public class addCustomerRedisInfo
 {
-    public string action { get; set; }
-    public string source { get; set; }
-    public string destination { get; set; }
-    public string fileName { get; set; }
+    public string? action { get; set; }
+    public string? source { get; set; }
+    public string? destination { get; set; }
+    public string? fileName { get; set; }
     public List<string>? content { get; set; }
 }
 
