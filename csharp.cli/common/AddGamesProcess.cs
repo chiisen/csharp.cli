@@ -45,7 +45,7 @@ namespace csharp.cli.common
                 newGameItem.localizationCode = $"{info.LocalCode}{gameId}";
                 newGameItem.categoryIdList = Array.Empty<int>();
 
-                var exist = newGameList.Where(x => x.id.Equals(gameId) && x.active == true).Select(x => x).FirstOrDefault();
+                var exist = newGameList.Where(x => x.id != null && x.id.Equals(gameId) && x.active == true).Select(x => x).FirstOrDefault();
                 if (exist is not null)
                 {
                     Console.WriteLine($"重複的新增遊戲: [{count}] {gameId} {gameName}", Color.Red);

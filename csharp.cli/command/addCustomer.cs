@@ -80,11 +80,11 @@ public partial class Program
                     {
                         case "COPY":
                             {
-                                var fileName = info.fileName.Replace("##CUSTOMER##", customerCode);
+                                var fileName = info.fileName?.Replace("##CUSTOMER##", customerCode);
 
-                                fileName = fileName.Replace("##CUSTOMER1##", c1Code);
+                                fileName = fileName?.Replace("##CUSTOMER1##", c1Code);
 
-                                fileName = fileName.Replace("##CUSTOMER2##", c2Code);
+                                fileName = fileName?.Replace("##CUSTOMER2##", c2Code);
 
                                 var sourceFile = @$"{sourceFolder}{info.source}{info.fileName}";
                                 if (File.Exists(sourceFile) is false)
@@ -143,7 +143,10 @@ public partial class Program
                                 oneline += "\r\n";
                                 oneline += info.source;
 
-                                newText = newText.Replace(info.source, oneline);
+                                if (info.source != null)
+                                {
+                                    newText = newText.Replace(info.source, oneline);
+                                }
 
                                 /*
                                     const string pattern = @"(\r)+";

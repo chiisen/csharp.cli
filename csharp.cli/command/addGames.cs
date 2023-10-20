@@ -98,7 +98,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 }
 
                 // 取得 ThirdPartyId 對應的 Redis 設定
-                var info = redisInfos.Where( x => x.ThirdPartyId.Trim().Equals(tpId)).Select( x => x).FirstOrDefault();
+                var info = redisInfos.FirstOrDefault(x => x.ThirdPartyId?.Trim().Equals(tpId) ?? false);
                 if (info is null)
                 {
                     Console.WriteLine($"Redis (csharp.cli:add-games) 找不到 {tpId} 的設定");

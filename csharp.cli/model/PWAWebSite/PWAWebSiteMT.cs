@@ -42,11 +42,11 @@ namespace csharp.cli.model
         /// <summary>
         /// 對應遊戲編號
         /// </summary>
-        public string localizationCode { get; set; }
+        public string? localizationCode { get; set; }
         /// <summary>
         /// 分類id清單
         /// </summary>
-        public int[] categoryIdList { get; set; }
+        public int[]? categoryIdList { get; set; }
         /// <summary>
         /// 同 id 欄位
         /// </summary>
@@ -77,14 +77,14 @@ namespace csharp.cli.model
         [JsonIgnore]
         public bool supportMobile { get; set; }
         [JsonIgnore]
-        public string code { get; set; }
+        public string? code { get; set; }
         [JsonIgnore]
-        public string @class { get; set; }
+        public string? @class { get; set; }
         /// <summary>
         /// RCG 專用 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競RCG 專用
         /// </summary>
         [JsonIgnore]
-        public string gameType { get; set; }
+        public string? gameType { get; set; }
         public PWAWebSite Clone()
         {
             return (PWAWebSiteMT)this.MemberwiseClone();
@@ -110,15 +110,16 @@ namespace csharp.cli.model
              */
             // 查 "PWAWebSiteClub2" MT 是 5 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競
             values = values.Replace("@serverId", item.serverId);
-            values = values.Replace("@gameId", item.id.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@gameId", item.id?.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
             values = values.Replace("@gameClubId", item.clubId.ToString());
-            values = values.Replace("@gameName", item.name.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@gameName", item.name?.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
             values = values.Replace("@mType", item.mType.ToString());
-            values = values.Replace("@imagePath", item.imagePath.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-            values = values.Replace("@imageName", item.imageName.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@imagePath", item.imagePath?.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@imageName", item.imageName?.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
             values = values.Replace("@active", (item.active ? "1" : "0"));
-            values = values.Replace("@localizationCode", item.localizationCode.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-            values = values.Replace("@categoryIdList", string.Join(",", item.categoryIdList));
+            values = values.Replace("@localizationCode", item.localizationCode?.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            if (item.categoryIdList != null)
+                values = values.Replace("@categoryIdList", string.Join(",", item.categoryIdList));
             values = values.Replace("@sort", item.sort.ToString());
 
             return values;

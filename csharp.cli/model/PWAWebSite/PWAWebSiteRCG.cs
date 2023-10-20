@@ -43,11 +43,11 @@ namespace csharp.cli.model
         /// <summary>
         /// 對應遊戲編號
         /// </summary>
-        public string localizationCode { get; set; }
+        public string? localizationCode { get; set; }
         /// <summary>
         /// 分類id清單
         /// </summary>
-        public int[] categoryIdList { get; set; }
+        public int[]? categoryIdList { get; set; }
         /// <summary>
         /// 顯示排序
         /// </summary>
@@ -68,13 +68,13 @@ namespace csharp.cli.model
         [JsonIgnore]
         public bool supportMobile { get; set; }
         [JsonIgnore]
-        public string code { get; set; }
+        public string? code { get; set; }
         [JsonIgnore]
-        public string @class { get; set; }
+        public string? @class { get; set; }
         /// <summary>
         /// RCG 專用 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競RCG 專用
         /// </summary>
-        public string gameType { get; set; }
+        public string? gameType { get; set; }
         public PWAWebSite Clone()
         {
             return (PWAWebSiteRCG)this.MemberwiseClone();
@@ -98,15 +98,15 @@ namespace csharp.cli.model
               },
              */
             // 查 "PWAWebSiteClub2" RCG 是 1 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競
-            values = values.Replace("@gameId", item.id.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@gameId", item.id?.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
             // thirdPartyId 不存入資料庫
             values = values.Replace("@code", item.code);
-            values = values.Replace("@gameName", item.name.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@gameName", item.name?.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
             values = values.Replace("@class", item.@class);
             values = values.Replace("@active", (item.active ? "1" : "0"));
             values = values.Replace("@supportWeb", (item.supportWeb ? "1" : "0"));
             values = values.Replace("@supportMobile", (item.supportMobile ? "1" : "0"));
-            values = values.Replace("@localizationCode", item.localizationCode.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@localizationCode", item.localizationCode?.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
 
             return values;
         }

@@ -61,18 +61,23 @@ public partial class Program
                 record.ForEach(x =>
                 {
                     // 修改指定的 code
-                    if (x.code.Equals(code))
+                    if (x?.code?.Equals(code) == true)
                     {
                         var nowTime = DateTime.Now.ToString("yyyyMMddHH") + "0000";
                         Console.WriteLine($"{x.version}", Color.Yellow);
-                        if (x.version.Equals(nowTime) is false)
+                        if (x.version?.Equals(nowTime) is false)
                         {
                             x.version = nowTime;
                             Console.WriteLine($"{nowTime}", Color.Blue);
                         }
                         else
                         {
-                            var offsetString = x.version[10..];
+                            var offsetString = x.version?[10..];
+                            if (offsetString is null)
+                            {
+                                Console.WriteLine($"null offsetString", Color.Red);
+                                return;
+                            }
                             var number = int.Parse(offsetString);
                             number += 1;
                             var number4digits = number.ToString("00##");

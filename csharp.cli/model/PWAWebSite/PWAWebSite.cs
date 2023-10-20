@@ -32,7 +32,7 @@
         /// <summary>
         /// 對應遊戲編號
         /// </summary>
-        public string localizationCode { get; set; }
+        public string? localizationCode { get; set; }
         /// <summary>
         /// 名稱
         /// </summary>
@@ -49,7 +49,7 @@
         /// 4 是熱門
         /// 6 是其他
         /// </summary>
-        public int[] categoryIdList { get; set; }
+        public int[]? categoryIdList { get; set; }
         /// <summary>
         /// mType
         /// </summary>
@@ -66,12 +66,12 @@
         /// RCG 專用
         /// </summary>
         public bool supportMobile { get; set; }
-        public string code { get; set; }
-        public string @class { get; set; }
+        public string? code { get; set; }
+        public string? @class { get; set; }
         /// <summary>
         /// RCG 專用 - 1:真人, 3:電子, 4:體育, 5:棋牌, 6:彩票, 7:動競, 8:電競RCG 專用
         /// </summary>
-        public string gameType { get; set; }
+        public string? gameType { get; set; }
 
         public PWAWebSite Clone();
         public string Replace(string values, PWAWebSite item);
