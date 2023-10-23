@@ -108,10 +108,11 @@ namespace csharp.cli.model
             values = values.Replace("@gameName", item.name?.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
             values = values.Replace("@mType", item.mType.ToString());
             values = values.Replace("@imagePath", item.imagePath?.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-            values = values.Replace("@imageName", item.imageName.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            values = values.Replace("@imageName", item.imageName?.Replace("'", "''")); // MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
             values = values.Replace("@active", (item.active ? "1" : "0"));
-            values = values.Replace("@localizationCode", item.localizationCode.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
-            values = values.Replace("@categoryIdList", string.Join(",", item.categoryIdList));
+            values = values.Replace("@localizationCode", item.localizationCode?.Replace("'", "''"));// MS-SQL 遇到單引號要改成兩個單引號就能正常執行了
+            if (item.categoryIdList != null)
+                values = values.Replace("@categoryIdList", string.Join(",", item.categoryIdList));
             values = values.Replace("@sort", item.sort.ToString());
 
             return values;

@@ -10,13 +10,13 @@ namespace csharp.cli.common
 
             try
             {
-                if (string.IsNullOrEmpty(text))
+                if (string.IsNullOrWhiteSpace(text))
                 {
-                    var errorMassage = $"{text} is Null or Empty";
-                    Console.WriteLine(errorMassage);
-                    throw new Exception(errorMassage);
+                    var errorMessage = $"{nameof(text)} is null or whitespace";
+                    Console.WriteLine(errorMessage);
+                    throw new ArgumentNullException(nameof(text), errorMessage);
                 }
-                return JsonConvert.DeserializeObject<T>(text);
+                return JsonConvert.DeserializeObject<T>(text) ?? throw new ArgumentNullException(nameof(text), "Deserialized object is null");
             }
             catch (Exception e)
             {

@@ -33,9 +33,7 @@ namespace csharp.cli.helper
             var asm = Assembly.GetExecutingAssembly();
 
             // 取得 assembly 的名稱
-            var assemblyName = asm.GetName().Name;
-
-            return assemblyName;
+            return asm?.GetName()?.Name ?? string.Empty;
         }
 
         /// <summary>
