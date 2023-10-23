@@ -76,7 +76,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 var tpId = thirdPartyId.HasValue ? thirdPartyId.Value : null;
                 if (tpId == null)
                 {
-                    Console.WriteLine($"沒有指定 json 的完整路徑與檔案名稱");
+                    Console.WriteLine($"[ERROR]: 沒有指定 json 的完整路徑與檔案名稱", Color.Red);
                     return 1;
                 }
 
@@ -93,7 +93,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
 
                 if (redisInfos is null)
                 {
-                    Console.WriteLine($"Redis (csharp.cli:add-games) 設定為 null");
+                    Console.WriteLine($"[ERROR]: Redis (csharp.cli:add-games) 設定為 null", Color.Red);
                     return 1;
                 }
 
@@ -101,14 +101,14 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 var info = redisInfos.FirstOrDefault(x => x.ThirdPartyId?.Trim().Equals(tpId) ?? false);
                 if (info is null)
                 {
-                    Console.WriteLine($"Redis (csharp.cli:add-games) 找不到 {tpId} 的設定");
+                    Console.WriteLine($"[ERROR]: Redis (csharp.cli:add-games) 找不到 {tpId} 的設定", Color.Red);
                     return 1;
                 }
 
                 // 讀取要新增遊戲的 CSV 設定檔案
                 if (info.CsvPath is null)
                 {
-                    Console.WriteLine($"{tpId} 沒有 CsvPath 的設定");
+                    Console.WriteLine($"[ERROR]: {tpId} 沒有 CsvPath 的設定", Color.Red);
                     return 1;
                 }
 
@@ -117,14 +117,14 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 var csvList = CsvHelper.GetCsv(info.CsvPath);
                 if (csvList is null)
                 {
-                    Console.WriteLine($"{tpId} 讀取不到 CSV 內容");
+                    Console.WriteLine($"[ERROR]: {tpId} 讀取不到 CSV 內容", Color.Red);
                     return 1;
                 }
 
                 // 讀取原始的 json 檔案，新增遊戲是由原始加上新增的遊戲
                 if (info.JsonPath is null)
                 {
-                    Console.WriteLine($"{tpId} 沒有 JSON 的設定");
+                    Console.WriteLine($"[ERROR]: {tpId} 沒有 JSON 的設定", Color.Red);
                     return 1;
                 }
                 string? sourceJsonText = null;
@@ -132,7 +132,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 {
                     if (!File.Exists(info.JsonPath))
                     {
-                        Console.WriteLine($"JSON 檔案: {info.JsonPath} 不存在");
+                        Console.WriteLine($"[ERROR]: JSON 檔案: {info.JsonPath} 不存在", Color.Red);
                         return 1;
                     }
 
@@ -144,7 +144,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 }
                 if (sourceJsonText is null)
                 {
-                    Console.WriteLine($"{tpId} 讀取不到 JSON 的內容", Color.Red);
+                    Console.WriteLine($"[ERROR]: {tpId} 讀取不到 JSON 的內容", Color.Red);
                     return 1;
                 }
 
@@ -181,7 +181,7 @@ Redis 格式: https://hackmd.io/@chiisen/SkNKvtcxp
                 }
                 else
                 {
-                    Console.WriteLine($"無法處理 {tpId} 的 thirdPartyId 設定");
+                    Console.WriteLine($"[ERROR]: 無法處理 {tpId} 的 thirdPartyId 設定");
                     return 1;
                 }
 
