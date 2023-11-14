@@ -63,6 +63,43 @@
             }
             this.sort = x.sort;
         }
+        public string ConvertInsertSQL()
+        {
+            return @"INSERT INTO[dbo].[T_AllTableList] (
+         [id]
+        ,[gameType]
+        ,[thirdPartyId]
+        ,[clubType]
+        ,[name]
+        ,[active]
+        ,[localizationCode]
+        ,[deskDisplayName]
+        ,[imageName]
+        ,[imagePath]
+        ,[desk]
+        ,[categoryIdList]
+        ,[sort]
+    )
+VALUES";
+        }
+        public string ConvertValuesSQL()
+        {
+            return @$"(
+        {this.id},
+        {this.gameType},
+        '{this.thirdPartyId}',
+        '{this.clubType}',
+        '{this.name}',
+        {(this.active.ToString().ToLower().Equals("true") ?  1 : 0)},
+        '{this.localizationCode}',
+        '{this.deskDisplayName}',
+        '{this.imageName}',
+        '{this.imagePath}',
+        '{this.desk}',
+        '{string.Join(", ", this.categoryIdList)}',
+         {this.sort}
+)";
+        }
     }
     /// <summary>
     /// 遊戲桌列表
@@ -144,6 +181,15 @@
             }
 
             return this;
+        }
+        public string ConvertInsertSQL()
+        {
+            return "";// @see PWAWebSiteAllTableListResponse
+        }
+
+        public string ConvertValuesSQL()
+        {
+            return "";// @see PWAWebSiteAllTableListResponse
         }
     }
 }

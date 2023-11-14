@@ -66,8 +66,39 @@
                     this.sort = int.Parse(value.ToString());
                     break;
             }
-
             return this;
         }
-    }
+
+        public string ConvertInsertSQL()
+        {
+            return @"INSERT INTO [dbo].[T_AllClubTypeList] (
+        [id],
+        [gameType],
+        [thirdPartyId],
+        [clubType],
+        [name],
+        [active],
+        [localizationCode],
+        [imageName],
+        [imagePath],
+        [sort]
+    )
+VALUES";
+        }
+        public string ConvertValuesSQL()
+        {
+            return @$"(
+        {this.id},
+        {this.gameType},
+        '{this.thirdPartyId}',
+        '{this.clubType}',
+        '{this.name}',
+        {(this.active.ToString().ToLower().Equals("true") ? 1 : 0)},
+        '{this.localizationCode}',
+        '{this.imageName}',
+        '{this.imagePath}',
+         {this.sort}
+)";
+        }
+    }    
 }
