@@ -1,0 +1,137 @@
+﻿using csharp.cli.model.TableList;
+using McMaster.Extensions.CommandLineUtils;
+using Newtonsoft.Json;
+using OfficeOpenXml;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Web.Services.Description;
+using Console = Colorful.Console;
+
+namespace csharp.cli;
+
+public partial class Program
+{
+    /// <summary>
+    /// EXCEL 轉檔
+    /// 命令列引數: excel-convert "words" -r 10
+    /// </summary>
+    public static void ExcelConvert()
+    {
+        _ = App.Command("excel-convert", command =>
+        {
+            // 第二層 Help 的標題
+            command.Description = "ExcelConvert 說明";
+            command.HelpOption("-?|-h|-help");
+
+            // 輸入參數說明
+            var excelPath = command.Argument("[Excel_Path]", "指定 Excel 的檔案路徑");
+
+            // 輸入參數說明
+            var excelSheet = command.Argument("[Excel_Sheet]", "指定 Excel 的工作表");
+
+            // 輸入參數說明
+            var outModel = command.Argument("[Out_Model]", "指定的輸出模型");
+
+            command.OnExecute(() =>
+            {
+                var excelFilePath = excelPath.HasValue ? excelPath.Value : null;
+                if (string.IsNullOrEmpty(excelFilePath)) return 0;
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;//指明非商业应用
+                var package = new ExcelPackage(excelFilePath);//加载Excel工作簿
+
+                var excelFileSheet = excelSheet.HasValue ? excelSheet.Value : null;
+                var sheet = package.Workbook.Worksheets[excelFileSheet];//读取工作簿中名为"Sheet1"的工作表
+
+                var modelStr = outModel.HasValue ? outModel.Value : null;
+                var modelNum = int.Parse(modelStr.ToString());
+
+                var targetFile = $"{excelFilePath}.json";
+                string json = "";
+                switch (modelNum)
+                {
+                    case 1:
+                        {
+                            json = ConvertString<PWAWebSiteAllClubTypeListResponse>(sheet);
+                            
+                        }
+                        break;
+                    case 2:
+                        {
+                            var list = ConvertList<PWAWebSiteAllTableListModel>(sheet);
+                            var resp = new List<PWAWebSiteAllTableListResponse>();
+
+                            list.ForEach(x => resp.Add(new PWAWebSiteAllTableListResponse(x)));
+                            json = JsonConvert.SerializeObject(resp, Formatting.Indented);// 格式化後寫入
+                        }
+                        break;
+                }
+                File.WriteAllText(targetFile, json);
+                return 0;
+            });
+        });
+    }
+    /// <summary>
+    /// Excel 轉為 json string
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="sheet"></param>
+    /// <returns></returns>
+    public static string ConvertString<T>(ExcelWorksheet sheet) where T : ITableList, new ()
+    {
+        var list = new List<T>();
+
+        var x = 2;// 行(由上到下，第一列是欄位名稱，所以由2開始)
+        var y = 1;// 列或叫欄位(由左到右)
+        while (sheet.Cells[x, y].Value != null)
+        {
+            var item = new T();
+
+            while (sheet.Cells[x, y].Value != null)
+            {
+                // 填資料
+                item = (T)item.ConvertItem(y, sheet.Cells[x, y].Value);
+
+                y += 1;
+            }
+
+            list.Add(item);
+
+            y = 1;// 從第一行開始
+            x += 1;// 換下一列
+        }
+
+        return JsonConvert.SerializeObject(list, Formatting.Indented);// 格式化後寫入
+    }
+    /// <summary>
+    /// Excel 轉為 List
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="sheet"></param>
+    /// <returns></returns>
+    public static List<T> ConvertList<T>(ExcelWorksheet sheet) where T : ITableList, new()
+    {
+        var list = new List<T>();
+
+        var x = 2;// 行(由上到下，第一列是欄位名稱，所以由2開始)
+        var y = 1;// 列或叫欄位(由左到右)
+        while (sheet.Cells[x, y].Value != null)
+        {
+            var item = new T();
+
+            while (sheet.Cells[x, y].Value != null)
+            {
+                // 填資料
+                item = (T)item.ConvertItem(y, sheet.Cells[x, y].Value);
+
+                y += 1;
+            }
+
+            list.Add(item);
+
+            y = 1;// 從第一行開始
+            x += 1;// 換下一列
+        }
+
+        return list;
+    }
+}

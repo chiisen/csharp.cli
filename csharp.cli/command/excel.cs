@@ -20,7 +20,7 @@ public partial class Program
             var excelPath = command.Argument("[Excel_Path]", "指定的 Excel 檔案路徑");
 
             // 輸入參數說明
-            var excelSheet = command.Argument("[Excel_Sheet]", "指定的 Excel 的工作表");
+            var excelSheet = command.Argument("[Excel_Sheet]", "指定的 Excel 工作表");
 
             command.OnExecute(() =>
             {

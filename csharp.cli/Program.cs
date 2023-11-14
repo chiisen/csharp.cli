@@ -169,6 +169,8 @@ public partial class Program
 
         Excel();
 
+        ExcelConvert();
+
         MultiThread();
 
         BetAreaAll();
