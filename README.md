@@ -77,12 +77,12 @@ dotnet tool uninstall -g csharp.cli
 
 # excel-convert
 ```bash=
-excel-convert "C:\github\RoyalTemporaryFile\直接進桌\AllTableList.xlsx" "sheet" "2"
+excel-convert "C:\github\RoyalTemporaryFile\直接進桌\AllTableList.xlsx" "sheet" "table"
 ```
-"C:\github\RoyalTemporaryFile\直接進桌\AllTableList.xlsx" Excel 的檔案路徑，通常跟 "2" 會有關
+"C:\github\RoyalTemporaryFile\直接進桌\AllTableList.xlsx" Excel 的檔案路徑，通常跟 "table" 會有關
 "sheet" 盡量同名就好
-"1" 是 PWAWebSiteAllClubTypeListResponse 類別
-"2" 是 PWAWebSiteAllTableListResponse 類別
+"club" 是 PWAWebSiteAllClubTypeListResponse 類別
+"table" 是 PWAWebSiteAllTableListResponse 類別
 
 # bet-area
 - 讀取 resoure 目錄內的 bet-area.json 檔案，列出 bet-area 的查詢結果

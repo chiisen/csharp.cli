@@ -44,15 +44,15 @@ public partial class Program
                 var sheet = package.Workbook.Worksheets[excelFileSheet];//读取工作簿中名为"Sheet1"的工作表
 
                 var modelStr = outModel.HasValue ? outModel.Value : null;
-                var modelNum = int.Parse(modelStr.ToString());
+                //var modelNum = int.Parse(modelStr.ToString());
 
                 var targetJson = $"{excelFilePath}.json";
                 var targetSQL = $"{excelFilePath}.sql";
                 string json = "";
                 string sql = "";
-                switch (modelNum)
+                switch (modelStr)
                 {
-                    case 1:
+                    case "club":
                         {
                             var list = ConvertList<PWAWebSiteAllClubTypeListResponse>(sheet);
                             // 轉 json
@@ -74,7 +74,7 @@ public partial class Program
                             }
                         }
                         break;
-                    case 2:
+                    case "table":
                         {
                             var list = ConvertList<PWAWebSiteAllTableListModel>(sheet);
 
