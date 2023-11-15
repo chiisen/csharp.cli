@@ -36,7 +36,7 @@
         /// 遊戲桌列表顯示排序
         /// </summary>
         public int sort { get; set; }
-
+        public PWAWebSiteAllTableListResponse() { }
         public PWAWebSiteAllTableListResponse(PWAWebSiteAllTableListModel x)
         {
             this.id = x.id;
