@@ -13,9 +13,9 @@
         /// 遊戲分類
         /// </summary>
         public int gameType { get; set; }
-        public string thirdPartyId { get; set; }
-        public string clubType { get; set; }
-        public string name { get; set; }
+        public string? thirdPartyId { get; set; }
+        public string? clubType { get; set; }
+        public string? name { get; set; }
         /// <summary>
         /// 是否啟用
         /// </summary>
@@ -23,9 +23,9 @@
         /// <summary>
         /// 語系對應代碼
         /// </summary>
-        public string localizationCode { get; set; }
-        public string imageName { get; set; }
-        public string imagePath { get; set; }
+        public string? localizationCode { get; set; }
+        public string? imageName { get; set; }
+        public string? imagePath { get; set; }
         /// <summary>
         /// 遊戲桌列表顯示排序
         /// </summary>
@@ -33,13 +33,24 @@
 
         ITableList ITableList.ConvertItem(int y, object value)
         {
+            if(value == null)
+            {
+                return this;
+            }
+
             switch (y)
             {
                 case 1:
-                    this.id = int.Parse(value.ToString());
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.id = parsedValue;
+                    }
                     break;
                 case 2:
-                    this.gameType = int.Parse(value.ToString());
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.gameType = parsedValue;
+                    }
                     break;
                 case 3:
                     this.thirdPartyId = value.ToString();
@@ -51,7 +62,10 @@
                     this.name = value.ToString();
                     break;
                 case 6:
-                    this.active = bool.Parse(value.ToString());
+                    {
+                        bool.TryParse(value.ToString(), out bool parsedValue);
+                        this.active = parsedValue;
+                    }
                     break;
                 case 7:
                     this.localizationCode = value.ToString();
@@ -63,9 +77,13 @@
                     this.imagePath = value.ToString();
                     break;
                 case 10:
-                    this.sort = int.Parse(value.ToString());
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.sort = parsedValue;
+                    }
                     break;
             }
+
             return this;
         }
 

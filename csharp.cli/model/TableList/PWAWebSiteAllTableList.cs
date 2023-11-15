@@ -13,9 +13,9 @@
         /// 遊戲分類
         /// </summary>
         public int gameType { get; set; }
-        public string thirdPartyId { get; set; }
-        public string clubType { get; set; }
-        public string name { get; set; }
+        public string? thirdPartyId { get; set; }
+        public string? clubType { get; set; }
+        public string? name { get; set; }
         /// <summary>
         /// 是否啟用
         /// </summary>
@@ -23,15 +23,15 @@
         /// <summary>
         /// 語系對應代碼
         /// </summary>
-        public string localizationCode { get; set; }
+        public string? localizationCode { get; set; }
         /// <summary>
         /// 桌代號，不須填時，請填 " " 空字串，避免  判斷錯誤
         /// </summary>
-        public string deskDisplayName { get; set; }
-        public string imageName { get; set; }
-        public string imagePath { get; set; }
-        public string desk { get; set; }
-        public int[] categoryIdList { get; set; }
+        public string? deskDisplayName { get; set; }
+        public string? imageName { get; set; }
+        public string? imagePath { get; set; }
+        public string? desk { get; set; }
+        public int[]? categoryIdList { get; set; }
         /// <summary>
         /// 遊戲桌列表顯示排序
         /// </summary>
@@ -84,21 +84,22 @@ VALUES";
         }
         public string ConvertValuesSQL()
         {
+            int[] value = {};
             return @$"(
-        {this.id},
-        {this.gameType},
-        '{this.thirdPartyId}',
-        '{this.clubType}',
-        '{this.name}',
-        {(this.active.ToString().ToLower().Equals("true") ?  1 : 0)},
-        '{this.localizationCode}',
-        '{this.deskDisplayName}',
-        '{this.imageName}',
-        '{this.imagePath}',
-        '{this.desk}',
-        '{string.Join(", ", this.categoryIdList)}',
-         {this.sort}
-)";
+                {this.id},
+                {this.gameType},
+                '{this.thirdPartyId}',
+                '{this.clubType}',
+                '{this.name}',
+                {(this.active.ToString().ToLower().Equals("true") ?  1 : 0)},
+                '{this.localizationCode}',
+                '{this.deskDisplayName}',
+                '{this.imageName}',
+                '{this.imagePath}',
+                '{this.desk}',
+                {(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)},
+                {this.sort}
+            )";
         }
     }
     /// <summary>
@@ -114,9 +115,9 @@ VALUES";
         /// 遊戲分類
         /// </summary>
         public int gameType { get; set; }
-        public string thirdPartyId { get; set; }
-        public string clubType { get; set; }
-        public string name { get; set; }
+        public string? thirdPartyId { get; set; }
+        public string? clubType { get; set; }
+        public string? name { get; set; }
         /// <summary>
         /// 是否啟用
         /// </summary>
@@ -124,12 +125,12 @@ VALUES";
         /// <summary>
         /// 語系對應代碼
         /// </summary>
-        public string localizationCode { get; set; }
-        public string deskDisplayName { get; set; } = "";
-        public string imageName { get; set; }
-        public string imagePath { get; set; }
-        public string desk { get; set; }
-        public string categoryIdList { get; set; }
+        public string? localizationCode { get; set; }
+        public string? deskDisplayName { get; set; } = "";
+        public string? imageName { get; set; }
+        public string? imagePath { get; set; }
+        public string? desk { get; set; }
+        public string? categoryIdList { get; set; }
         /// <summary>
         /// 遊戲桌列表顯示排序
         /// </summary>
@@ -137,13 +138,24 @@ VALUES";
 
         ITableList ITableList.ConvertItem(int y, object value)
         {
+            if(value == null)
+            {
+                return this;
+            }
+
             switch (y)
             {
                 case 1:
-                    this.id = int.Parse(value.ToString());
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.id = parsedValue;
+                    }
                     break;
                 case 2:
-                    this.gameType = int.Parse(value.ToString());
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.gameType = parsedValue;
+                    }
                     break;
                 case 3:
                     this.thirdPartyId = value.ToString();
@@ -155,7 +167,10 @@ VALUES";
                     this.name = value.ToString();
                     break;
                 case 6:
-                    this.active = bool.Parse(value.ToString());
+                    {
+                        bool.TryParse(value.ToString(), out bool parsedValue);
+                        this.active = parsedValue;
+                    }
                     break;
                 case 7:
                     this.localizationCode = value.ToString();
@@ -176,7 +191,10 @@ VALUES";
                     this.categoryIdList = value.ToString();
                     break;
                 case 13:
-                    this.sort = int.Parse(value.ToString());
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.sort = parsedValue;
+                    }
                     break;
             }
 
