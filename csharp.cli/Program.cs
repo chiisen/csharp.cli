@@ -147,6 +147,8 @@ public partial class Program
         // ! 註冊 Command
         Example();
 
+        Banner();
+
         Echo();
 
         Polly();
