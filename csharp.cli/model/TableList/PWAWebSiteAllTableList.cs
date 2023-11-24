@@ -101,7 +101,7 @@ VALUES";
                 '{this.imagePath}',
                 '{this.desk}',
                 '{this.serverId}',
-                {(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)},
+                '{(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)}',
                 {this.sort}
             )";
         }
