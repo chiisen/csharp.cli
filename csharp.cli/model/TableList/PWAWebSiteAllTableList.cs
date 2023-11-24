@@ -31,6 +31,7 @@
         public string? imageName { get; set; }
         public string? imagePath { get; set; }
         public string? desk { get; set; }
+        public string? serverId { get; set; }
         public int[]? categoryIdList { get; set; }
         /// <summary>
         /// 遊戲桌列表顯示排序
@@ -57,6 +58,7 @@
             this.imageName = x.imageName;
             this.imagePath = x.imagePath;
             this.desk = x.desk;
+            this.serverId = x.serverId;
             if (!string.IsNullOrEmpty(x.categoryIdList))
             {
                 this.categoryIdList = x.categoryIdList.Split(',').Select(int.Parse).ToArray();
@@ -77,6 +79,7 @@
         ,[imageName]
         ,[imagePath]
         ,[desk]
+        ,[serverId]
         ,[categoryIdList]
         ,[sort]
     )
@@ -97,6 +100,7 @@ VALUES";
                 '{this.imageName}',
                 '{this.imagePath}',
                 '{this.desk}',
+                '{this.serverId}',
                 {(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)},
                 {this.sort}
             )";
@@ -130,6 +134,7 @@ VALUES";
         public string? imageName { get; set; }
         public string? imagePath { get; set; }
         public string? desk { get; set; }
+        public string? serverId { get; set; }
         public string? categoryIdList { get; set; }
         /// <summary>
         /// 遊戲桌列表顯示排序
@@ -188,9 +193,12 @@ VALUES";
                     this.desk = value.ToString();
                     break;
                 case 12:
-                    this.categoryIdList = value.ToString();
+                    this.serverId = value.ToString();
                     break;
                 case 13:
+                    this.categoryIdList = value.ToString();
+                    break;
+                case 14:
                     {
                         int.TryParse(value.ToString(), out int parsedValue);
                         this.sort = parsedValue;

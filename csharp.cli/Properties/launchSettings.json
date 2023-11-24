@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "banner \"C:\\Users\\sam\\Downloads\\banner.json\" \"banner06.jpg\" \"\""
+      "commandLineArgs": "excel-convert \"C:\\github\\chiisen\\RoyalTemporaryFile\\直接進桌\\AllTableList.xlsx\" \"sheet\" \"table\""
     }
   }
 }

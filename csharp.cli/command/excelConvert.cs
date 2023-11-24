@@ -1,12 +1,6 @@
 ﻿using csharp.cli.model.TableList;
-using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 using OfficeOpenXml;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Web.Services.Description;
-using Console = Colorful.Console;
 
 namespace csharp.cli;
 
