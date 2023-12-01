@@ -1,6 +1,9 @@
 ﻿using csharp.cli.model.TableList;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using System.Drawing;
+using System.IO;
+using Console = Colorful.Console;
 
 namespace csharp.cli;
 
@@ -30,12 +33,28 @@ public partial class Program
             command.OnExecute(() =>
             {
                 var excelFilePath = excelPath.HasValue ? excelPath.Value : null;
-                if (string.IsNullOrEmpty(excelFilePath)) return 0;
+                if (string.IsNullOrEmpty(excelFilePath))
+                {
+                    return 0;
+                }
+                if (!File.Exists(excelFilePath))
+                {
+                    Console.WriteLine($"檔案不存在 - {excelFilePath}", Color.Red);
+                    return 0;
+                }
+
+                Console.WriteLine($"開啟 Excel - {excelFilePath}", Color.Yellow);
+
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;//指明非商业应用
                 var package = new ExcelPackage(excelFilePath);//加载Excel工作簿
 
                 var excelFileSheet = excelSheet.HasValue ? excelSheet.Value : null;
                 var sheet = package.Workbook.Worksheets[excelFileSheet];//读取工作簿中名为"Sheet1"的工作表
+                if(sheet == null)
+                {
+                    Console.WriteLine($"[Null sheet] - {excelFilePath} - {excelFileSheet}", Color.Red);
+                    return 0;
+                }
 
                 var modelStr = outModel.HasValue ? outModel.Value : null;
                 //var modelNum = int.Parse(modelStr.ToString());
@@ -55,6 +74,8 @@ public partial class Program
                             // 轉 sql
                             if(list.Count > 0)
                             {
+                                sql += "TRUNCATE TABLE [dbo].[T_AllClubTypeList]\n\n";
+
                                 var count = 1;
                                 sql += list.First().ConvertInsertSQL();
                                 list.ForEach(x => {
@@ -74,7 +95,12 @@ public partial class Program
 
                             // 轉欄位格式
                             var resp = new List<PWAWebSiteAllTableListResponse>();
-                            list.ForEach(x => resp.Add(new PWAWebSiteAllTableListResponse(x)));
+                            list.ForEach(x => {
+                                if (x.active)
+                                {
+                                    resp.Add(new PWAWebSiteAllTableListResponse(x));
+                                }
+                            });
 
                             // 轉 json
                             json = JsonConvert.SerializeObject(resp, Formatting.Indented);// 格式化後寫入
@@ -82,6 +108,9 @@ public partial class Program
                             // 轉 sql
                             if (resp.Count > 0)
                             {
+                                sql += "TRUNCATE TABLE [dbo].[T_AllTableList]\n\n";
+
+
                                 var count = 1;
                                 sql += resp.First().ConvertInsertSQL();
                                 resp.ForEach(x => {
