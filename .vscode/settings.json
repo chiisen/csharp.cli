@@ -1,3 +1,4 @@
 {
-    "dotnet.defaultSolution": "csharp.cli.sln"
+    "dotnet.defaultSolution": "csharp.cli.sln",
+    "editor.inlineSuggest.showToolbar": "onHover"
 }

@@ -145,6 +145,8 @@ public partial class Program
         sw = Stopwatch.StartNew();
 
         // ! 註冊 Command
+        TerminalGui();
+        
         Example();
 
         Banner();

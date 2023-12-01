@@ -1,5 +1,4 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
-using Terminal.Gui;
 using Console = Colorful.Console;
 
 namespace csharp.cli;
@@ -31,31 +30,6 @@ public partial class Program
                 var count = repeatOption.HasValue() ? repeatOption.Value() : "1";
 
                 Console.WriteLine($"example => words: {words}, count: {count}", System.Drawing.Color.Azure);
-
-
-                // Terminal.Gui 範例
-                Application.Init();
-
-                var n = MessageBox.Query(50, 7,
-                    "Question", "你喜歡介面操作嗎?", "Yes", "No");
-
-                Application.Shutdown();
-
-                var message = "";
-                switch(n)
-                {
-                    case 0:
-                        message = $"Yes({n})";
-                        break;
-                    case 1:
-                        message = $"No({n})";
-                        break;
-                    default:
-                        message = $"default({n})";
-                        break;
-                }                
-
-                Console.WriteLine($"n = {message}", System.Drawing.Color.Red);
 
                 return 0;
             });
