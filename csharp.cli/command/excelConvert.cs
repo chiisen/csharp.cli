@@ -1,6 +1,9 @@
-﻿using csharp.cli.model.TableList;
+﻿using csharp.cli.helper;
+using csharp.cli.model;
+using csharp.cli.model.TableList;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using Console = Colorful.Console;
@@ -9,9 +12,22 @@ namespace csharp.cli;
 
 public partial class Program
 {
+    /*
+     // Redis 設定內容
+    {
+        "translationPath": "C:/royal/github/RoyalTemporaryFile/直接進桌/RD語系翻譯表.xlsx",
+        "translationSheet": "籃版官網翻譯(新的)",
+        "redisClubKey": "K8SDEV_AllClubTypeList",
+        "redisTableKey": "K8SDEV_AllTableList",
+        "redisConnectionString": "redis-cluster.h1-redis-dev:6379, password=h1devredis1688, abortConnect=false, connectRetry=5, connectTimeout=5000, syncTimeout=5000"
+    }
+    */
+
+
+
     /// <summary>
     /// EXCEL 轉檔
-    /// 命令列引數: excel-convert "words" -r 10
+    /// 命令列引數: excel-convert "C:\royal\github\RoyalTemporaryFile\直接進桌\AllClubTypeList.xlsx" "sheet" "club"
     /// </summary>
     public static void ExcelConvert()
     {
@@ -33,23 +49,9 @@ public partial class Program
             command.OnExecute(() =>
             {
                 var excelFilePath = excelPath.HasValue ? excelPath.Value : null;
-                if (string.IsNullOrEmpty(excelFilePath))
-                {
-                    return 0;
-                }
-                if (!File.Exists(excelFilePath))
-                {
-                    Console.WriteLine($"檔案不存在 - {excelFilePath}", Color.Red);
-                    return 0;
-                }
-
-                Console.WriteLine($"開啟 Excel - {excelFilePath}", Color.Yellow);
-
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;//指明非商业应用
-                var package = new ExcelPackage(excelFilePath);//加载Excel工作簿
-
                 var excelFileSheet = excelSheet.HasValue ? excelSheet.Value : null;
-                var sheet = package.Workbook.Worksheets[excelFileSheet];//读取工作簿中名为"Sheet1"的工作表
+
+                var sheet = OpenSheet(excelFilePath, excelFileSheet);
                 if(sheet == null)
                 {
                     Console.WriteLine($"[Null sheet] - {excelFilePath} - {excelFileSheet}", Color.Red);
@@ -58,6 +60,36 @@ public partial class Program
 
                 var modelStr = outModel.HasValue ? outModel.Value : null;
                 //var modelNum = int.Parse(modelStr.ToString());
+
+                
+                
+                // 讀取本地端 Redis 設定
+                var setting = RedisHelper.GetValue<ExcelConvertSetting>("excel-convert");
+                // 取得翻譯字典
+                ExcelWorksheet? translation = null;
+                Dictionary<string, string>? translationDictionary = null;
+
+                if (setting != null && !string.IsNullOrEmpty(setting.translationPath))
+                {
+                    translation = OpenSheet(setting.translationPath, setting.translationSheet);
+                    if (translation != null)
+                    {
+                        var translationList = ConvertList<TranslationList>(translation);
+                        // translationDictionary = translationList.ToDictionary(x => x.key, x => x.value); // 沒重複可以直接使用
+
+                        translationList.ForEach(x => {
+                            translationDictionary = new Dictionary<string, string>();
+                            if (translationDictionary.ContainsKey(x.key))
+                            {
+                                Console.WriteLine($"[翻譯代號 key 重複了] - {x.key} - {x.value}", Color.Red);
+                            }
+                            else
+                            {
+                                translationDictionary.Add(x.key, x.value);
+                            }
+                        });                        
+                    }
+                }
 
                 var targetJson = $"{excelFilePath}.json";
                 var targetSQL = $"{excelFilePath}.sql";
@@ -79,6 +111,15 @@ public partial class Program
                                 var count = 1;
                                 sql += list.First().ConvertInsertSQL();
                                 list.ForEach(x => {
+
+                                    if (translationDictionary != null)
+                                    {
+                                        if (translationDictionary.ContainsKey(x.localizationCode) is not true)
+                                        {
+                                            Console.WriteLine($"[Club 翻譯代號 localizationCode 找不到] - {x.thirdPartyId} - {x.name} - {x.localizationCode}", Color.Red);
+                                        }
+                                    }
+
                                     sql += x.ConvertValuesSQL();
                                     if (count < list.Count)
                                     {
@@ -86,6 +127,13 @@ public partial class Program
                                     }
                                     count++;
                                 });
+
+                                // 刪除指定　Redis 快取
+                                if (setting != null && !string.IsNullOrEmpty(setting.redisConnectionString) && !string.IsNullOrEmpty(setting.redisClubKey))
+                                {
+                                    RedisHelper.OtherKeyDelete(setting.redisConnectionString, setting.redisClubKey);
+                                    Console.WriteLine($"[Club 刪除 Redis Key] - {setting.redisClubKey}", Color.Red);
+                                }
                             }
                         }
                         break;
@@ -114,6 +162,15 @@ public partial class Program
                                 var count = 1;
                                 sql += resp.First().ConvertInsertSQL();
                                 resp.ForEach(x => {
+
+                                    if (translationDictionary != null)
+                                    {
+                                        if (translationDictionary.ContainsKey(x.localizationCode) is not true)
+                                        {
+                                            Console.WriteLine($"[Table 翻譯代號 localizationCode 找不到] - {x.thirdPartyId} - {x.name} - {x.localizationCode}", Color.Red);
+                                        }
+                                    }
+
                                     sql += x.ConvertValuesSQL();
                                     if (count < resp.Count)
                                     {
@@ -121,6 +178,13 @@ public partial class Program
                                     }
                                     count++;
                                 });
+
+                                // 刪除指定　Redis 快取
+                                if (setting != null && !string.IsNullOrEmpty(setting.redisConnectionString) && !string.IsNullOrEmpty(setting.redisTableKey))
+                                {
+                                    RedisHelper.OtherKeyDelete(setting.redisConnectionString, setting.redisTableKey);
+                                    Console.WriteLine($"[Table 刪除 Redis Key] - {setting.redisTableKey}", Color.Red);
+                                }
                             }
                         }
                         break;
@@ -131,6 +195,38 @@ public partial class Program
             });
         });
     }
+
+    /// <summary>
+    /// 開啟 Sheet 工作列
+    /// </summary>
+    /// <param name="excelFilePath"></param>
+    /// <param name="excelFileSheet"></param>
+    /// <returns></returns>
+    public static ExcelWorksheet? OpenSheet(string? excelFilePath, string? excelFileSheet)
+    {
+        if (string.IsNullOrEmpty(excelFilePath))
+        {
+            return null;
+        }
+        if (!File.Exists(excelFilePath))
+        {
+            Console.WriteLine($"檔案不存在 - {excelFilePath}", Color.Red);
+            return null;
+        }
+
+        Console.WriteLine($"開啟 Excel - {excelFilePath}", Color.Yellow);
+
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;//指明非商业应用
+        var package = new ExcelPackage(excelFilePath);//加载Excel工作簿
+
+        if (string.IsNullOrEmpty(excelFileSheet))
+        {
+            return null;
+        }
+        var sheet = package.Workbook.Worksheets[excelFileSheet];//读取工作簿中名为"Sheet1"的工作表
+        return sheet;
+    }
+
     /// <summary>
     /// Excel 轉為 json string
     /// </summary>

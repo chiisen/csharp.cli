@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Reflection;
+using Terminal.Gui;
 
 namespace csharp.cli.helper
 {
