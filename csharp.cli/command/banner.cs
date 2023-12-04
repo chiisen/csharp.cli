@@ -58,7 +58,7 @@ public partial class Program
 
                 record.ForEach(x =>
                 {
-                    if (x.banner_src.Contains(image))
+                    if (!string.IsNullOrEmpty(x.banner_src) && x.banner_src.Contains(image))
                     {
                         x.banner_url = newStr;
                     }
