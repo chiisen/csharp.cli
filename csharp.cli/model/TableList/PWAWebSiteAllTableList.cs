@@ -37,6 +37,10 @@
         /// 遊戲桌列表顯示排序
         /// </summary>
         public int sort { get; set; }
+        /// <summary>
+        /// 樣式
+        /// </summary>
+        public string? style { get; set; }
         public PWAWebSiteAllTableListResponse() { }
         public PWAWebSiteAllTableListResponse(PWAWebSiteAllTableListModel x)
         {
@@ -64,6 +68,7 @@
                 this.categoryIdList = x.categoryIdList.Split(',').Select(int.Parse).ToArray();
             }
             this.sort = x.sort;
+            this.style = x.style;
         }
         public string ConvertInsertSQL()
         {
@@ -82,6 +87,7 @@
         ,[serverId]
         ,[categoryIdList]
         ,[sort]
+        ,[style]
     )
 VALUES";
         }
@@ -102,7 +108,8 @@ VALUES";
                 '{this.desk}',
                 '{this.serverId}',
                 '{(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)}',
-                {this.sort}
+                {this.sort},
+                '{this.style}'
             )";
         }
     }
@@ -140,6 +147,10 @@ VALUES";
         /// 遊戲桌列表顯示排序
         /// </summary>
         public int sort { get; set; }
+        /// <summary>
+        /// 樣式
+        /// </summary>
+        public string? style { get; set; }
 
         ITableList ITableList.ConvertItem(int y, object value)
         {
@@ -203,6 +214,9 @@ VALUES";
                         int.TryParse(value.ToString(), out int parsedValue);
                         this.sort = parsedValue;
                     }
+                    break;
+                case 15:
+                    this.style = value.ToString();
                     break;
             }
 

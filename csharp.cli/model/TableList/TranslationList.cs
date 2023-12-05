@@ -18,7 +18,7 @@
                         this.key = value.ToString();
                     }
                     break;
-                case 2:
+                case 3:
                     {
                         this.value = value.ToString();
                     }
@@ -29,11 +29,11 @@
         }
         public string ConvertInsertSQL()
         {
-            return "";
+            return "不需要輸出";
         }
         public string ConvertValuesSQL()
         {
-            return "";
+            return "不需要輸出";
         }
     }
 }

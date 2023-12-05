@@ -69,6 +69,8 @@ public partial class Program
                 ExcelWorksheet? translationExcel = null;
                 Dictionary<string, string>? translationDictionary = null;
 
+                string trans = "";
+
                 if (setting != null && !string.IsNullOrEmpty(setting.translationPath))
                 {
                     translationExcel = OpenSheet(setting.translationPath, setting.translationSheet);
@@ -90,22 +92,31 @@ public partial class Program
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"[翻譯代號 key 重複了] - {x.key} - {x.value}", Color.Red);
+                                    Console.WriteLine($"[翻譯代號 key 重複了] - Sheet:{setting.translationSheet} - Key:{x.key} - Value:{x.value}", Color.Red);
                                  }
                             });
+
+                            // 轉 json
+                            trans = JsonConvert.SerializeObject(translationDictionary, Formatting.Indented);// 格式化後寫入
                         }
                     }
                 }
 
+                var translationJson = $"{excelFilePath}_translation.json";
                 var targetJson = $"{excelFilePath}.json";
                 var targetSQL = $"{excelFilePath}.sql";
                 string json = "";
                 string sql = "";
+                
                 switch (modelStr)
                 {
                     case "club":
                         {
                             var list = ConvertList<PWAWebSiteAllClubTypeListResponse>(sheet);
+
+                            // 排除未開啟的桌資料
+                            list = list.Where(x => x.active == true).ToList();
+
                             // 轉 json
                             json = JsonConvert.SerializeObject(list, Formatting.Indented);// 格式化後寫入
 
@@ -124,12 +135,27 @@ public partial class Program
                                         {
                                             if (translationDictionary.ContainsKey(x.localizationCode) is not true)
                                             {
-                                                Console.WriteLine($"[Club 翻譯代號 localizationCode 找不到] - {x.thirdPartyId} - {x.name} - {x.localizationCode}", Color.Red);
+                                                Console.WriteLine($"[Club 翻譯代號 localizationCode 找不到] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - localizationCode:{x.localizationCode}", Color.Red);
+                                            }
+                                            else
+                                            {
+                                                var dict = translationDictionary[x.localizationCode];
+                                                if (dict != x.name)
+                                                {
+                                                    if(x.name != null && x.name.Contains(dict))
+                                                    {
+                                                        Console.WriteLine($"[Club 翻譯代號 localizationCode 與 name 部分相似] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - localizationCode:{x.localizationCode} - dict:{dict}", Color.Yellow);
+                                                    }
+                                                    else
+                                                    {
+                                                        Console.WriteLine($"[Club 翻譯代號 localizationCode 與 name 不一致] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - localizationCode:{x.localizationCode} - dict:{dict}", Color.Red);
+                                                    }                                                    
+                                                }
                                             }
                                         }
                                         else
                                         {
-                                            Console.WriteLine($"[Club 翻譯代號 localizationCode 為 null] - {x.thirdPartyId} - {x.name}", Color.Red);
+                                            Console.WriteLine($"[Club 翻譯代號 localizationCode 為 null] - thirdPartyId:{x.thirdPartyId} - name:{x.name}", Color.Red);
                                         }
                                     }
 
@@ -157,7 +183,8 @@ public partial class Program
                             // 轉欄位格式
                             var resp = new List<PWAWebSiteAllTableListResponse>();
                             list.ForEach(x => {
-                                if (x.active)
+                                // 排除未開啟的桌資料
+                                if (x.active == true)
                                 {
                                     resp.Add(new PWAWebSiteAllTableListResponse(x));
                                 }
@@ -182,12 +209,12 @@ public partial class Program
                                         {
                                             if (translationDictionary.ContainsKey(x.localizationCode) is not true)
                                             {
-                                                Console.WriteLine($"[Table 翻譯代號 localizationCode 找不到] - {x.thirdPartyId} - {x.name} - {x.localizationCode}", Color.Red);
+                                                Console.WriteLine($"[Table 翻譯代號 localizationCode 找不到] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - localizationCode:{x.localizationCode}", Color.Red);
                                             }
                                         }
                                         else
                                         {
-                                            Console.WriteLine($"[Table 翻譯代號 localizationCode 為 null] - {x.thirdPartyId} - {x.name}", Color.Red);
+                                            Console.WriteLine($"[Table 翻譯代號 localizationCode 為 null] - thirdPartyId:{x.thirdPartyId} - name:{x.name}", Color.Red);
                                         }                                            
                                     }
 
@@ -209,6 +236,9 @@ public partial class Program
                         }
                         break;
                 }
+
+                File.WriteAllText(translationJson, trans);
+
                 File.WriteAllText(targetJson, json);
                 File.WriteAllText(targetSQL, sql);
                 return 0;
