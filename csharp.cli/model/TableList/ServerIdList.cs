@@ -1,6 +1,6 @@
 ﻿namespace csharp.cli.model.TableList
 {
-    public class TranslationList : ITableList
+    public class ServerIdList : ITableList
     {
         public string? key { get; set; }
         public string? value { get; set; }
@@ -13,12 +13,12 @@
 
             switch (y)
             {
-                case 1:
+                case 2:
                     {
                         this.key = value.ToString();
                     }
                     break;
-                case 3:
+                case 1:
                     {
                         this.value = value.ToString();
                     }

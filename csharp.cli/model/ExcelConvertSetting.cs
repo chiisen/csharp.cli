@@ -10,5 +10,7 @@
         public string? redisConnectionString { get; set; }
         public string? redisClubKey { get; set; }
         public string? redisTableKey { get; set; }
+        public string? serverIdPath { get; set; }
+        public string? serverIdSheet { get; set; }
     }
 }

@@ -20,7 +20,9 @@ public partial class Program
         "translationSheet": "籃版官網翻譯(新的)",
         "redisClubKey": "K8SDEV_AllClubTypeList",
         "redisTableKey": "K8SDEV_AllTableList",
-        "redisConnectionString": "redis-cluster.h1-redis-dev:6379, password=h1devredis1688, abortConnect=false, connectRetry=5, connectTimeout=5000, syncTimeout=5000"
+        "redisConnectionString": "redis-cluster.h1-redis-dev:6379, password=h1devredis1688, abortConnect=false, connectRetry=5, connectTimeout=5000, syncTimeout=5000",
+        "serverIdPath": "C:/royal/github/RoyalTemporaryFile/直接進桌/RG真人ServerId.xlsx",
+        "serverIdSheet": "Server"
     }
     */
 
@@ -61,16 +63,20 @@ public partial class Program
 
                 var modelStr = outModel.HasValue ? outModel.Value : null;
                 //var modelNum = int.Parse(modelStr.ToString());
+                Console.WriteLine($"執行模式:{modelStr}", Color.Green);
 
-                
-                
+
                 // 讀取本地端 Redis 設定
                 var setting = RedisHelper.GetValue<ExcelConvertSetting>("excel-convert");
                 // 取得翻譯字典
                 ExcelWorksheet? translationExcel = null;
                 Dictionary<string, string>? translationDictionary = null;
 
+                ExcelWorksheet? serverIdExcel = null;
+                Dictionary<string, string>? serverIdDictionary = null;
+
                 string trans = "";
+                string serv = "";
 
                 if (setting != null && !string.IsNullOrEmpty(setting.translationPath))
                 {
@@ -81,6 +87,8 @@ public partial class Program
                         // translationDictionary = translationList.ToDictionary(x => x.key, x => x.value); // 沒重複可以直接使用
                         if (translationList.Count > 0)
                         {
+                            Console.WriteLine($"讀取翻譯 {translationList.Count} 筆", Color.Green);
+
                             translationDictionary = new Dictionary<string, string>();
                             translationList.ForEach(x =>
                             {
@@ -101,9 +109,40 @@ public partial class Program
                             trans = JsonConvert.SerializeObject(translationDictionary, Formatting.Indented);// 格式化後寫入
                         }
                     }
+
+                    serverIdExcel = OpenSheet(setting.serverIdPath, setting.serverIdSheet);
+                    if (serverIdExcel != null)
+                    {
+                        var serverIdList = ConvertList<ServerIdList>(serverIdExcel);
+
+                        if (serverIdList.Count > 0)
+                        {
+                            Console.WriteLine($"讀取 ServerId {serverIdList.Count} 筆", Color.Green);
+
+                            serverIdDictionary = new Dictionary<string, string>();
+                            serverIdList.ForEach(x =>
+                            {
+                                if (x.key is not null && serverIdDictionary.ContainsKey(x.key) is not true)
+                                {
+                                    if (x.value is not null)
+                                    {
+                                        serverIdDictionary.Add(x.key, x.value);
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"[ServerId 的 key 重複了] - Sheet:{setting.serverIdSheet} - Key:{x.key} - Value:{x.value}", Color.Red);
+                                }
+                            });
+
+                            // 轉 json
+                            serv = JsonConvert.SerializeObject(serverIdDictionary, Formatting.Indented);// 格式化後寫入
+                        }
+                    }
                 }
 
                 var translationJson = $"{excelFilePath}_translation.json";
+                var serverIdJson = $"{excelFilePath}_serverId.json";
                 var targetJson = $"{excelFilePath}.json";
                 var targetSQL = $"{excelFilePath}.sql";
                 string json = "";
@@ -239,6 +278,32 @@ public partial class Program
                                         }                                            
                                     }
 
+                                    if(serverIdDictionary is not null)
+                                    {
+                                        if (x.serverId is not null && x.thirdPartyId is not null && x.thirdPartyId == "RCG")
+                                        {
+                                            if(x.desk is not null)
+                                            {
+                                                if(serverIdDictionary.ContainsKey(x.desk) is true)
+                                                {
+                                                    var servId = serverIdDictionary[x.desk];
+                                                    if (x.serverId != servId)
+                                                    {
+                                                        Console.WriteLine($"[Table 的 serverId 可能填錯了] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - desk:{x.desk} - serverId:{x.serverId} 正確為: {servId}", Color.Red);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine($"[Table 桌號 desk 不存在 ServerId 檔案中] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - desk:{x.desk}", Color.Red);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine($"[Table 桌號 desk 為 null] - thirdPartyId:{x.thirdPartyId} - name:{x.name}", Color.Red);
+                                            }
+                                        }
+                                    }
+
                                     sql += x.ConvertValuesSQL();
                                     if (count < resp.Count)
                                     {
@@ -259,6 +324,7 @@ public partial class Program
                 }
 
                 File.WriteAllText(translationJson, trans);
+                File.WriteAllText(serverIdJson, serv);                
 
                 File.WriteAllText(targetJson, json);
                 File.WriteAllText(targetSQL, sql);
