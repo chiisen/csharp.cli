@@ -40,7 +40,7 @@
         /// <summary>
         /// 樣式
         /// </summary>
-        public string? style { get; set; }
+        public int style { get; set; }
         public PWAWebSiteAllTableListResponse() { }
         public PWAWebSiteAllTableListResponse(PWAWebSiteAllTableListModel x)
         {
@@ -109,7 +109,7 @@ VALUES";
                 '{this.serverId}',
                 '{(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)}',
                 {this.sort},
-                '{this.style}'
+                {this.style}
             )";
         }
     }
@@ -150,7 +150,7 @@ VALUES";
         /// <summary>
         /// 樣式
         /// </summary>
-        public string? style { get; set; }
+        public int style { get; set; }
 
         ITableList ITableList.ConvertItem(int y, object value)
         {
@@ -216,7 +216,10 @@ VALUES";
                     }
                     break;
                 case 15:
-                    this.style = value.ToString();
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.style = parsedValue;
+                    }
                     break;
             }
 

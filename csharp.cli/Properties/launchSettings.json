@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "excel-convert \"C:\\royal\\github\\RoyalTemporaryFile\\直接進桌\\AllTableList.xlsx\" \"sheet\" \"club\""
+      "commandLineArgs": "excel-convert \"C:\\royal\\github\\RoyalTemporaryFile\\直接進桌\\AllTableList.xlsx\" \"sheet\" \"table\""
     }
   }
 }
