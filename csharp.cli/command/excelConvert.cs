@@ -6,6 +6,7 @@ using OfficeOpenXml;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Xml.Linq;
 using Console = Colorful.Console;
 
 namespace csharp.cli;
@@ -210,6 +211,26 @@ public partial class Program
                                             if (translationDictionary.ContainsKey(x.localizationCode) is not true)
                                             {
                                                 Console.WriteLine($"[Table 翻譯代號 localizationCode 找不到] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - localizationCode:{x.localizationCode}", Color.Red);
+                                            }
+                                            else
+                                            {
+                                                var dict = translationDictionary[x.localizationCode];
+                                                if (dict != x.name)
+                                                {
+                                                    if (x.name != null && x.name.Contains(dict) && x.deskDisplayName != null)
+                                                    {
+                                                        //桌名稱是組出來的，所以必須移除代號再比較
+                                                        var newName = x.name.Replace(x.deskDisplayName, "");
+                                                        if(newName != dict)
+                                                        {
+                                                            Console.WriteLine($"[Table 翻譯代號 localizationCode 與 name 部分相似] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - localizationCode:{x.localizationCode} - dict:{dict}", Color.Yellow);
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Console.WriteLine($"[Table 翻譯代號 localizationCode 與 name 不一致] - thirdPartyId:{x.thirdPartyId} - name:{x.name} - localizationCode:{x.localizationCode} - dict:{dict}", Color.Red);
+                                                    }
+                                                }
                                             }
                                         }
                                         else
