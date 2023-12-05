@@ -66,28 +66,34 @@ public partial class Program
                 // 讀取本地端 Redis 設定
                 var setting = RedisHelper.GetValue<ExcelConvertSetting>("excel-convert");
                 // 取得翻譯字典
-                ExcelWorksheet? translation = null;
+                ExcelWorksheet? translationExcel = null;
                 Dictionary<string, string>? translationDictionary = null;
 
                 if (setting != null && !string.IsNullOrEmpty(setting.translationPath))
                 {
-                    translation = OpenSheet(setting.translationPath, setting.translationSheet);
-                    if (translation != null)
+                    translationExcel = OpenSheet(setting.translationPath, setting.translationSheet);
+                    if (translationExcel != null)
                     {
-                        var translationList = ConvertList<TranslationList>(translation);
+                        var translationList = ConvertList<TranslationList>(translationExcel);
                         // translationDictionary = translationList.ToDictionary(x => x.key, x => x.value); // 沒重複可以直接使用
-
-                        translationList.ForEach(x => {
+                        if (translationList.Count > 0)
+                        {
                             translationDictionary = new Dictionary<string, string>();
-                            if (translationDictionary.ContainsKey(x.key))
+                            translationList.ForEach(x =>
                             {
-                                Console.WriteLine($"[翻譯代號 key 重複了] - {x.key} - {x.value}", Color.Red);
-                            }
-                            else
-                            {
-                                translationDictionary.Add(x.key, x.value);
-                            }
-                        });                        
+                                if (x.key is not null && translationDictionary.ContainsKey(x.key) is not true)
+                                {
+                                    if(x.value is not null)
+                                    {
+                                        translationDictionary.Add(x.key, x.value);
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"[翻譯代號 key 重複了] - {x.key} - {x.value}", Color.Red);
+                                 }
+                            });
+                        }
                     }
                 }
 
@@ -112,11 +118,18 @@ public partial class Program
                                 sql += list.First().ConvertInsertSQL();
                                 list.ForEach(x => {
 
-                                    if (translationDictionary != null)
+                                    if (translationDictionary is not null)
                                     {
-                                        if (translationDictionary.ContainsKey(x.localizationCode) is not true)
+                                        if(x.localizationCode is not null)
                                         {
-                                            Console.WriteLine($"[Club 翻譯代號 localizationCode 找不到] - {x.thirdPartyId} - {x.name} - {x.localizationCode}", Color.Red);
+                                            if (translationDictionary.ContainsKey(x.localizationCode) is not true)
+                                            {
+                                                Console.WriteLine($"[Club 翻譯代號 localizationCode 找不到] - {x.thirdPartyId} - {x.name} - {x.localizationCode}", Color.Red);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"[Club 翻譯代號 localizationCode 為 null] - {x.thirdPartyId} - {x.name}", Color.Red);
                                         }
                                     }
 
@@ -163,12 +176,19 @@ public partial class Program
                                 sql += resp.First().ConvertInsertSQL();
                                 resp.ForEach(x => {
 
-                                    if (translationDictionary != null)
+                                    if (translationDictionary is not null)
                                     {
-                                        if (translationDictionary.ContainsKey(x.localizationCode) is not true)
+                                        if (x.localizationCode is not null)
                                         {
-                                            Console.WriteLine($"[Table 翻譯代號 localizationCode 找不到] - {x.thirdPartyId} - {x.name} - {x.localizationCode}", Color.Red);
+                                            if (translationDictionary.ContainsKey(x.localizationCode) is not true)
+                                            {
+                                                Console.WriteLine($"[Table 翻譯代號 localizationCode 找不到] - {x.thirdPartyId} - {x.name} - {x.localizationCode}", Color.Red);
+                                            }
                                         }
+                                        else
+                                        {
+                                            Console.WriteLine($"[Table 翻譯代號 localizationCode 為 null] - {x.thirdPartyId} - {x.name}", Color.Red);
+                                        }                                            
                                     }
 
                                     sql += x.ConvertValuesSQL();
