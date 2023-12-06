@@ -17,7 +17,7 @@ public partial class Program
      // Redis 設定內容
     {
         "translationPath": "C:/royal/github/RoyalTemporaryFile/直接進桌/RD語系翻譯表.xlsx",
-        "translationSheet": "籃版官網翻譯(新的)",
+        "translationSheet": "總表(需要新的翻譯請在這邊填寫),籃版官網翻譯(新的)",
         "redisClubKey": "K8SDEV_AllClubTypeList",
         "redisTableKey": "K8SDEV_AllTableList",
         "redisConnectionString": "redis-cluster.h1-redis-dev:6379, password=h1devredis1688, abortConnect=false, connectRetry=5, connectTimeout=5000, syncTimeout=5000",
@@ -69,48 +69,58 @@ public partial class Program
                 // 讀取本地端 Redis 設定
                 var setting = RedisHelper.GetValue<ExcelConvertSetting>("excel-convert");
                 // 取得翻譯字典
-                ExcelWorksheet? translationExcel = null;
                 Dictionary<string, string>? translationDictionary = null;
 
-                ExcelWorksheet? serverIdExcel = null;
                 Dictionary<string, string>? serverIdDictionary = null;
 
                 string trans = "";
                 string serv = "";
 
-                if (setting != null && !string.IsNullOrEmpty(setting.translationPath))
+                if (setting != null && !string.IsNullOrEmpty(setting.translationPath) && setting.translationSheet != null)
                 {
-                    translationExcel = OpenSheet(setting.translationPath, setting.translationSheet);
-                    if (translationExcel != null)
+                    var sheets = setting.translationSheet.Split(',').ToList();
+                    sheets.ForEach(s => 
                     {
-                        var translationList = ConvertList<TranslationList>(translationExcel);
-                        // translationDictionary = translationList.ToDictionary(x => x.key, x => x.value); // 沒重複可以直接使用
-                        if (translationList.Count > 0)
+                        ExcelWorksheet? translationExcel = OpenSheet(setting.translationPath, s);
+                        if (translationExcel != null)
                         {
-                            Console.WriteLine($"讀取翻譯 {translationList.Count} 筆", Color.Green);
-
-                            translationDictionary = new Dictionary<string, string>();
-                            translationList.ForEach(x =>
+                            var translationList = ConvertList<TranslationList>(translationExcel);
+                            // translationDictionary = translationList.ToDictionary(x => x.key, x => x.value); // 沒重複可以直接使用
+                            if (translationList.Count > 0)
                             {
-                                if (x.key is not null && translationDictionary.ContainsKey(x.key) is not true)
-                                {
-                                    if(x.value is not null)
-                                    {
-                                        translationDictionary.Add(x.key, x.value);
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"[翻譯代號 key 重複了] - Sheet:{setting.translationSheet} - Key:{x.key} - Value:{x.value}", Color.Red);
-                                 }
-                            });
+                                Console.WriteLine($"讀取翻譯 {s} - {translationList.Count} 筆", Color.Green);
 
-                            // 轉 json
-                            trans = JsonConvert.SerializeObject(translationDictionary, Formatting.Indented);// 格式化後寫入
+                                if (translationDictionary == null)
+                                {
+                                    translationDictionary = new Dictionary<string, string>();
+                                }
+                                translationList.ForEach(x =>
+                                {
+                                    if (x.key is not null && translationDictionary.ContainsKey(x.key) is not true)
+                                    {
+                                        if (x.value is not null)
+                                        {
+                                            translationDictionary.Add(x.key, x.value);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"[翻譯代號 key 重複了] - Sheet:{s} - Key:{x.key} - Value:{x.value}", Color.Red);
+                                    }
+                                });
+
+                                // 轉 json
+                                trans = JsonConvert.SerializeObject(translationDictionary, Formatting.Indented);// 格式化後寫入
+                            }
                         }
+                    });
+
+                    if (translationDictionary != null)
+                    {
+                        Console.WriteLine($"讀取翻譯多個 Sheet 共 {translationDictionary.Count} 筆", Color.Green);
                     }
 
-                    serverIdExcel = OpenSheet(setting.serverIdPath, setting.serverIdSheet);
+                    ExcelWorksheet? serverIdExcel = OpenSheet(setting.serverIdPath, setting.serverIdSheet);
                     if (serverIdExcel != null)
                     {
                         var serverIdList = ConvertList<ServerIdList>(serverIdExcel);
