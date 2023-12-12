@@ -31,7 +31,7 @@ public partial class Program
     /// 腳本中的 ##CUSTOMER## 為全大寫，例如: PME
     /// 腳本中的 ##CUSTOMER1## 為第一個字大寫，例如: Pme
     /// 腳本中的 ##CUSTOMER2## 為全小寫，例如: pme
-    /// 命令列引數: add-customer
+    /// 命令列引數: add-customer GEMINI
     /// </summary>
     public static void addCustomer()
     {
