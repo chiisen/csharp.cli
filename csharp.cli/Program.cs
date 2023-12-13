@@ -209,6 +209,8 @@ public partial class Program
 
         eventNews();
 
+        ExcelToGameList();
+
         sw.Stop();
 
         Console.WriteLine($"註冊 Command - sw: {sw.ElapsedMilliseconds}", Color.Azure);

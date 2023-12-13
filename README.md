@@ -76,13 +76,22 @@ dotnet tool uninstall -g csharp.cli
 ---
 
 # excel-convert
+情境是某日外單位上級突然交辦我
+整合跨單位的陳年資料  
+因應客戶需求需要分類兩個表單  
+一為【遊戲類型】另一為【桌列表】  
+故需要格式為 "club" 與 "table"  
+對應兩種 json 格式與 EXCEL 格式  
+所以 "club" 格式會相依 EXCEL 與 Json 的輸入格式  
+而 "table" 格式會相依 EXCEL 與 Json 的輸入格式  
+執行過程會檢查【翻譯代碼】是否正確  
 ```bash=
 excel-convert "C:\github\RoyalTemporaryFile\直接進桌\AllTableList.xlsx" "sheet" "table"
 ```
-"C:\github\RoyalTemporaryFile\直接進桌\AllTableList.xlsx" Excel 的檔案路徑，通常跟 "table" 會有關
-"sheet" 盡量同名就好
-"club" 是 PWAWebSiteAllClubTypeListResponse 類別
-"table" 是 PWAWebSiteAllTableListResponse 類別
+1. "C:\github\RoyalTemporaryFile\直接進桌\AllTableList.xlsx" Excel 的檔案路徑的檔案格式，通常跟 "table" 會有相依    
+2. 工作表名稱 "sheet" 盡量同名就好  
+3. 格式 "club" 是 PWAWebSiteAllClubTypeListResponse 類別  
+4. 格式 "table" 是 PWAWebSiteAllTableListResponse 類別  
 
 # bet-area
 - 讀取 resoure 目錄內的 bet-area.json 檔案，列出 bet-area 的查詢結果
@@ -101,6 +110,16 @@ csharp.cli  bet-area Bacc -a 1
 ---
 
 # add-customer
+情境為交接服務程式的過程中  
+針對功能部分沒有任何交接文件  
+經過統整後  
+由於步驟過多  
+又是常態業務  
+所以順便製作【生成代碼（Code Generation）】  
+一鍵生成所需新增的代碼
+
+---
+
 利用 Redis 上的 Json 設定腳本，自動修改或新增目標路徑的內容
 Redis 為本地端，並非遠端，所以不用擔心安全性問題，連線字串為: 127.0.0.1@6379
 Redis 的 Windows 版本下載網址: https://github.com/MicrosoftArchive/redis/releases

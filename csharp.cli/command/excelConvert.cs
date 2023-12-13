@@ -3,10 +3,7 @@ using csharp.cli.model;
 using csharp.cli.model.TableList;
 using Newtonsoft.Json;
 using OfficeOpenXml;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Xml.Linq;
 using Console = Colorful.Console;
 
 namespace csharp.cli;
@@ -54,7 +51,7 @@ public partial class Program
                 var excelFilePath = excelPath.HasValue ? excelPath.Value : null;
                 var excelFileSheet = excelSheet.HasValue ? excelSheet.Value : null;
 
-                var sheet = OpenSheet(excelFilePath, excelFileSheet);
+                var sheet = ExcelHelper.OpenSheet(excelFilePath, excelFileSheet);
                 if(sheet == null)
                 {
                     Console.WriteLine($"[Null sheet] - {excelFilePath} - {excelFileSheet}", Color.Red);
@@ -81,7 +78,7 @@ public partial class Program
                     var sheets = setting.translationSheet.Split(',').ToList();
                     sheets.ForEach(s => 
                     {
-                        ExcelWorksheet? translationExcel = OpenSheet(setting.translationPath, s);
+                        ExcelWorksheet? translationExcel = ExcelHelper.OpenSheet(setting.translationPath, s);
                         if (translationExcel != null)
                         {
                             var translationList = ConvertList<TranslationList>(translationExcel);
@@ -120,7 +117,7 @@ public partial class Program
                         Console.WriteLine($"讀取翻譯多個 Sheet 共 {translationDictionary.Count} 筆", Color.Green);
                     }
 
-                    ExcelWorksheet? serverIdExcel = OpenSheet(setting.serverIdPath, setting.serverIdSheet);
+                    ExcelWorksheet? serverIdExcel = ExcelHelper.OpenSheet(setting.serverIdPath, setting.serverIdSheet);
                     if (serverIdExcel != null)
                     {
                         var serverIdList = ConvertList<ServerIdList>(serverIdExcel);
@@ -341,37 +338,6 @@ public partial class Program
                 return 0;
             });
         });
-    }
-
-    /// <summary>
-    /// 開啟 Sheet 工作列
-    /// </summary>
-    /// <param name="excelFilePath"></param>
-    /// <param name="excelFileSheet"></param>
-    /// <returns></returns>
-    public static ExcelWorksheet? OpenSheet(string? excelFilePath, string? excelFileSheet)
-    {
-        if (string.IsNullOrEmpty(excelFilePath))
-        {
-            return null;
-        }
-        if (!File.Exists(excelFilePath))
-        {
-            Console.WriteLine($"檔案不存在 - {excelFilePath}", Color.Red);
-            return null;
-        }
-
-        Console.WriteLine($"開啟 Excel - {excelFilePath}", Color.Yellow);
-
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;//指明非商业应用
-        var package = new ExcelPackage(excelFilePath);//加载Excel工作簿
-
-        if (string.IsNullOrEmpty(excelFileSheet))
-        {
-            return null;
-        }
-        var sheet = package.Workbook.Worksheets[excelFileSheet];//读取工作簿中名为"Sheet1"的工作表
-        return sheet;
     }
 
     /// <summary>
