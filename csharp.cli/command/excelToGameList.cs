@@ -2,6 +2,7 @@
 using csharp.cli.model.GameList;
 using csharp.cli.model.TableList;
 using Newtonsoft.Json;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using Console = Colorful.Console;
 
@@ -71,10 +72,16 @@ public partial class Program
                         // 轉 sql
                         if (gameList.Count > 0)
                         {
+                            var count = 1;
                             sql += gameList.First().ConvertInsertSQL();
                             gameList.ForEach(x =>
                             {
                                 sql += x.ConvertValuesSQL();
+                                if (count < gameList.Count)
+                                {
+                                    sql += ",";
+                                }
+                                count++;
                             });
                         }
                         break;
