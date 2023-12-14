@@ -10,7 +10,7 @@ namespace csharp.cli.model.GameList
         /// <summary>
         /// 遊戲id
         /// </summary>
-        public string id { get; set; }
+        public string? id { get; set; }
         /// <summary>
         /// 館別id
         /// </summary>
@@ -18,15 +18,15 @@ namespace csharp.cli.model.GameList
         /// <summary>
         /// 名稱
         /// </summary>
-        public string name { get; set; }
+        public string? name { get; set; }
         /// <summary>
         /// 圖片路徑
         /// </summary>
-        public string imagePath { get; set; }
+        public string? imagePath { get; set; }
         /// <summary>
         /// 圖片名稱
         /// </summary>
-        public string imageName { get; set; }
+        public string? imageName { get; set; }
         /// <summary>
         /// 是否啟用
         /// </summary>
@@ -34,7 +34,7 @@ namespace csharp.cli.model.GameList
         /// <summary>
         /// 對應遊戲編號
         /// </summary>
-        public string localizationCode { get; set; }
+        public string? localizationCode { get; set; }
         /// <summary>
         /// 分類id清單
         /// </summary>
@@ -50,7 +50,7 @@ namespace csharp.cli.model.GameList
         /// <summary>
         /// ServerId
         /// </summary>
-        public string ServerId { get; set; }
+        public string? ServerId { get; set; }
         /// <summary>
         /// 遊戲類型
         /// </summary>
@@ -60,7 +60,7 @@ namespace csharp.cli.model.GameList
         /// 廠商英文代號
         /// </summary>
         [JsonIgnore]
-        public string thirdPartyId { get; set; }        
+        public string? thirdPartyId { get; set; }        
         /// <summary>
         /// JDB專用欄位
         /// </summary>
@@ -68,6 +68,10 @@ namespace csharp.cli.model.GameList
         public PWAWebSiteGameListSlotResponse() { }
         public PWAWebSiteGameListSlotResponse(PWAWebSiteGameListSlotModel x)
         {
+            if(x == null)
+            {
+                return;
+            }
             this.id = x.gameId;
             this.clubId = x.gameClubId;
             this.thirdPartyId = x.thirdPartyId;
@@ -76,7 +80,6 @@ namespace csharp.cli.model.GameList
             this.imagePath = x.imagePath;
             this.imageName = x.imageName;
             this.active = x.active;
-            this.localizationCode = x.localizationCode;
             if (!string.IsNullOrEmpty(x.categoryIdList))
             {
                 this.categoryIdList = x.categoryIdList.Split(',').Select(int.Parse).ToArray();

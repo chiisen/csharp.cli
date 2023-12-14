@@ -10,11 +10,11 @@ namespace csharp.cli.model.GameList
         /// <summary>
         /// 遊戲id
         /// </summary>
-        public string gameId { get; set; }
+        public string? gameId { get; set; }
         /// <summary>
         /// 遊戲名稱
         /// </summary>
-        public string gameName { get; set; }
+        public string? gameName { get; set; }
         /// <summary>
         /// 遊戲類型
         /// </summary>
@@ -26,15 +26,15 @@ namespace csharp.cli.model.GameList
         /// <summary>
         /// 廠商編號
         /// </summary>
-        public string thirdPartyId { get; set; }
+        public string? thirdPartyId { get; set; }
         /// <summary>
         /// 圖片路徑
         /// </summary>
-        public string imagePath { get; set; }
+        public string? imagePath { get; set; }
         /// <summary>
         /// 圖片名稱
         /// </summary>
-        public string imageName { get; set; }
+        public string? imageName { get; set; }
         /// <summary>
         /// 是否啟用
         /// </summary>
@@ -42,11 +42,11 @@ namespace csharp.cli.model.GameList
         /// <summary>
         /// 對應遊戲編號
         /// </summary>
-        public string localizationCode { get; set; }
+        public string? localizationCode { get; set; }
         /// <summary>
         /// 分類id清單
         /// </summary>
-        public string categoryIdList { get; set; }
+        public string? categoryIdList { get; set; }
         /// <summary>
         /// 排序
         /// </summary>
