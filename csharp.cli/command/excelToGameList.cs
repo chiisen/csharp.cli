@@ -72,6 +72,8 @@ public partial class Program
                         // 轉 sql
                         if (gameList.Count > 0)
                         {
+                            sql += $"DELETE [HKNetGame_HJ].[dbo].[T_Game_MappingInfo] WHERE [thirdPartyId] = '{gameList[0].thirdPartyId}'\n\n";
+
                             var count = 1;
                             sql += gameList.First().ConvertInsertSQL();
                             gameList.ForEach(x =>

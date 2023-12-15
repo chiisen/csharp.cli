@@ -80,6 +80,7 @@ namespace csharp.cli.model.GameList
             this.imagePath = x.imagePath;
             this.imageName = x.imageName;
             this.active = x.active;
+            this.localizationCode = x.localizationCode;
             if (!string.IsNullOrEmpty(x.categoryIdList))
             {
                 this.categoryIdList = x.categoryIdList.Split(',').Select(int.Parse).ToArray();
