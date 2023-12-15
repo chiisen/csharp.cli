@@ -4,7 +4,7 @@ namespace csharp.cli;
 
 public class WmConvertHelper
 {
-    // TODO 101 百家樂賽果 Bacc
+    //101 百家樂賽果 Bacc
     private static Dictionary<(int, string), string> Baccarat = new()
         {
             // WM code => RCG code
@@ -29,7 +29,7 @@ public class WmConvertHelper
             {(101, "BPair"),"ZDD"}// 莊對
         };
 
-    // TODO 102 龍虎賽果 LongHu
+    //102 龍虎賽果 LongHu
     private static Dictionary<(int, string), string> DragonTiger = new()
         {
             // WM code => RCG code
@@ -47,7 +47,7 @@ public class WmConvertHelper
             {(102, "DragonEven"),"LongShuang"}// 龍雙
         };
 
-    // TODO 103 輪盤賽果 LunPan 
+    //103 輪盤賽果 LunPan 
     private static Dictionary<(int, string), string> Roulette = new()
         {
             // WM code => RCG code
@@ -210,7 +210,7 @@ public class WmConvertHelper
             {(103, "Black"), "02,04,06,08,10,11,13,15,17,20,22,24,26,28,29,31,33,35," }// 黑
         };
 
-    // TODO 104 骰宝賽果 ShaiZi （同110）
+    //104 骰宝賽果 ShaiZi （同110）
     private static Dictionary<(int, string), string> Sicbo = new()
         {
             // WM code => RCG code
@@ -268,7 +268,7 @@ public class WmConvertHelper
             {(104, "Even"), "G02" }// 雙            
         };
 
-    // TODO 105 牛牛賽果 BullBull
+    //105 牛牛賽果 BullBull
     private static Dictionary<(int, string), string> NiuNiu = new()
         {
             // WM code => RCG code
@@ -281,7 +281,7 @@ public class WmConvertHelper
             {(105, "Player3Equal"),"P3Equal"}// 閒三平倍
         };
 
-    // TODO 107 番攤賽果 FanTan
+    //107 番攤賽果 FanTan
     private static Dictionary<(int, string), string> Fantan = new()
         {
             // WM code => RCG code
@@ -303,7 +303,7 @@ public class WmConvertHelper
             {(107, "Ssh234"), "02,03,04" } // 三門 234
         };
 
-    // TODO 108 色碟賽果 SeDie
+    //108 色碟賽果 SeDie
     private static Dictionary<(int, string), string> Sedie = new()
         {
             // WM code => RCG code
@@ -317,7 +317,7 @@ public class WmConvertHelper
             {(108, "R4"), "Red4" }// 四紅
         };
 
-    // TODO 110 鱼虾蟹賽果 ShaiZi （同104）
+    //110 鱼虾蟹賽果 ShaiZi （同104）
     private static Dictionary<(int, string), string> FishPrawnCrab = new()
         {
             // WM code => RCG code
@@ -354,7 +354,7 @@ public class WmConvertHelper
             {(110, "Even"), "G02" }// 雙
         };
 
-    // TODO 128 安達巴哈賽果 AndarBahar
+    //128 安達巴哈賽果 AndarBahar
     private static Dictionary<(int, string), string> AndarBahar = new()
         {
             // WM code => RCG code
@@ -383,7 +383,7 @@ public class WmConvertHelper
         }
         switch (record.gid)
         {
-            case 101:// TODO 101 百家樂賽果 Bacc
+            case 101://101 百家樂賽果 Bacc
                      // 沒有莊(免傭)的 WM code 要再判斷 commission 欄位是否為 1，對應 RCG 的 ZhuangB 00010 莊(免傭)
                 if (record.commission == "1")
                 {
@@ -398,56 +398,56 @@ public class WmConvertHelper
                     return "";
                 }
                 return Baccarat[(record.gid, record.betCode)];
-            case 102:// TODO 102 龍虎賽果 LongHu
+            case 102://102 龍虎賽果 LongHu
                 if (DragonTiger.ContainsKey((record.gid, record.betCode)) == false)
                 {
                     Console.WriteLine($"WM - Translate the unconvertible betCode: {record.betCode}, betId: {record.betId}, gid: {record.gid}, betTime: {record.betTime:yyyy-MM-dd HH:mm:ss.ffffff}");
                     return "";
                 }
                 return DragonTiger[(record.gid, record.betCode)];
-            case 103:// TODO 103 輪盤賽果 LunPan 
+            case 103://103 輪盤賽果 LunPan 
                 if (Roulette.ContainsKey((record.gid, record.betCode)) == false)
                 {
                     Console.WriteLine($"WM - Translate the unconvertible betCode: {record.betCode}, betId: {record.betId}, gid: {record.gid}, betTime: {record.betTime:yyyy-MM-dd HH:mm:ss.ffffff}");
                     return "";
                 }
                 return Roulette[(record.gid, record.betCode)];
-            case 104:// TODO 104 骰宝賽果 ShaiZi （同110）
+            case 104://104 骰宝賽果 ShaiZi （同110）
                 if (Sicbo.ContainsKey((record.gid, record.betCode)) == false)
                 {
                     Console.WriteLine($"WM - Translate the unconvertible betCode: {record.betCode}, betId: {record.betId}, gid: {record.gid}, betTime: {record.betTime:yyyy-MM-dd HH:mm:ss.ffffff}");
                     return "";
                 }
                 return Sicbo[(record.gid, record.betCode)];
-            case 105:// TODO 105 牛牛賽果 BullBull
+            case 105://105 牛牛賽果 BullBull
                 if (NiuNiu.ContainsKey((record.gid, record.betCode)) == false)
                 {
                     Console.WriteLine($"WM - Translate the unconvertible betCode: {record.betCode}, betId: {record.betId}, gid: {record.gid}, betTime: {record.betTime:yyyy-MM-dd HH:mm:ss.ffffff}");
                     return "";
                 }
                 return NiuNiu[(record.gid, record.betCode)];
-            case 107:// TODO 107 番攤賽果 FanTan
+            case 107://107 番攤賽果 FanTan
                 if (Fantan.ContainsKey((record.gid, record.betCode)) == false)
                 {
                     Console.WriteLine($"WM - Translate the unconvertible betCode: {record.betCode}, betId: {record.betId}, gid: {record.gid}, betTime: {record.betTime:yyyy-MM-dd HH:mm:ss.ffffff}");
                     return "";
                 }
                 return Fantan[(record.gid, record.betCode)];
-            case 108:// TODO 108 色碟賽果 SeDie
+            case 108://108 色碟賽果 SeDie
                 if (Sedie.ContainsKey((record.gid, record.betCode)) == false)
                 {
                     Console.WriteLine($"WM - Translate the unconvertible betCode: {record.betCode}, betId: {record.betId}, gid: {record.gid}, betTime: {record.betTime:yyyy-MM-dd HH:mm:ss.ffffff}");
                     return "";
                 }
                 return Sedie[(record.gid, record.betCode)];
-            case 110:// TODO 110 鱼虾蟹賽果 ShaiZi （同104）
+            case 110://110 鱼虾蟹賽果 ShaiZi （同104）
                 if (FishPrawnCrab.ContainsKey((record.gid, record.betCode)) == false)
                 {
                     Console.WriteLine($"WM - Translate the unconvertible betCode: {record.betCode}, betId: {record.betId}, gid: {record.gid}, betTime: {record.betTime:yyyy-MM-dd HH:mm:ss.ffffff}");
                     return "";
                 }
                 return FishPrawnCrab[(record.gid, record.betCode)];
-            case 128:// TODO 128 安達巴哈賽果 AndarBahar
+            case 128://128 安達巴哈賽果 AndarBahar
                 if (AndarBahar.ContainsKey((record.gid, record.betCode)) == false)
                 {
                     Console.WriteLine($"WM - Translate the unconvertible betCode: {record.betCode}, betId: {record.betId}, gid: {record.gid}, betTime: {record.betTime:yyyy-MM-dd HH:mm:ss.ffffff}");

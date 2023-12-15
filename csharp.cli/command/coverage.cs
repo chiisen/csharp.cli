@@ -3,8 +3,6 @@ using csharp.cli.model;
 using McMaster.Extensions.CommandLineUtils;
 using System.Drawing;
 using Console = Colorful.Console;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace csharp.cli;
 

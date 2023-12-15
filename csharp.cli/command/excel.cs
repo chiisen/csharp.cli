@@ -1,119 +1,59 @@
-﻿using csharp.cli.common;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Newtonsoft.Json;
-using System.Data;
+﻿using OfficeOpenXml;
 
 namespace csharp.cli;
 
 public partial class Program
 {
     /// <summary>
-    /// EXCEL 範例程式
-    /// 命令列引數: excel
+    /// EXCEL 讀寫測試範例
+    /// 命令列引數: excel "EXCEL的完整路徑與檔案名稱" "sheet名稱"
     /// </summary>
     public static void Excel()
     {
         _ = App.Command("excel", command =>
         {
             // 第二層 Help 的標題
-            command.Description = "excel 說明";
+            command.Description = "【EXCEL 讀寫測試範例】說明";
             command.HelpOption("-?|-h|-help");
+
+            // 輸入參數說明
+            var excelPath = command.Argument("[Excel_Path]", "指定的 Excel 檔案路徑");
+
+            // 輸入參數說明
+            var excelSheet = command.Argument("[Excel_Sheet]", "指定的 Excel 工作表");
 
             command.OnExecute(() =>
             {
-                #region Excel
+                var excelFilePath = excelPath.HasValue ? excelPath.Value : null;
+                if (string.IsNullOrEmpty(excelFilePath)) return 0;
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;//指明非商业应用
+                var package = new ExcelPackage(excelFilePath);//加载Excel工作簿
 
-                var persons = new List<UserDetails>()
+                var excelFileSheet = excelSheet.HasValue ? excelSheet.Value : null;
+                var sheet1 = package.Workbook.Worksheets[excelFileSheet];//读取工作簿中名为"Sheet1"的工作表
+
+                var x = 1;// 行(由上到下)
+                var y = 1;// 列或叫欄位(由左到右)
+                while (sheet1.Cells[x, y].Value != null)
                 {
-                    new UserDetails() {ID="1001", Name="ABCD", City ="City1", Country="USA"},
-                    new UserDetails() {ID="1002", Name="PQRS", City ="City2", Country="INDIA"},
-                    new UserDetails() {ID="1003", Name="XYZZ", City ="City3", Country="CHINA"},
-                    new UserDetails() {ID="1004", Name="LMNO", City ="City4", Country="UK"},
-                };
-
-                // Lets converts our object data to Datatable for a simplified logic.
-                // Datatable is most easy way to deal with complex datatypes for easy reading and formatting. 
-                var table = Common.JsonDeserialize<DataTable>(JsonConvert.SerializeObject(persons));
-                if (table == null)
-                {
-                    Console.WriteLine($"null table");
-                    return 1;
-                }
-
-                using var document = SpreadsheetDocument.Create("TestNewData.xlsx", SpreadsheetDocumentType.Workbook);
-                var workbookPart = document.AddWorkbookPart();
-                workbookPart.Workbook = new Workbook();
-
-                var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
-                var sheetData = new SheetData();
-                worksheetPart.Worksheet = new Worksheet(sheetData);
-
-                var sheets = workbookPart.Workbook.AppendChild(new Sheets());
-                var sheet = new Sheet() { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = "Sheet1" };
-
-                sheets.Append(sheet);
-
-                var headerRow = new Row();
-
-                var columns = new List<string>();
-                foreach (DataColumn column in table.Columns)
-                {
-                    columns.Add(column.ColumnName);
-
-                    var cell = new Cell()
+                    while (sheet1.Cells[x, y].Value != null)
                     {
-                        DataType = CellValues.String,
-                        CellValue = new CellValue(column.ColumnName)
-                    };
-                    headerRow.AppendChild(cell);
-                }
-
-                sheetData.AppendChild(headerRow);
-
-                foreach (DataRow drowse in table.Rows)
-                {
-                    if (drowse == null)
-                    {
-                        continue;
-                    }
-                    var newRow = new Row();
-                    foreach (var col in columns)
-                    {
-                        var cs = drowse[col];
-                        var csStr = cs.ToString();
-                        if (csStr == null)
-                        {
-                            continue;
-                        }
-
-                        var cell = new Cell()
-                        {
-                            DataType = CellValues.String,
-                            CellValue = new CellValue(csStr)
-                        };
-                        newRow.AppendChild(cell);
+                        Console.WriteLine($"x={x}, y={y}");
+                        Console.WriteLine(sheet1.Cells[x, y].Value);
+                        x += 1;
                     }
 
-                    sheetData.AppendChild(newRow);
+                    x = 1;// 從第一行開始
+                    y += 1;// 換下一列
                 }
 
-                workbookPart.Workbook.Save();
+                var targetFile = $"{excelFilePath}.backup";
 
-                #endregion Excel
-
+                //package.Save();//将更改保存到原文件
+                package.SaveAs(targetFile);//将更改保存到新的文件，类似于另存为
 
                 return 0;
             });
         });
-    }
-
-    public class UserDetails
-    {
-        public string? ID { get; set; }
-        public string? Name { get; set; }
-        public string? City { get; set; }
-        public string? Country { get; set; }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Drawing;
-using System.Text;
-using csharp.cli.common;
+﻿using csharp.cli.common;
 using csharp.cli.model;
 using Newtonsoft.Json;
+using System.Drawing;
+using System.Text;
 using Console = Colorful.Console;
 
 

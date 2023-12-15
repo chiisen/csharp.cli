@@ -1,5 +1,4 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
-using System.Drawing;
 using Console = Colorful.Console;
 
 namespace csharp.cli;
@@ -30,7 +29,8 @@ public partial class Program
 
                 var count = repeatOption.HasValue() ? repeatOption.Value() : "1";
 
-                Console.WriteLine($"example => words: {words}, count: {count}", Color.Azure);
+                Console.WriteLine($"example => words: {words}, count: {count}", System.Drawing.Color.Azure);
+
                 return 0;
             });
         });

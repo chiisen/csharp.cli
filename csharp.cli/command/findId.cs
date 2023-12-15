@@ -1,6 +1,5 @@
 ﻿using csharp.cli.model;
 using Dapper;
-using DocumentFormat.OpenXml.Drawing;
 using McMaster.Extensions.CommandLineUtils;
 using Npgsql;
 using System.Drawing;

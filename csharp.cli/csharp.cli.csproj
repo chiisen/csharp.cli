@@ -8,8 +8,8 @@
 	<PackAsTool>true</PackAsTool>
 	<ToolCommandName>csharp.cli</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
-	<AssemblyVersion>1.0.1.98</AssemblyVersion>
-	<FileVersion>2023.0626.0159.1087</FileVersion>
+	<AssemblyVersion>1.0.1.109</AssemblyVersion>
+	<FileVersion>2023.1215.0233.1776</FileVersion>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Version>$(AssemblyVersion)</Version>
 	<ApplicationIcon>resource\csharp.cli.ico</ApplicationIcon>
@@ -40,7 +40,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="resource\AdminAPI_Core5\Controllers\Game\Game##CUSTOMER1##ApiController.cs" />
+    <Compile Remove="resource\AdminAPI_Core5\Controllers\Report\Report##CUSTOMER1##GameController.cs" />
+    <Compile Remove="resource\AdminAPI_Core5\Models\Game\##CUSTOMER1##ApiModel.cs" />
+    <Compile Remove="resource\AdminAPI_Core5\Services\DataLayer\Api\##CUSTOMER1##ApiDataLayer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="resource\csharp.cli.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="resource\AdminAPI_Core5\Controllers\Game\Game##CUSTOMER1##ApiController.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resource\AdminAPI_Core5\Controllers\Report\Report##CUSTOMER1##GameController.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resource\AdminAPI_Core5\Models\Game\##CUSTOMER1##ApiModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resource\AdminAPI_Core5\Services\DataLayer\Api\##CUSTOMER1##ApiDataLayer.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -48,7 +70,7 @@
     <PackageReference Include="Colorful.Console" Version="1.2.15" />
     <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
+    <PackageReference Include="EPPlus" Version="6.2.10" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql" Version="7.0.4" />
@@ -60,10 +82,119 @@
     <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
     <PackageReference Include="System.Linq.Parallel" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
+    <PackageReference Include="Terminal.Gui" Version="1.14.1" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="resource\betArea.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\AE\INSERT_AE.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\DS\INSERT_DS.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\FC\INSERT_FC.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\Golden\INSERT_Golden.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\GR\INSERT_GR.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\JDB\INSERT_JDB.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\JILI\INSERT_JILI.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\JOKER\INSERT_JOKER.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\META\INSERT_META.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\MG\INSERT_MG.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\MP\INSERT_MP.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\MT\INSERT_MT.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\NEXTSPIN\INSERT_NEXTSPIN.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\PG\INSERT_PG.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\PP\INSERT_PP.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\RCG\INSERT_RCG.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\Royal\INSERT_Royal.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\TP\INSERT_TP.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\AE\VALUES_AE.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\DS\VALUES_DS.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\FC\VALUES_FC.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\Golden\VALUES_Golden.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\GR\VALUES_GR.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\JDB\VALUES_JDB.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\JILI\VALUES_JILI.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\JOKER\VALUES_JOKER.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\META\VALUES_META.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\MG\VALUES_MG.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\MP\VALUES_MP.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\MT\VALUES_MT.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\NEXTSPIN\VALUES_NEXTSPIN.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\PG\VALUES_PG.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\PP\VALUES_PP.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\RCG\VALUES_RCG.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\Royal\VALUES_Royal.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resource\PWAWebSite\TP\VALUES_TP.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
