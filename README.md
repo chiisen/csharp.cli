@@ -67,6 +67,14 @@ dotnet tool uninstall -g csharp.cli
 .\install.bat
 ```
 會循序進行清理目錄、打包、移除套件、安裝套件並顯示套件安裝版本  
+如果執行失敗可以試試看下面指令，指定 sdk 版本，因為目前還不支援 sdk 8 以上的版本
+ ```bash=
+dotnet new globaljson --sdk-version 7.0.404
+```
+最後的一串數字 7.0.404 是 sdk 版本號，可以用下面指令查詢目前已安裝的 sdk 版本
+ ```bash=
+dotnet --info
+```
 
 ---
 
