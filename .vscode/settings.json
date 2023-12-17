@@ -1,4 +1,5 @@
 {
     "dotnet.defaultSolution": "csharp.cli.sln",
-    "editor.inlineSuggest.showToolbar": "onHover"
+    "editor.inlineSuggest.showToolbar": "onHover",
+    "terminal.integrated.fontFamily": "'CaskaydiaCove NF'"
 }
