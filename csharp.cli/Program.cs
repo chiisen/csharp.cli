@@ -1,8 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using csharp.cli.helper;
 using McMaster.Extensions.CommandLineUtils;
-using Serilog;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
@@ -21,6 +19,9 @@ public partial class Program
 
     private static int Main(string[] args)
     {
+        // 指定輸出為 UTF8
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+
         #region 測試Serilog
         var sw = Stopwatch.StartNew();
         /*
@@ -210,6 +211,8 @@ public partial class Program
         eventNews();
 
         ExcelToGameList();
+
+        IChing();
 
         sw.Stop();
 

@@ -40,7 +40,7 @@ namespace csharp.cli.model.GameList
         /// </summary>
         public bool active { get; set; }
         /// <summary>
-        /// 對應遊戲編號
+        /// 對應翻譯編號
         /// </summary>
         public string? localizationCode { get; set; }
         /// <summary>

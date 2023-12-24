@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "excel-to-gamelist \"C:/royal/github/RoyalTemporaryFile/GEMINI/GameList.xlsx\" \"sheet\" \"slot\""
+      "commandLineArgs": "i-ching"
     }
   }
 }

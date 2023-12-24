@@ -1,8 +1,5 @@
-﻿using csharp.cli.helper;
-using csharp.cli.model.GameList;
-using csharp.cli.model.TableList;
+﻿using csharp.cli.model.GameList;
 using Newtonsoft.Json;
-using System.Diagnostics.Metrics;
 using System.Drawing;
 using Console = Colorful.Console;
 
