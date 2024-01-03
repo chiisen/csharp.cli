@@ -1,6 +1,7 @@
 ﻿using Colorful;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using Console = Colorful.Console;
 
 namespace csharp.cli;
@@ -412,8 +413,16 @@ public partial class Program
 
             Console.WriteLine($"========", Color.Red);
 
-            Console.WriteLine($"卦象: {sixtyFourHexagrams2[new Tuple<string, string>(upYao, downYao)]}");
-            
+            // 取得後面的號碼
+            string[] strResult = sixtyFourHexagrams2[new Tuple<string, string>(upYao, downYao)].Split(' ');
+
+            Console.WriteLine($"卦象: {strResult[0]} - {strResult[1]}");
+
+            Console.WriteLine($"========", Color.Red);
+
+            var text = File.ReadAllText(@$"{AppDomain.CurrentDomain.BaseDirectory}resource\i-ching\{strResult[1]}.txt", Encoding.UTF8);
+
+            Console.WriteLine($"{text}");
         }
     }
     /// <summary>
