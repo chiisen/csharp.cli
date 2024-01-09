@@ -101,7 +101,7 @@ public partial class Program
                             // 轉 sql
                             if (gameList.Count > 0)
                             {
-                                sql += $"DELETE [HKNetGame_HJ].[dbo].[T_Mobile_Popular_Games] WHERE [gameType] = '{gameList[0].gameType}'\n\n";
+                                sql += $"DELETE [HKNetGame_HJ].[dbo].[T_Mobile_Popular_Games] WHERE [gameType] = {gameList[0].gameType}\n\n";
 
                                 var count = 1;
                                 sql += gameList.First().ConvertInsertSQL();
