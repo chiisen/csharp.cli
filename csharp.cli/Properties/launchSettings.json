@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "i-ching"
+      "commandLineArgs": "excel-to-gamelist \"C:/royal/github/RoyalTemporaryFile/手機熱門遊戲/Mobile_Popular_Games_3.xlsx\" \"sheet\" \"hot\""
     }
   }
 }
