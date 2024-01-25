@@ -13,5 +13,9 @@
     /// </summary>
     public class ##CUSTOMER1##GetGameTokenRequestModel : W1ForwardGameConfigBase
     {
+        /// <summary>
+        /// 遊戲代碼
+        /// </summary>
+        public string gameCode { get; set; }
     }
 }
