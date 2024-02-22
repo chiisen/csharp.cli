@@ -48,10 +48,6 @@ namespace csharp.cli.model.GameList
         /// </summary>
         public int Status { get; set; }
         /// <summary>
-        /// ServerId
-        /// </summary>
-        public string? ServerId { get; set; }
-        /// <summary>
         /// 遊戲類型
         /// </summary>
         [JsonIgnore]
@@ -60,11 +56,23 @@ namespace csharp.cli.model.GameList
         /// 廠商英文代號
         /// </summary>
         [JsonIgnore]
-        public string? thirdPartyId { get; set; }        
+        public string? thirdPartyId { get; set; }
+        /// <summary>
+        /// ServerId
+        /// </summary>
+        public string? serverId { get; set; }
+        /// <summary>
+        /// mType
+        /// </summary>
+        public int mType { get; set; }
         /// <summary>
         /// JDB專用欄位
         /// </summary>
         public int gType { get; set; }
+        /// <summary>
+        /// code
+        /// </summary>
+        public string? code { get; set; }
         public PWAWebSiteGameListSlotResponse() { }
         public PWAWebSiteGameListSlotResponse(PWAWebSiteGameListSlotModel x)
         {
@@ -75,6 +83,7 @@ namespace csharp.cli.model.GameList
             this.id = x.gameId;
             this.clubId = x.gameClubId;
             this.thirdPartyId = x.thirdPartyId;
+            this.serverId = x.serverId;
             this.name = x.gameName;
             this.gameType = x.gameType;
             this.imagePath = x.imagePath;
@@ -85,12 +94,15 @@ namespace csharp.cli.model.GameList
             {
                 this.categoryIdList = x.categoryIdList.Split(',').Select(int.Parse).ToArray();
             }
-            this.sort = x.sort;            
+            this.sort = x.sort;
+            this.mType = x.mType;
+            this.gType = x.gType;
+            this.code = x.code;
         }
 
         public string ConvertInsertSQL()
         {
-            return @"INSERT INTO [dbo].[T_Game_MappingInfo] (
+            return @"INSERT INTO [dbo].[T_WebSite_Game_MappingInfo] (
         [gameId]
         ,[gameName]
         ,[gameType]
@@ -119,16 +131,16 @@ VALUES";
         {this.gameType},
         {this.clubId},
         '{this.thirdPartyId}',
-	    '{this.ServerId}',
+	    '{this.serverId}',
         '{this.imagePath}',
         '{this.imageName}',
         {(this.active.ToString().ToLower().Equals("true") ? 1 : 0)},
         '{this.localizationCode}',
         '{(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)}',
         {this.sort},
-	    0,
+	    {this.mType},
 	    {this.gType},
-        ''
+        '{this.code}'
     )";
         }
     }

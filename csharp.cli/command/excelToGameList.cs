@@ -31,68 +31,46 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-            var excelFilePath = excelPath.HasValue ? excelPath.Value : null;
-            var excelFileSheet = excelSheet.HasValue ? excelSheet.Value : null;
+                var excelFilePath = excelPath.HasValue ? excelPath.Value : null;
+                var excelFileSheet = excelSheet.HasValue ? excelSheet.Value : null;
 
-            var sheet = ExcelHelper.OpenSheet(excelFilePath, excelFileSheet);
-            if (sheet == null)
-            {
-                Console.WriteLine($"[Null sheet] - {excelFilePath} - {excelFileSheet}", Color.Red);
-                return 0;
-            }
+                var sheet = ExcelHelper.OpenSheet(excelFilePath, excelFileSheet);
+                if (sheet == null)
+                {
+                    Console.WriteLine($"[Null sheet] - {excelFilePath} - {excelFileSheet}", Color.Red);
+                    return 0;
+                }
 
-            var modelStr = outModel.HasValue ? outModel.Value : null;
-            //var modelNum = int.Parse(modelStr.ToString());
-            Console.WriteLine($"執行模式:{modelStr}", Color.Green);
+                var modelStr = outModel.HasValue ? outModel.Value : null;
+                //var modelNum = int.Parse(modelStr.ToString());
+                Console.WriteLine($"執行模式:{modelStr}", Color.Green);
 
-            var targetJson = $"{excelFilePath}.json";
-            var targetSQL = $"{excelFilePath}.sql";
-            string json = "";
-            string sql = "";
+                var targetJson = $"{excelFilePath}.json";
+                var targetSQL = $"{excelFilePath}.sql";
+                string json = "";
+                string sql = "";
 
-            switch (modelStr)
-            {
-                case "slot":
-                    {
-                        var list = ConvertList<PWAWebSiteGameListSlotModel>(sheet);
-
-                        // 排除未開啟的桌資料
-                        list = list.Where(x => x.active == true).ToList();
-
-                        var gameList = new List<PWAWebSiteGameListSlotResponse>();
-                        list.ForEach(x => {
-                            gameList.Add(new PWAWebSiteGameListSlotResponse(x));
-                        });
-
-                        // 轉 json
-                        json = JsonConvert.SerializeObject(gameList, Formatting.Indented);// 格式化後寫入
-
-                        // 轉 sql
-                        if (gameList.Count > 0)
+                switch (modelStr)
+                {
+                    case "slot":
                         {
-                            sql += $"DELETE [HKNetGame_HJ].[dbo].[T_Game_MappingInfo] WHERE [thirdPartyId] = '{gameList[0].thirdPartyId}'\n\n";
+                            var list = ConvertList<PWAWebSiteGameListSlotModel>(sheet);
 
-                            var count = 1;
-                            sql += gameList.First().ConvertInsertSQL();
-                            gameList.ForEach(x =>
+                            var srcCount = list.Count;
+
+                            // 排除未開啟的桌資料
+                            list = list.Where(x => x.active == true).ToList();
+
+                            var newCount = list.Count;
+
+                            if(srcCount != newCount)
                             {
-                                sql += x.ConvertValuesSQL();
-                                if (count < gameList.Count)
-                                {
-                                    sql += ",";
-                                }
-                                count++;
-                            });
-                        }
-                        break;
-                    }
-                case "hot":
-                    {
-                            var list = ConvertList<PWAWebSiteGameListHotModel>(sheet);
+                                Console.WriteLine($"數量有異動:{srcCount} => {newCount}", Color.Red);
+                            }
 
-                            var gameList = new List<PWAWebSiteGameListHotResponse>();
+                            var gameList = new List<PWAWebSiteGameListSlotResponse>();
                             list.ForEach(x => {
-                                gameList.Add(new PWAWebSiteGameListHotResponse(x));
+                                gameList.Add(new PWAWebSiteGameListSlotResponse(x));
                             });
 
                             // 轉 json
@@ -101,7 +79,7 @@ public partial class Program
                             // 轉 sql
                             if (gameList.Count > 0)
                             {
-                                sql += $"DELETE [HKNetGame_HJ].[dbo].[T_Mobile_Popular_Games] WHERE [gameType] = {gameList[0].gameType}\n\n";
+                                sql += $"DELETE [HKNetGame_HJ].[dbo].[T_WebSite_Game_MappingInfo] WHERE [thirdPartyId] = '{gameList[0].thirdPartyId}'\n\n";
 
                                 var count = 1;
                                 sql += gameList.First().ConvertInsertSQL();
@@ -116,13 +94,44 @@ public partial class Program
                                 });
                             }
                             break;
-                            break;
-                    }
-            }
+                        }
+                    case "hot":
+                        {
+                                var list = ConvertList<PWAWebSiteGameListHotModel>(sheet);
 
-            File.WriteAllText(targetJson, json);
-            File.WriteAllText(targetSQL, sql);
-            return 0;
+                                var gameList = new List<PWAWebSiteGameListHotResponse>();
+                                list.ForEach(x => {
+                                    gameList.Add(new PWAWebSiteGameListHotResponse(x));
+                                });
+
+                                // 轉 json
+                                json = JsonConvert.SerializeObject(gameList, Formatting.Indented);// 格式化後寫入
+
+                                // 轉 sql
+                                if (gameList.Count > 0)
+                                {
+                                    sql += $"DELETE [HKNetGame_HJ].[dbo].[T_Mobile_Popular_Games] WHERE [gameType] = {gameList[0].gameType}\n\n";
+
+                                    var count = 1;
+                                    sql += gameList.First().ConvertInsertSQL();
+                                    gameList.ForEach(x =>
+                                    {
+                                        sql += x.ConvertValuesSQL();
+                                        if (count < gameList.Count)
+                                        {
+                                            sql += ",";
+                                        }
+                                        count++;
+                                    });
+                                }
+                                break;
+                                break;
+                        }
+                }
+
+                File.WriteAllText(targetJson, json);
+                File.WriteAllText(targetSQL, sql);
+                return 0;
             });
         });
     }

@@ -28,6 +28,10 @@ namespace csharp.cli.model.GameList
         /// </summary>
         public string? thirdPartyId { get; set; }
         /// <summary>
+        /// 伺服器編號
+        /// </summary>
+        public string? serverId { get; set; }
+        /// <summary>
         /// 圖片路徑
         /// </summary>
         public string? imagePath { get; set; }
@@ -51,6 +55,18 @@ namespace csharp.cli.model.GameList
         /// 排序
         /// </summary>
         public int sort { get; set; }
+        /// <summary>
+        /// mType
+        /// </summary>
+        public int mType { get; set; }
+        /// <summary>
+        /// gType
+        /// </summary>
+        public int gType { get; set; }
+        /// <summary>
+        /// code
+        /// </summary>
+        public string? code { get; set; }
 
         public string ConvertInsertSQL()
         {
@@ -92,31 +108,52 @@ namespace csharp.cli.model.GameList
                     this.thirdPartyId = value.ToString();
                     break;
                 case 6:
-                    this.imagePath = value.ToString();
+                    this.serverId = value.ToString();
                     break;
                 case 7:
-                    this.imageName = value.ToString();
+                    this.imagePath = value.ToString();
                     break;
                 case 8:
+                    this.imageName = value.ToString();
+                    break;
+                case 9:
                     {
                         bool.TryParse(value.ToString(), out bool parsedValue);
                         this.active = parsedValue;
                     }
                     break;
-                case 9:
+                case 10:
                     this.localizationCode = value.ToString();
                     break;
-                case 10:
+                case 11:
                     {
                         this.categoryIdList = value.ToString();
                     }
                     break;
-                case 11:
+                case 12:
                     {
                         int.TryParse(value.ToString(), out int parsedValue);
                         this.sort = parsedValue;
                     }
                     break;
+                case 13:
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.mType = parsedValue;
+                    }
+                    break;
+                case 14:
+                    {
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.gType = parsedValue;
+                    }
+                    break;
+                case 15:
+                    {
+                        this.code = value.ToString();
+                    }
+                    break;
+
             }
 
             return this;
