@@ -56,18 +56,6 @@ public partial class Program
                         {
                             var list = ConvertList<PWAWebSiteGameListSlotModel>(sheet);
 
-                            var srcCount = list.Count;
-
-                            // 排除未開啟的桌資料
-                            list = list.Where(x => x.active == true).ToList();
-
-                            var newCount = list.Count;
-
-                            if(srcCount != newCount)
-                            {
-                                Console.WriteLine($"數量有異動:{srcCount} => {newCount}", Color.Red);
-                            }
-
                             var gameList = new List<PWAWebSiteGameListSlotResponse>();
                             list.ForEach(x => {
                                 gameList.Add(new PWAWebSiteGameListSlotResponse(x));
