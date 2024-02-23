@@ -85,11 +85,13 @@ namespace csharp.cli.model.GameList
                 case 1:
                     {
                         this.gameId = value.ToString();
+                        this.gameId = gameId.Replace("'", "''");// 如果要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
                     }
                     break;
                 case 2:
                     {
                         this.gameName = value.ToString();
+                        this.gameName = gameName.Replace("'", "''");// 如果要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
                     }
                     break;                
                 case 3:
@@ -115,6 +117,7 @@ namespace csharp.cli.model.GameList
                     break;
                 case 8:
                     this.imageName = value.ToString();
+                    this.imageName = imageName.Replace("'", "''");// 如果要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
                     break;
                 case 9:
                     {
