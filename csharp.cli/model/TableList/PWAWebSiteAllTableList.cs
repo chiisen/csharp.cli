@@ -72,7 +72,7 @@
         }
         public string ConvertInsertSQL()
         {
-            return @"INSERT INTO[dbo].[T_AllTableList] (
+            return @"INSERT INTO[dbo].[T_WebSite_Desk] (
          [id]
         ,[gameType]
         ,[thirdPartyId]

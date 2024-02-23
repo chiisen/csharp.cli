@@ -243,7 +243,7 @@ public partial class Program
                             // 轉 sql
                             if (resp.Count > 0)
                             {
-                                sql += "TRUNCATE TABLE [dbo].[T_AllTableList]\n\n";
+                                sql += "TRUNCATE TABLE [dbo].[T_WebSite_Desk]\n\n";
 
 
                                 var count = 1;
