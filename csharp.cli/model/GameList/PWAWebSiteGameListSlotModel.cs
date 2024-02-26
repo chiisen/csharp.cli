@@ -85,14 +85,28 @@ namespace csharp.cli.model.GameList
             {
                 case 1:
                     {
+                        var srcString = value.ToString();
+
                         this.gameId = value.ToString();
-                        this.gameId = gameId.Replace("'", "''");// 如果 SQL 要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
+                        this.gameId = gameId?.Replace("'", "''");// 如果 SQL 要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
+
+                        if (srcString != this.gameId)
+                        {
+                            Console.WriteLine($"[字串內出現 ' 的特殊符號] - thirdPartyId:{this.thirdPartyId} - gameId:{this.gameId}", Color.Red);
+                        }
                     }
                     break;
                 case 2:
                     {
+                        var srcString = value.ToString();
+
                         this.gameName = value.ToString();
-                        this.gameName = gameName.Replace("'", "''");// 如果 SQL 要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
+                        this.gameName = gameName?.Replace("'", "''");// 如果 SQL 要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
+
+                        if (srcString != this.gameName)
+                        {
+                            Console.WriteLine($"[字串內出現 ' 的特殊符號] - thirdPartyId:{this.thirdPartyId} - gameId:{this.gameId} - gameName:{this.gameName}", Color.Red);
+                        }
                     }
                     break;                
                 case 3:
@@ -117,13 +131,31 @@ namespace csharp.cli.model.GameList
                     this.imagePath = value.ToString();
                     break;
                 case 8:
-                    this.imageName = value.ToString();
-                    this.imageName = imageName.Replace("'", "''");// 如果 SQL 要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
+                    if(this.thirdPartyId == "JILI")
+                    {
+                        // JILI 特例要轉成固定三位數字
+                        int.TryParse(value.ToString(), out int parsedValue);
+                        this.imageName = parsedValue.ToString("D3");
+
+                        Console.WriteLine($"[JILI 特例要轉成固定三位數字] - thirdPartyId:{this.thirdPartyId} - gameId:{this.gameId} - imageName:{this.imageName}", Color.Red);
+                    }
+                    else
+                    {
+                        var srcString = value.ToString();
+
+                        this.imageName = value.ToString();
+                        this.imageName = imageName?.Replace("'", "''");// 如果 SQL 要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
+
+                        if(srcString != this.imageName)
+                        {
+                            Console.WriteLine($"[字串內出現 ' 的特殊符號] - thirdPartyId:{this.thirdPartyId} - gameId:{this.gameId} - imageName:{this.imageName}", Color.Red);
+                        }
+                    }
                     break;
                 case 9:
                     {
                         var open = false;
-                        var activeStr = value.ToString().ToLower();
+                        var activeStr = value?.ToString()?.ToLower();
                         if (activeStr.Equals("true") || activeStr.Equals("1"))
                         {
                             open = true;

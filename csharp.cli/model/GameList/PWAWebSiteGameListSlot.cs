@@ -73,7 +73,14 @@ namespace csharp.cli.model.GameList
         /// code
         /// </summary>
         public string? code { get; set; }
+        /// <summary>
+        /// 公開建構式
+        /// </summary>
         public PWAWebSiteGameListSlotResponse() { }
+        /// <summary>
+        /// PWAWebSiteGameListSlotModel 轉 PWAWebSiteGameListSlotResponse
+        /// </summary>
+        /// <param name="x">原始 PWAWebSiteGameListSlotModel 型別資料</param>
         public PWAWebSiteGameListSlotResponse(PWAWebSiteGameListSlotModel x)
         {
             if(x == null)
