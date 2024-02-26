@@ -69,11 +69,21 @@ namespace csharp.cli.model.GameList
         /// </summary>
         public string? code { get; set; }
 
+        /// <summary>
+        /// 將物件轉換為插入 SQL 語句。
+        /// </summary>
+        /// <returns>插入 SQL 語句。</returns>
         public string ConvertInsertSQL()
         {
             return "";
         }
 
+        /// <summary>
+        /// 將值轉換為物件的相應屬性。
+        /// </summary>
+        /// <param name="y">屬性的索引。</param>
+        /// <param name="value">要轉換的值。</param>
+        /// <returns>轉換後的物件。</returns>
         public ITableList ConvertItem(int y, object value)
         {
             if (value == null)
@@ -108,7 +118,7 @@ namespace csharp.cli.model.GameList
                             Console.WriteLine($"[字串內出現 ' 的特殊符號] - thirdPartyId:{this.thirdPartyId} - gameId:{this.gameId} - gameName:{this.gameName}", Color.Red);
                         }
                     }
-                    break;                
+                    break;
                 case 3:
                     {
                         int.TryParse(value.ToString(), out int parsedValue);
@@ -131,7 +141,7 @@ namespace csharp.cli.model.GameList
                     this.imagePath = value.ToString();
                     break;
                 case 8:
-                    if(this.thirdPartyId == "JILI")
+                    if (this.thirdPartyId == "JILI")
                     {
                         // JILI 特例要轉成固定三位數字
                         int.TryParse(value.ToString(), out int parsedValue);
@@ -146,7 +156,7 @@ namespace csharp.cli.model.GameList
                         this.imageName = value.ToString();
                         this.imageName = imageName?.Replace("'", "''");// 如果 SQL 要在字串內出現 ' 的特殊符號，要再補上一個 ' 符號才能正常執行
 
-                        if(srcString != this.imageName)
+                        if (srcString != this.imageName)
                         {
                             Console.WriteLine($"[字串內出現 ' 的特殊符號] - thirdPartyId:{this.thirdPartyId} - gameId:{this.gameId} - imageName:{this.imageName}", Color.Red);
                         }
@@ -156,11 +166,10 @@ namespace csharp.cli.model.GameList
                     {
                         var open = false;
                         var activeStr = value?.ToString()?.ToLower();
-                        if (activeStr.Equals("true") || activeStr.Equals("1"))
+                        if (activeStr != null && (activeStr.Equals("true") || activeStr.Equals("1")))
                         {
                             open = true;
                         }
-                        //bool.TryParse(value.ToString(), out bool parsedValue);
                         this.active = open;
                     }
                     break;
@@ -201,6 +210,10 @@ namespace csharp.cli.model.GameList
             return this;
         }
 
+        /// <summary>
+        /// 將物件轉換為 values SQL 語句。
+        /// </summary>
+        /// <returns>values SQL 語句。</returns>
         public string ConvertValuesSQL()
         {
             return "";

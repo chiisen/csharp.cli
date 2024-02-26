@@ -80,6 +80,7 @@ public partial class Program
                                     }
                                     count++;
                                 });
+                                Console.WriteLine($"slot: 產生 {count} 筆資料", Color.Green);
                             }
                             break;
                         }
@@ -111,7 +112,8 @@ public partial class Program
                                         }
                                         count++;
                                     });
-                                }
+                                Console.WriteLine($"hot: 產生 {count} 筆資料", Color.Green);
+                            }
                                 break;
                         }
                 }
