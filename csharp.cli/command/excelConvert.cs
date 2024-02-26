@@ -227,6 +227,8 @@ public partial class Program
                         {
                             var list = ConvertList<PWAWebSiteAllTableListModel>(sheet);
 
+                            Console.WriteLine($"[總共] - {list.Count} 筆", Color.Red);
+
                             // 轉欄位格式
                             var resp = new List<PWAWebSiteAllTableListResponse>();
                             list.ForEach(x => {
@@ -235,7 +237,13 @@ public partial class Program
                                 {
                                     resp.Add(new PWAWebSiteAllTableListResponse(x));
                                 }
+                                else
+                                {
+                                    Console.WriteLine($"[未開啟] - {x.thirdPartyId} - {x.name}", Color.Red);
+                                }
                             });
+
+                            Console.WriteLine($"[最後] - {resp.Count} 筆", Color.Red);
 
                             // 轉 json
                             json = JsonConvert.SerializeObject(resp, Formatting.Indented);// 格式化後寫入
