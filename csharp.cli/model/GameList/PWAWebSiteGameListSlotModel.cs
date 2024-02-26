@@ -1,4 +1,5 @@
 ﻿using csharp.cli.model.TableList;
+using System.Drawing;
 
 namespace csharp.cli.model.GameList
 {
@@ -121,8 +122,14 @@ namespace csharp.cli.model.GameList
                     break;
                 case 9:
                     {
-                        bool.TryParse(value.ToString(), out bool parsedValue);
-                        this.active = parsedValue;
+                        var open = false;
+                        var activeStr = value.ToString().ToLower();
+                        if (activeStr.Equals("true") || activeStr.Equals("1"))
+                        {
+                            open = true;
+                        }
+                        //bool.TryParse(value.ToString(), out bool parsedValue);
+                        this.active = open;
                     }
                     break;
                 case 10:
