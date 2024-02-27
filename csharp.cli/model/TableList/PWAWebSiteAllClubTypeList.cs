@@ -89,7 +89,7 @@
 
         public string ConvertInsertSQL()
         {
-            return @"INSERT INTO [dbo].[T_AllClubTypeList] (
+            return @"INSERT INTO [dbo].[T_WebSite_GameType] (
         [id],
         [gameType],
         [thirdPartyId],

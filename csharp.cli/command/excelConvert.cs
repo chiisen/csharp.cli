@@ -28,6 +28,7 @@ public partial class Program
     /// <summary>
     /// EXCEL 轉檔
     /// 命令列引數: excel-convert "C:\royal\github\RoyalTemporaryFile\直接進桌\AllClubTypeList.xlsx" "sheet" "club"
+    /// 命令列引數: excel-convert "C:\royal\github\RoyalTemporaryFile\直接進桌\AllTableList.xlsx" "sheet" "table"
     /// </summary>
     public static void ExcelConvert()
     {
@@ -170,7 +171,7 @@ public partial class Program
                             // 轉 sql
                             if(list.Count > 0)
                             {
-                                sql += "TRUNCATE TABLE [dbo].[T_AllClubTypeList]\n\n";
+                                sql += "TRUNCATE TABLE [dbo].[T_WebSite_GameType]\n\n";
 
                                 var count = 1;
                                 sql += list.First().ConvertInsertSQL();

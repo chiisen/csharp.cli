@@ -38,7 +38,8 @@ namespace csharp.cli.model.GameList
 
         public string ConvertInsertSQL()
         {
-            return @"INSERT INTO [dbo].[T_Mobile_Popular_Games] (
+            return @"
+INSERT INTO [dbo].[T_WebSite_Popular_Game] (
         [gameId]
         ,[thirdPartyId]
         ,[sort]

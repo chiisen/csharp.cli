@@ -10,6 +10,7 @@ public partial class Program
     /// <summary>
     /// EXCEL 轉成遊戲列表的 json 格式與 SQL INSERT 指令
     /// 命令列引數: excel-to-gamelist "C:/royal/github/RoyalTemporaryFile/GEMINI/Game List 遊戲清單.xlsx" "Game List 遊戲清單" "slot"
+    /// 命令列引數: excel-to-gamelist "C:\royal\github\RoyalTemporaryFile\進線2遊戲列表\進線2遊戲列表.xlsx" "JDB" "slot"
     /// 命令列引數: excel-to-gamelist "C:/royal/github/RoyalTemporaryFile/手機熱門遊戲/Mobile_Popular_Games_3.xlsx" "sheet" "hot"
     /// </summary>
     public static void ExcelToGameList()
@@ -99,7 +100,7 @@ public partial class Program
                                 // 轉 sql
                                 if (gameList.Count > 0)
                                 {
-                                    sql += $"DELETE [HKNetGame_HJ].[dbo].[T_Mobile_Popular_Games] WHERE [gameType] = {gameList[0].gameType}\n\n";
+                                    sql += $"DELETE [HKNetGame_HJ].[dbo].[T_WebSite_Popular_Game] WHERE [gameType] = {gameList[0].gameType}\n\n";
 
                                     var count = 1;
                                     sql += gameList.First().ConvertInsertSQL();

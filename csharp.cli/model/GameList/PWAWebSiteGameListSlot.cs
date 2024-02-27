@@ -137,24 +137,25 @@ namespace csharp.cli.model.GameList
         /// <returns>INSERT SQL 語句。</returns>
         public string ConvertInsertSQL()
         {
-            return @"INSERT INTO [dbo].[T_WebSite_Game_MappingInfo] (
-                    [gameId]
-                    ,[gameName]
-                    ,[gameType]
-                    ,[gameClubId]
-                    ,[thirdPartyId]
-                    ,[serverId]
-                    ,[imagePath]
-                    ,[imageName]
-                    ,[active]
-                    ,[localizationCode]
-                    ,[categoryIdList]
-                    ,[sort]
-                    ,[mType]
-                    ,[gType]
-                    ,[code]
-                )
-            VALUES";
+            return @"
+INSERT INTO [dbo].[T_WebSite_Game_MappingInfo] (
+        [gameId]
+        ,[gameName]
+        ,[gameType]
+        ,[gameClubId]
+        ,[thirdPartyId]
+        ,[serverId]
+        ,[imagePath]
+        ,[imageName]
+        ,[active]
+        ,[localizationCode]
+        ,[categoryIdList]
+        ,[sort]
+        ,[mType]
+        ,[gType]
+        ,[code]
+    )
+VALUES";
         }
 
         /// <summary>
@@ -165,22 +166,22 @@ namespace csharp.cli.model.GameList
         {
             int[] value = { };
             return @$"(
-                    '{this.id}',
-                 '{this.name}',
-                    {this.gameType},
-                    {this.clubId},
-                    '{this.thirdPartyId}',
-                 '{this.serverId}',
-                    '{this.imagePath}',
-                    '{this.imageName}',
-                    {(this.active.ToString().ToLower().Equals("true") ? 1 : 0)},
-                    '{this.localizationCode}',
-                    '{(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)}',
-                    {this.sort},
-                 {this.mType},
-                 {this.gType},
-                    '{this.code}'
-                )";
+        '{this.id}',
+        '{this.name}',
+        {this.gameType},
+        {this.clubId},
+        '{this.thirdPartyId}',
+        '{this.serverId}',
+        '{this.imagePath}',
+        '{this.imageName}',
+        {(this.active.ToString().ToLower().Equals("true") ? 1 : 0)},
+        '{this.localizationCode}',
+        '{(this.categoryIdList != null ? string.Join(", ", this.categoryIdList) : value)}',
+        {this.sort},
+        {this.mType},
+        {this.gType},
+        '{this.code}'
+     )";
         }
     }
 }

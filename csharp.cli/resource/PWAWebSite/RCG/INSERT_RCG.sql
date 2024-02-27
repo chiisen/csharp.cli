@@ -1,4 +1,4 @@
-﻿INSERT INTO[dbo].[T_Game_MappingInfo] (
+﻿INSERT INTO[dbo].[T_WebSite_Game_MappingInfo] (
                 [gameId],
                 [code],
                 [gameName],
