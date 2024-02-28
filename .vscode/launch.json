@@ -11,9 +11,9 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/csharp.cli/bin/Debug/net7.0/CSHARP.CLI.dll",
-            "args": [],
+            "args": ["echo","repeat", "-r","4"],
             "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal",
+            "console": "externalTerminal",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart"
         }

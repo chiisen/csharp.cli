@@ -45,9 +45,10 @@ public partial class Program
                 var repeatCount = int.Parse(count);
                 for (var i = 0; i < repeatCount; ++i)
                 {
-                    Console.WriteLine(words);
+                    Console.WriteLine($"{i},{words}");
                 }
-
+                Console.WriteLine($"按任何鍵結束。");
+                Console.ReadKey();
                 return 0;
             });
         });
