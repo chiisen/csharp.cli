@@ -197,6 +197,10 @@ namespace csharp.cli.model.GameList
                     {
                         int.TryParse(value.ToString(), out int parsedValue);
                         this.gType = parsedValue;
+                        if (this.thirdPartyId == "JDB" && parsedValue != 0)
+                        {
+                            Console.WriteLine($"[gType 非 0] - thirdPartyId:{this.thirdPartyId} - gameId:{this.gameId} - gType:{this.gType}", Color.Red);
+                        }
                     }
                     break;
                 case 15:
