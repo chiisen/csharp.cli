@@ -46,6 +46,10 @@ namespace csharp.cli.model.GameList
                 case 2:
                     {
                         this.thirdPartyId = value.ToString();
+                        if(this.thirdPartyId == "RSG")
+                        {
+                            throw new Exception("thirdPartyId 不能為 RSG，必須改成 Royal");
+                        }
                     }
                     break;                
                 case 3:
