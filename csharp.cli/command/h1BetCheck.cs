@@ -42,12 +42,11 @@ public partial class Program
                         return 1;
                     }
 
-#pragma warning disable CS8714 // 型別無法作為型別參數用於泛型型別或方法中。型別引數的可 Null 性與 'notnull' 限制式不符合。
                     var enamehMap = h1Result
                         .Where(x => x.Club_id is not null)
                         .GroupBy(x => x.Club_id)
-                        .ToDictionary(x => x.Key, x => x.ToList());
-#pragma warning restore CS8714 // 型別無法作為型別參數用於泛型型別或方法中。型別引數的可 Null 性與 'notnull' 限制式不符合。
+                        .ToDictionary(x => x.Key ?? "default", x => x.ToList());
+
                     if (enamehMap is null)
                     {
                         Console.WriteLine($"null enamehMap.", Color.Red);
