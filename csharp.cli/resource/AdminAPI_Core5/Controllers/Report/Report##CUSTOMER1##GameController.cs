@@ -25,8 +25,21 @@ namespace APPAPI.Controllers
             }
 
             var result = await this._##CUSTOMER2##ApiDataLayer.GetBetRecord(requestData);
+            var history = new List<W1GetBetRecordDataGeneral>();
+            result.Result.ForEach(x => {
+                history.Add(new W1GetBetRecordDataGeneral
+                {
+                    r1 = x.billno,
+                    r2 = x.gametype,
+                    r3 = "0", // 沒有彩金
+                    r4 = x.createtime,
+                    r5 = x.reckontime,
+                    r6 = x.betamount,
+                    r7 = x.winLose
+                });
+            });
 
-            return Json(result);
+            return Json(history);
         }
         /// <summary>
         /// 取得注單第三層報表
