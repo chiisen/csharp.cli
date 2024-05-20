@@ -39,7 +39,13 @@ namespace APPAPI.Controllers
                 });
             });
 
-            return Json(history);
+            var resp = new ResponseInfoModel<List<W1GetBetRecordDataGeneral>>
+            {
+                Status = ResponseCode.Success,
+                Desc = ResponseMsg.Msg[ResponseCode.Success],
+                Result = history
+            };
+            return Json(resp);
         }
         /// <summary>
         /// 取得注單第三層報表
