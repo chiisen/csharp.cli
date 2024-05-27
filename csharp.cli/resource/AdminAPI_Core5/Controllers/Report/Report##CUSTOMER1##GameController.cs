@@ -1,5 +1,6 @@
 ﻿using APPAPI.Models.Game;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace APPAPI.Controllers
@@ -29,13 +30,13 @@ namespace APPAPI.Controllers
             result.Result.ForEach(x => {
                 history.Add(new W1GetBetRecordDataGeneral
                 {
-                    r1 = x.billno,
-                    r2 = x.gametype,
+                    r1 = x.recordId,
+                    r2 = x.gameId,
                     r3 = "0", // 沒有彩金
-                    r4 = x.createtime,
-                    r5 = x.reckontime,
-                    r6 = x.betamount,
-                    r7 = x.winLose
+                    r4 = x.betTime,
+                    r5 = x.settleTime,
+                    r6 = x.betAmount,
+                    r7 = x.netWin
                 });
             });
 
