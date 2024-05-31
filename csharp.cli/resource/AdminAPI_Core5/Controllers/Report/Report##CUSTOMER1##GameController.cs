@@ -1,4 +1,5 @@
-﻿using APPAPI.Models.Game;
+﻿using APPAPI.Models;
+using APPAPI.Models.Game;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace APPAPI.Controllers
             result.Result.ForEach(x => {
                 history.Add(new W1GetBetRecordDataGeneral
                 {
+                    // 電子 r1 ~ e7，體育 r1 ~ r9
                     r1 = x.recordId,
                     r2 = x.gameId,
                     r3 = "0", // 沒有彩金
