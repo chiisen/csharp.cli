@@ -2,7 +2,7 @@
   "profiles": {
     "csharp.cli": {
       "commandName": "Project",
-      "commandLineArgs": "excel-to-gamelist \"C:\\royal\\github\\RoyalTemporaryFile\\進線2遊戲列表\\進線2遊戲列表.xlsx\" \"DS\" \"slot\""
+      "commandLineArgs": "nlua"
     }
   }
 }
