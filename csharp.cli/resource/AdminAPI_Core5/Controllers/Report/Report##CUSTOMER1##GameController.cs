@@ -9,7 +9,7 @@ namespace APPAPI.Controllers
     public partial class ReportController : BaseController
     {
         /// <summary>
-        /// EGSLOT 第二層注單
+        /// 取得第二層注單
         /// </summary>
         /// <param name="requestData"></param>
         /// <returns></returns>
