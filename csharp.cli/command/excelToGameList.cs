@@ -119,8 +119,8 @@ public partial class Program
                         }
                 }
 
-                File.WriteAllText(targetJson, json);
-                File.WriteAllText(targetSQL, sql);
+                File.WriteAllText(targetJson, json, new System.Text.UTF8Encoding(true));
+                File.WriteAllText(targetSQL, sql, new System.Text.UTF8Encoding(true));
                 return 0;
             });
         });

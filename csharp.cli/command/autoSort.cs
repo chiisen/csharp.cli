@@ -76,7 +76,7 @@ public partial class Program
                 var json = JsonConvert.SerializeObject(record, Formatting.Indented);// 格式化後寫入
                 try
                 {
-                    File.WriteAllText(jsonPath, json);
+                    File.WriteAllText(jsonPath, json, new System.Text.UTF8Encoding(true));
                 }
                 catch (Exception e)
                 {

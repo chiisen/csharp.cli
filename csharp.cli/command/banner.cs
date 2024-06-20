@@ -66,7 +66,7 @@ public partial class Program
 
                 var json = JsonConvert.SerializeObject(record, Formatting.Indented);// 格式化後寫入
                 var writePath = $"{path}.bak";
-                File.WriteAllText(writePath, json);
+                File.WriteAllText(writePath, json, new System.Text.UTF8Encoding(true));
 
                 return 0;
             });

@@ -339,11 +339,11 @@ public partial class Program
                         break;
                 }
 
-                File.WriteAllText(translationJson, trans);
-                File.WriteAllText(serverIdJson, serv);                
+                File.WriteAllText(translationJson, trans, new System.Text.UTF8Encoding(true));
+                File.WriteAllText(serverIdJson, serv, new System.Text.UTF8Encoding(true));                
 
-                File.WriteAllText(targetJson, json);
-                File.WriteAllText(targetSQL, sql);
+                File.WriteAllText(targetJson, json, new System.Text.UTF8Encoding(true));
+                File.WriteAllText(targetSQL, sql, new System.Text.UTF8Encoding(true));
                 return 0;
             });
         });

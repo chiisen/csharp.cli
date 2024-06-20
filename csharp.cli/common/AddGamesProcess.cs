@@ -65,7 +65,7 @@ namespace csharp.cli.common
 
                 Console.WriteLine($"開始寫入 json 遊戲列表 {newGameJsonPath}");
 
-                File.WriteAllText(newGameJsonPath, newGameJson);
+                File.WriteAllText(newGameJsonPath, newGameJson, new System.Text.UTF8Encoding(true));
 
                 Console.WriteLine($"結束寫入 json 遊戲列表 {newGameJsonPath}");
             }
@@ -111,7 +111,7 @@ namespace csharp.cli.common
                     valueList.Add(oneItemValues);
                 }
 
-                File.WriteAllText(newGameSqlPath, string.Join(",", valueList) + ";");
+                File.WriteAllText(newGameSqlPath, string.Join(",", valueList) + ";", new System.Text.UTF8Encoding(true));
 
                 Console.WriteLine($"結束寫入 sql 遊戲列表【不包含新增遊戲】共{gameList.Count}筆 {newGameSqlPath}");
             }

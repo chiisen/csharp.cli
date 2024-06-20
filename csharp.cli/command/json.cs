@@ -68,12 +68,12 @@ public partial class Program
                 var dir = Path.GetDirectoryName(path);
 
                 var writePath = @$"{dir}\{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}-F.json";
-                File.WriteAllText(writePath, json);
+                File.WriteAllText(writePath, json, new System.Text.UTF8Encoding(true));
                 Console.WriteLine($"寫入 json 檔案: {writePath}");
 
                 var jsonLine = System.Text.Json.JsonSerializer.Serialize(value);// 寫成一行
                 writePath = @$"{dir}\{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}-L.json";
-                File.WriteAllText(writePath, jsonLine);
+                File.WriteAllText(writePath, jsonLine, new System.Text.UTF8Encoding(true));
                 Console.WriteLine($"寫入 json 檔案: {writePath}");
                 return 0;
             });

@@ -115,7 +115,7 @@ public partial class Program
 
                                     newText = newText.Replace("\r", "\r\n");// 調整為 CRLF
                                     */
-                                File.WriteAllText(destinationFile, newText);
+                                File.WriteAllText(destinationFile, newText, new System.Text.UTF8Encoding(true));
 
                                 break;
                             }
@@ -156,7 +156,7 @@ public partial class Program
                                     newText = newText.Replace("\r", "\r\n");// 調整為 CRLF
                                     */
 
-                                File.WriteAllText(destinationFile, newText);
+                                File.WriteAllText(destinationFile, newText, new System.Text.UTF8Encoding(true));
                                 break;
                             }
                     }

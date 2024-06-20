@@ -117,7 +117,7 @@ public partial class Program
 
                 try
                 {
-                    File.WriteAllText(jsonPath, result);
+                    File.WriteAllText(jsonPath, result, new System.Text.UTF8Encoding(true));
                 }
                 catch (Exception e)
                 {
