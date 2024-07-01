@@ -18,7 +18,6 @@ namespace APPAPI.Services.DataLayer.Api
         /// LogHelper
         /// </summary>
         protected LogHelper<##CUSTOMER1##ApiDataLayer> _logger;
-        private RcgApiSetup _apiSetup;
         private DbConnection _dbConnection;
         private JsonSerializerOptions JsonOptions { get; set; }
         private readonly ScopedLogTemp _logScope;
@@ -93,22 +92,22 @@ namespace APPAPI.Services.DataLayer.Api
                     var forwardGameResult =
                         await this._h1WalletDataLayer.ForwardGameH1WalletFunction(
                             new W1ForwardGameRequestModel<W1ForwardGameConfig##CUSTOMER## > ()
-                    {
-                        club_id = await this._jwtService.ParseToken(JwtColumn.Club_Id),
-                        platform = GameClubNameModel.##CUSTOMER##,
-                        game_Name = "",
-                        gameConfig = new()
-                        {
-                            clientIP = clientIP,
-                            device = paramList.device,
-                            lang = paramList.lang,
-                            lobbyURL = paramList.lobbyURL,
-                            gameCode = paramList.gameCode
-                        },
-                        club_Ename = await this._jwtService.ParseToken(JwtColumn.Club_Ename),
-                        franchiser_id = await this._jwtService.ParseToken(JwtColumn.Franchiser_Id),
-                        currency = await this._jwtService.ParseToken(JwtColumn.ForwardGameCurrency),
-                    });
+                            {
+                                club_id = await this._jwtService.ParseToken(JwtColumn.Club_Id),
+                                platform = GameClubNameModel.##CUSTOMER##,
+                                game_Name = "",
+                                gameConfig = new()
+                                {
+                                    clientIP = clientIP,
+                                    device = paramList.device,
+                                    lang = paramList.lang,
+                                    lobbyURL = paramList.lobbyURL,
+                                    gameCode = paramList.gameCode
+                                },
+                                club_Ename = await this._jwtService.ParseToken(JwtColumn.Club_Ename),
+                                franchiser_id = await this._jwtService.ParseToken(JwtColumn.Franchiser_Id),
+                                currency = await this._jwtService.ParseToken(JwtColumn.ForwardGameCurrency),
+                            });
 
                     // ##CUSTOMER## 在進線前要設定限注
                     var sw = System.Diagnostics.Stopwatch.StartNew();
@@ -140,13 +139,34 @@ namespace APPAPI.Services.DataLayer.Api
         public async Task<ResponseInfoModel<string>> GetGameReportDetial(W1GetBetDetailRequestModel request)
         {
             var result = await this._w1WalletDataLayer.GetBetDetial<string>(request, this._thirdPartyId);
-
-            return new ResponseInfoModel<string>()
+            if (result == null)
             {
-                Status = result.Status,
-                Desc = result.Desc,
-                Result = result.Status == ResponseCode.Success ? result.Result : null,
-            };
+                return new ResponseInfoModel<string>()
+                {
+                    Status = ResponseCode.Failure,
+                    Desc = ResponseMsg.Msg[ResponseCode.Failure],
+                    Result = string.Empty,
+                };
+            }
+
+            if (result.Status == ResponseCode.Success)
+            {
+                return new ResponseInfoModel<string>()
+                {
+                    Status = result.Status,
+                    Desc = result.Desc,
+                    Result = result.Result,
+                };
+            }
+            else
+            {
+                return new ResponseInfoModel<string>()
+                {
+                    Status = result.Status,
+                    Desc = result.Desc,
+                    Result = string.Empty,
+                };
+            }
         }
     }
 }
