@@ -1,7 +1,5 @@
-﻿using APPAPI.Models;
-using APPAPI.Models.Game;
+﻿using APPAPI.Models.Game;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace APPAPI.Controllers

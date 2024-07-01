@@ -1,12 +1,7 @@
 ﻿using APPAPI.Common;
-using APPAPI.Helper;
 using APPAPI.Models;
 using APPAPI.Models.Game;
-using APPAPI.Models.Game.Rcg;
-using APPAPI.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace APPAPI.Controllers
