@@ -25,11 +25,31 @@ namespace APPAPI.Controllers
             }
 
             var result = await this._##CUSTOMER2##ApiDataLayer.GetBetRecord(requestData);
+            if (result == null || result.Result == null)
+            {
+                return Json(new ResponseInfoModel<List<W1GetBetRecordDataGeneral>>
+                {
+                    Status = ResponseCode.Failure,
+                    Desc = "SYSTEM_BUSY",
+                    Result = new List<W1GetBetRecordDataGeneral>(),
+                    ErrorDetail = result?.ErrorDetail
+                });
+            }
+            if (result.Result.Count == 0)
+            {
+                return Json(new ResponseInfoModel<List<W1GetBetRecordDataGeneral>>
+                {
+                    Status = ResponseCode.Failure,
+                    Desc = "SYSTEM_BUSY",
+                    Result = new List<W1GetBetRecordDataGeneral>(),
+                    ErrorDetail = result.ErrorDetail
+                });
+            }
             var history = new List<W1GetBetRecordDataGeneral>();
             result.Result.ForEach(x => {
-                history.Add(new W1GetBetRecordDataGeneral
+                var record = new W1GetBetRecordDataGeneral
                 {
-                    // 電子 r1 ~ e7，體育 r1 ~ r9
+                    // 電子 r1 ~ e7，體育 r1 ~ r9，真人 r1 ~ r7
                     r1 = x.recordId,
                     r2 = x.gameId,
                     r3 = "0", // 沒有彩金
@@ -38,6 +58,17 @@ namespace APPAPI.Controllers
                     r6 = x.betAmount,
                     r7 = x.netWin
                 });
+
+                if (!string.IsNullOrEmpty(requestData.starDick))
+                {
+                    string[] parts = requestData.starDick.Split(',');
+                    parts.ToList().ForEach(x => {
+                        string[] cmd = x.Split('=');
+                        record.SetFieldValue(record, cmd[0], cmd[1]);
+                    });
+                }
+
+                history.Add(record);
             });
 
             var resp = new ResponseInfoModel<List<W1GetBetRecordDataGeneral>>
