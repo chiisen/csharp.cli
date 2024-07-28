@@ -17,7 +17,7 @@ public partial class Program
         _ = App.Command("ast", command =>
         {
             // 第二層 Help 的標題
-            command.Description = "AbstractSyntaxTree 說明";
+            command.Description = "Abstract Syntax Tree 說明";
             command.HelpOption("-?|-h|-help");
 
             command.OnExecute(() =>
