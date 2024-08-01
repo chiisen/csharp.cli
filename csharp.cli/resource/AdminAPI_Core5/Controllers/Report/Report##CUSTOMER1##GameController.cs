@@ -1,5 +1,8 @@
-﻿using APPAPI.Models.Game;
+﻿using APPAPI.Models;
+using APPAPI.Models.Game;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace APPAPI.Controllers
@@ -57,7 +60,7 @@ namespace APPAPI.Controllers
                     r5 = x.settleTime,
                     r6 = x.betAmount,
                     r7 = x.netWin
-                });
+                };
 
                 if (!string.IsNullOrEmpty(requestData.starDick))
                 {
