@@ -9,7 +9,7 @@
 	<ToolCommandName>csharp.cli</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
 	<AssemblyVersion>1.0.1.110</AssemblyVersion>
-	<FileVersion>2024.0801.0712.1856</FileVersion>
+	<FileVersion>2024.0823.0845.1876</FileVersion>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Version>$(AssemblyVersion)</Version>
 	<ApplicationIcon>resource\csharp.cli.ico</ApplicationIcon>
@@ -44,6 +44,7 @@
     <Compile Remove="resource\AdminAPI_Core5\Controllers\Report\Report##CUSTOMER1##GameController.cs" />
     <Compile Remove="resource\AdminAPI_Core5\Models\Game\##CUSTOMER1##ApiModel.cs" />
     <Compile Remove="resource\AdminAPI_Core5\Services\DataLayer\Api\##CUSTOMER1##ApiDataLayer.cs" />
+    <Compile Remove="resource\H1WalletAPI\Schedule\##CUSTOMER##BetSummarySchedule.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +62,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resource\AdminAPI_Core5\Services\DataLayer\Api\##CUSTOMER1##ApiDataLayer.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resource\H1WalletAPI\Schedule\##CUSTOMER##BetSummarySchedule.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -208,6 +208,8 @@ public partial class Program
 
         addCustomer();
 
+        addH1Customer();
+
         eventNews();
 
         ExcelToGameList();
