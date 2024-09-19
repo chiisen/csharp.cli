@@ -1,5 +1,10 @@
 {
     "dotnet.defaultSolution": "csharp.cli.sln",
     "editor.inlineSuggest.showToolbar": "onHover",
-    "terminal.integrated.fontFamily": "'CaskaydiaCove NF'"
+    "terminal.integrated.fontFamily": "'CaskaydiaCove NF'",
+    "files.exclude": {
+        "**/obj": true,
+        "**/bin": true,
+        "**/.vs": true
+    }
 }
