@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
+using System.Collections.Generic;
 using System.Reflection;
 using Terminal.Gui;
 
@@ -170,6 +171,48 @@ namespace csharp.cli.helper
             var data = JsonConvert.SerializeObject(value);
 
             Redis!.StringSet($"{cacheKey}", data);
+        }
+        /// <summary>
+        /// 取得 Hash 鍵的所有值
+        /// </summary>
+        /// <param name="hashKey"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        public static HashEntry[] HashGetAll(string hashKey, int db = 0)
+        {
+            LazyInitializer(db);
+
+            var assemblyName = GetProjectName();
+
+            var key = $"{assemblyName}:{hashKey}";
+
+            var data = Redis!.HashGetAll(key);
+            if (data == null)
+            {
+                Console.WriteLine($"empty data");
+                return default!;
+            }
+
+            return data!;
+        }
+
+        /// <summary>
+        /// 寫入 Hash 鍵
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="hashKey"></param>
+        /// <param name="hashEntries"></param>
+        /// <param name="db"></param>
+        public static void HashSet(string hashKey, HashEntry[] hashEntries, int db = 0)
+        {
+            LazyInitializer(db);
+
+            var assemblyName = GetProjectName();
+
+            var key = $"{assemblyName}:{hashKey}";
+
+            // 寫入 HashEntry
+            Redis!.HashSet(key, hashEntries);
         }
     }
 }
