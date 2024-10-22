@@ -20,8 +20,8 @@ public partial class Program
 
             command.OnExecute(() =>
             {
-                var message = RedisHelper.CheckAndUpdateKeyAsync("test", "2");
-                Console.WriteLine($"{message}");
+                var isUpdate = RedisHelper.CheckAndUpdateKeyAsync("test", "2");
+                Console.WriteLine($"是否更新: {isUpdate.ToString()}");
 
                 // 假設要寫入的 Hash 鍵為 "user:1000"
                 int clubId = 1000;

@@ -220,7 +220,7 @@ namespace csharp.cli.helper
         /// <param name="key"></param>
         /// <param name="newValue"></param>
         /// <returns></returns>
-        public static string? CheckAndUpdateKeyAsync(string checkKey, string newValue, int db = 0)
+        public static bool CheckAndUpdateKeyAsync(string checkKey, string newValue, int db = 0)
         {
             LazyInitializer(db);
 
@@ -230,13 +230,13 @@ namespace csharp.cli.helper
             var script = @"
             if redis.call('EXISTS', KEYS[1]) == 1 then
                 redis.call('SET', KEYS[1], ARGV[1])
-                return 'Updated'
+                return true
             else
-                return 'Key does not exist'
+                return false
             end
             ";
 
-            var result = (string?)Redis!.ScriptEvaluate(script, new RedisKey[] { key }, new RedisValue[] { newValue });
+            var result = (bool)Redis!.ScriptEvaluate(script, new RedisKey[] { key }, new RedisValue[] { newValue });
             return result;
         }
     }
