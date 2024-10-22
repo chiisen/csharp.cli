@@ -1,8 +1,5 @@
 ﻿using csharp.cli.helper;
-using Newtonsoft.Json;
 using StackExchange.Redis;
-using System.Collections.Generic;
-using System.Drawing;
 using Console = Colorful.Console;
 
 namespace csharp.cli;
@@ -15,7 +12,7 @@ public partial class Program
     /// </summary>
     public static void Redis()
     {
-        _ = App.Command("redis", command =>
+        _ = App.Command("redis", async command =>
         {
             // 第二層 Help 的標題
             command.Description = "redis 說明";
@@ -23,6 +20,9 @@ public partial class Program
 
             command.OnExecute(() =>
             {
+                var message = RedisHelper.CheckAndUpdateKeyAsync("test", "2");
+                Console.WriteLine($"{message}");
+
                 // 假設要寫入的 Hash 鍵為 "user:1000"
                 int clubId = 1000;
 

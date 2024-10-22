@@ -214,5 +214,30 @@ namespace csharp.cli.helper
             // 寫入 HashEntry
             Redis!.HashSet(key, hashEntries);
         }
+        /// <summary>
+        /// 檢查 key 確定存在就更新 value
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
+        public static string? CheckAndUpdateKeyAsync(string checkKey, string newValue, int db = 0)
+        {
+            LazyInitializer(db);
+
+            var assemblyName = GetProjectName();
+            var key = $"{assemblyName}:{checkKey}";
+
+            var script = @"
+            if redis.call('EXISTS', KEYS[1]) == 1 then
+                redis.call('SET', KEYS[1], ARGV[1])
+                return 'Updated'
+            else
+                return 'Key does not exist'
+            end
+            ";
+
+            var result = (string?)Redis!.ScriptEvaluate(script, new RedisKey[] { key }, new RedisValue[] { newValue });
+            return result;
+        }
     }
 }
