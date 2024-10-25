@@ -172,6 +172,7 @@ namespace csharp.cli.helper
 
             Redis!.StringSet($"{cacheKey}", data);
         }
+
         /// <summary>
         /// 取得 Hash 鍵的所有值
         /// </summary>
@@ -214,6 +215,7 @@ namespace csharp.cli.helper
             // 寫入 HashEntry
             Redis!.HashSet(key, hashEntries);
         }
+
         /// <summary>
         /// 檢查 key 確定存在就更新 value
         /// </summary>
@@ -238,6 +240,61 @@ namespace csharp.cli.helper
 
             var result = (bool)Redis!.ScriptEvaluate(script, new RedisKey[] { key }, new RedisValue[] { newValue });
             return result;
+        }
+
+        /// <summary>
+        /// 寫入 List 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="listKey"></param>
+        /// <param name="message"></param>
+        /// <param name="db"></param>
+        public static void ListRightPush(string listKey, string message, int db = 0)
+        {
+            LazyInitializer(db);
+
+            var assemblyName = GetProjectName();
+
+            var key = $"{assemblyName}:{listKey}";
+
+            // 寫入 ListRightPush
+            Redis!.ListRightPush(key, message);
+        }
+
+        /// <summary>
+        /// 讀取 ListLength
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="listKey"></param>
+        /// <param name="db"></param>
+        public static long ListLength(string listKey, int db = 0)
+        {
+            LazyInitializer(db);
+
+            var assemblyName = GetProjectName();
+
+            var key = $"{assemblyName}:{listKey}";
+
+            // 讀取 ListLength
+            return Redis!.ListLength(key);
+        }
+
+        /// <summary>
+        /// 讀取 List 並輸出 List 所有資料
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="listKey"></param>
+        /// <param name="db"></param>
+        public static RedisValue ListGetByIndex(string listKey, long index, int db = 0)
+        {
+            LazyInitializer(db);
+
+            var assemblyName = GetProjectName();
+
+            var key = $"{assemblyName}:{listKey}";
+
+            // 讀取指定 index 資料
+            return Redis!.ListGetByIndex(key, index);
         }
     }
 }

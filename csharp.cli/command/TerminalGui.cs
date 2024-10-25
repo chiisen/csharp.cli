@@ -1,6 +1,6 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 using Console = Colorful.Console;
+using Spectre.Console;
 
 namespace csharp.cli;
 
@@ -42,7 +42,7 @@ public partial class Program
                         break;
                 }                
 
-                Console.WriteLine($"n = {message}", System.Drawing.Color.Red);
+                AnsiConsole.MarkupLine($"[red]n = {message}.[/]");
 
                 return 0;
             });
