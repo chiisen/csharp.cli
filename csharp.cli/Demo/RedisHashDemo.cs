@@ -26,13 +26,24 @@ namespace csharp.cli.Demo
                         new("login", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")),
                         new("playGame", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
                 };
-                RedisHelper.HashSet(hashKey, hashEntries);
+                RedisHelper.HashSet(hashKey, hashEntries, TimeSpan.FromMinutes(30));
+            }
 
-                // 確認寫入成功，讀取並輸出所有資料
-                HashEntry[] storedEntries = RedisHelper.HashGetAll(hashKey);
-                foreach (var entry in storedEntries)
+            // 確認寫入成功，讀取並輸出所有資料
+            var server = RedisHelper.GetServer();
+            if(server != null)
+            {
+                var keys = RedisHelper.GetKeys(pattern: "userHash:*");
+                if (keys != null)
                 {
-                    AnsiConsole.MarkupLine($"[green]{entry.Name}: {entry.Value}.[/]");
+                    foreach (var key in keys)
+                    {
+                        HashEntry[] storedEntries = RedisHelper.HashGetAll(key!);
+                        foreach (var entry in storedEntries)
+                        {
+                            AnsiConsole.MarkupLine($"[green]{entry.Name}: {entry.Value}.[/]");
+                        }
+                    }
                 }
             }
         }

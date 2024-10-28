@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Colorful;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,6 +11,7 @@ namespace csharp.cli.helper
     {
         protected static IDatabase? Redis { get; set; }
         protected static IDatabase? OtherRedis { get; set; }
+        protected static IServer[]? Servers { get; set; }
         public static bool IsInitialized { get; private set; }
 
         private static void LazyInitializer(int db = 0)
@@ -25,6 +27,7 @@ namespace csharp.cli.helper
             options.ReconnectRetryPolicy = new ExponentialRetry(3000);
 
             IConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect(options);
+            Servers = connectionMultiplexer.GetServers();
             Redis = connectionMultiplexer.GetDatabase(db);
 
             IsInitialized = true;
@@ -55,7 +58,7 @@ namespace csharp.cli.helper
             var data = Redis!.StringGet($"{assemblyName}:{cacheKey}");
             if (data == RedisValue.EmptyString)
             {
-                Console.WriteLine($"empty data");
+                System.Console.WriteLine($"empty data");
                 return default!;
             }
 
@@ -139,7 +142,7 @@ namespace csharp.cli.helper
             var data = OtherRedis!.StringGet($"{cacheKey}");
             if (data == RedisValue.EmptyString)
             {
-                Console.WriteLine($"empty data");
+                System.Console.WriteLine($"empty data");
                 return default!;
             }
 
@@ -185,16 +188,62 @@ namespace csharp.cli.helper
 
             var assemblyName = GetProjectName();
 
-            var key = $"{assemblyName}:{hashKey}";
+            var key = "";
+
+            if (hashKey.Contains(assemblyName))
+            {
+                key = hashKey;
+            }
+            else
+            {
+                key = $"{assemblyName}:{hashKey}";
+            }
 
             var data = Redis!.HashGetAll(key);
             if (data == null)
             {
-                Console.WriteLine($"empty data");
+                System.Console.WriteLine($"empty data");
                 return default!;
             }
 
             return data!;
+        }
+
+        /// <summary>
+        /// 以 IServer 來去得 key 的所有值
+        /// </summary>
+        /// <returns></returns>
+        public static IServer? GetServer()
+        {
+            if (Servers != null && Servers.Length > 0)
+            {
+                return Servers[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
+        public static IEnumerable<RedisKey>? GetKeys(string pattern, int db = 0)
+        {
+            if (Servers != null && Servers.Length > 0)
+            {
+                var assemblyName = GetProjectName();
+
+                var key = $"{assemblyName}:{pattern}";
+
+                return Servers[0].Keys(db, key);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -204,7 +253,7 @@ namespace csharp.cli.helper
         /// <param name="hashKey"></param>
         /// <param name="hashEntries"></param>
         /// <param name="db"></param>
-        public static void HashSet(string hashKey, HashEntry[] hashEntries, int db = 0)
+        public static void HashSet(string hashKey, HashEntry[] hashEntries, TimeSpan? expiry = null, int db = 0)
         {
             LazyInitializer(db);
 
@@ -214,6 +263,12 @@ namespace csharp.cli.helper
 
             // 寫入 HashEntry
             Redis!.HashSet(key, hashEntries);
+
+            // 設定過期時間
+            if (expiry.HasValue)
+            {
+                Redis.KeyExpire(key, expiry);
+            }
         }
 
         /// <summary>
