@@ -26,6 +26,14 @@ dotnet new console -lang c#
 <PackageOutputPath>./nupkg</PackageOutputPath>
 ```
 
+- 設定編譯時產生 nupkg(可由介面設定或在 *.csproj 內新增)
+```xml=
+<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+```
+介面在【專案】=>【XXX 屬性】  
+    =>【套件】=>【一般】=>【在建置時產生 NuGet 套件】  
+    =>勾選【在建置作業期間產生套件檔案】 
+
 ---
 
 # 安裝 nuget
